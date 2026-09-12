@@ -86,7 +86,7 @@ export default function AboutPage() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Link href={site.resumePath} className={buttonStyles()}>
             <FileText className="size-4" aria-hidden />
-            View resume
+            View résumé
           </Link>
           <Link href="/#contact" className={buttonStyles({ variant: "secondary" })}>
             Get in touch

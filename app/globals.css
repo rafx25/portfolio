@@ -149,7 +149,7 @@
     --muted-foreground: #333333;
     --border: #cccccc;
     --border-strong: #999999;
-    --accent: #8c1f2a;
+    --accent: #000000;
   }
 
   @page {
@@ -172,11 +172,27 @@
     padding: 0 !important;
   }
 
+  /* One flat colour: nothing in a resume should depend on being coloured. */
+  .resume-page,
   .resume-page * {
-    color: inherit;
+    color: #000 !important;
+    background: transparent !important;
   }
 
   a {
     text-decoration: none;
+  }
+
+  /* Tighter than the screen version: a resume should not run long because of
+     line height. Keeps the whole thing inside two pages. */
+  .resume-page {
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  .resume-page p,
+  .resume-page li {
+    orphans: 2;
+    widows: 2;
   }
 }
