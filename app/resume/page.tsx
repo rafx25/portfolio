@@ -4,34 +4,41 @@ import { site } from "@/lib/site";
 import { education, experience } from "@/data/experience";
 import { skills } from "@/data/skills";
 import { projects } from "@/data/projects";
-import { formatDateRange } from "@/lib/utils";
+import { resumeContactLines } from "@/lib/resume-content";
 import { Container } from "@/components/ui/container";
 import { PrintButton } from "./print-button";
 
 export const metadata: Metadata = {
-  title: "Resume",
-  description: `Resume of ${site.name}, ${site.role}. Experience, systems delivered, technical skills and education.`,
+  title: "Résumé",
+  description: `Résumé of ${site.name}, ${site.role}. Experience, systems delivered, technical skills and education.`,
   alternates: { canonical: "/resume" },
 };
 
-const summary = `Full stack developer with 5+ years building and maintaining workflow-driven web applications for government agencies and private-sector organisations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, multi-level approval workflows, audit logging, legacy system maintenance, document generation and production support. Currently building with Laravel 12, Inertia.js and Vue 3.`;
+const summary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organisations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, multi-level approval workflows, audit logging, legacy system maintenance, document generation and production support. Currently building with Laravel 12, Inertia.js and Vue 3.`;
 
+/** Hyphen rather than an em dash: dash variants trip some date parsers. */
+function dateRange(start: string, end: string | null) {
+  return `${start} - ${end ?? "Present"}`;
+}
+
+/**
+ * Applicant tracking systems read the PDF as a flat stream of text, so this
+ * page is a single column from top to bottom. No side-by-side blocks, no
+ * layout tables, no icons, and headings use the wording those parsers expect.
+ */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-7 break-inside-avoid">
-      <h2 className="border-border text-accent border-b pb-1 font-mono text-xs tracking-widest uppercase">
+    <section className="mt-5">
+      <h2 className="border-border break-after-avoid border-b pb-1 text-sm font-bold tracking-wide uppercase">
         {title}
       </h2>
-      <div className="mt-4">{children}</div>
+      <div className="mt-3">{children}</div>
     </section>
   );
 }
 
 export default function ResumePage() {
-  const contact = [site.location, site.email, site.github, site.linkedin].filter(
-    (v) => !v.startsWith("["),
-  );
-
+  const { contact, links } = resumeContactLines();
   const delivered = projects.filter((p) => p.featured || p.screenshots.length > 0);
 
   return (
@@ -39,8 +46,8 @@ export default function ResumePage() {
       <Container className="max-w-3xl">
         <div className="print:hidden">
           <p className="text-muted-foreground text-sm">
-            This is the printable version. Use the button below and choose{" "}
-            <span className="text-foreground">Save as PDF</span> as the destination.
+            Single column and readable by applicant tracking systems. The download is a
+            generated PDF, not a screenshot, so the text stays selectable.
           </p>
           <div className="mt-4">
             <PrintButton />
@@ -49,111 +56,92 @@ export default function ResumePage() {
         </div>
 
         <header className="mt-8 print:mt-0">
-          <h1 className="text-3xl font-semibold tracking-tight">{site.name}</h1>
-          <p className="text-accent mt-1 text-base font-medium">{site.role}</p>
-          <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-            {contact.map((item, i) => (
-              <span key={item}>
-                {i > 0 ? <span className="mx-2 opacity-40">|</span> : null}
-                {item.replace(/^https?:\/\//, "")}
-              </span>
-            ))}
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight uppercase">{site.name}</h1>
+          <p className="mt-1 text-base font-semibold">{site.role}</p>
+          <p className="text-muted-foreground mt-2 text-sm">{contact}</p>
+          {links ? <p className="text-muted-foreground text-sm">{links}</p> : null}
         </header>
 
-        <Section title="Summary">
-          <p className="text-muted-foreground text-sm leading-relaxed">{summary}</p>
+        <Section title="Professional Summary">
+          <p className="text-sm leading-relaxed">{summary}</p>
         </Section>
 
-        <Section title="Technical skills">
-          <dl className="space-y-2">
+        <Section title="Core Technical Skills">
+          <ul className="space-y-1.5">
             {skills.map((group) => (
-              <div key={group.category} className="text-sm sm:flex sm:gap-4">
-                <dt className="w-44 shrink-0 font-medium">{group.category}</dt>
-                <dd className="text-muted-foreground">
-                  {group.items
-                    .filter((i) => i.level !== "Currently learning")
-                    .map((i) => i.name)
-                    .join(", ")}
-                  {group.items.some((i) => i.level === "Currently learning") ? (
-                    <span className="opacity-70">
-                      {" — learning: "}
-                      {group.items
-                        .filter((i) => i.level === "Currently learning")
-                        .map((i) => i.name)
-                        .join(", ")}
-                    </span>
-                  ) : null}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Section>
-
-        <Section title="Experience">
-          <ol className="space-y-6">
-            {experience.map((item) => (
-              <li
-                key={`${item.organization}-${item.start}`}
-                className="break-inside-avoid"
-              >
-                <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                  <h3 className="text-sm font-semibold">{item.role}</h3>
-                  <span className="text-muted-foreground shrink-0 font-mono text-xs">
-                    {formatDateRange(item.start, item.end)}
-                  </span>
-                </div>
-                <p className="text-accent text-sm">{item.organization}</p>
-
-                <ul className="mt-2 space-y-1.5">
-                  {item.highlights.map((highlight) => (
-                    <li
-                      key={highlight}
-                      className="text-muted-foreground flex gap-2 text-sm leading-relaxed"
-                    >
-                      <span className="mt-1.5 shrink-0 text-[0.6rem]" aria-hidden>
-                        ▪
-                      </span>
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
+              <li key={group.category} className="text-sm leading-relaxed">
+                <span className="font-semibold">{group.category}: </span>
+                {group.items
+                  .filter((item) => item.level !== "Currently learning")
+                  .map((item) => item.name)
+                  .join(", ")}
+                {group.items.some((item) => item.level === "Currently learning") ? (
+                  <>
+                    {". Learning: "}
+                    {group.items
+                      .filter((item) => item.level === "Currently learning")
+                      .map((item) => item.name)
+                      .join(", ")}
+                  </>
+                ) : null}
               </li>
             ))}
-          </ol>
+          </ul>
         </Section>
 
-        <Section title="Selected systems">
-          <ul className="space-y-2.5">
+        <Section title="Professional Experience">
+          {experience.map((item) => (
+            <div
+              key={`${item.organization}-${item.start}`}
+              className="mt-4 break-inside-avoid first:mt-0"
+            >
+              <h3 className="text-sm font-bold">{item.role}</h3>
+              <p className="text-muted-foreground text-sm">
+                {[item.organization, item.location, dateRange(item.start, item.end)]
+                  .filter(Boolean)
+                  .join(" | ")}
+              </p>
+
+              <ul className="mt-1.5 space-y-1">
+                {item.highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="pl-4 -indent-4 text-sm leading-relaxed"
+                  >
+                    {"• "}
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </Section>
+
+        <Section title="Delivered Systems">
+          <ul className="space-y-2">
             {delivered.map((project) => (
-              <li key={project.slug} className="break-inside-avoid text-sm">
-                <span className="font-medium">{project.name}</span>
-                <span className="text-muted-foreground">
-                  {" — "}
-                  {project.tagline}
-                </span>
-                <span className="text-muted-foreground block font-mono text-xs">
-                  {project.technologies.join(" · ")}
-                </span>
+              <li
+                key={project.slug}
+                className="break-inside-avoid pl-4 -indent-4 text-sm leading-relaxed"
+              >
+                {"• "}
+                <span className="font-semibold">{project.name}</span>
+                {" — "}
+                {project.tagline} Built with {project.technologies.join(", ")}.
               </li>
             ))}
           </ul>
         </Section>
 
         <Section title="Education">
-          <ul className="space-y-1">
-            {education.map((item) => (
-              <li
-                key={item.qualification}
-                className="flex flex-col gap-0.5 text-sm sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
-              >
-                <span className="font-medium">{item.qualification}</span>
-                <span className="text-muted-foreground font-mono text-xs">
-                  {item.institution} · {item.start}&ndash;{item.end}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {education.map((item) => (
+            <div key={item.qualification} className="text-sm leading-relaxed">
+              <p className="font-semibold">{item.qualification}</p>
+              <p className="text-muted-foreground">
+                {item.institution} | {item.start} - {item.end}
+              </p>
+            </div>
+          ))}
         </Section>
       </Container>
     </div>

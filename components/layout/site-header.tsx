@@ -128,7 +128,7 @@ export function SiteHeader() {
                 : "border-border-strong hover:bg-surface-muted",
             )}
           >
-            Resume
+            Résumé
           </Link>
           <button
             type="button"

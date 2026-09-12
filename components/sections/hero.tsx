@@ -92,13 +92,7 @@ export function Hero() {
                 className={buttonStyles({ variant: "secondary" })}
               >
                 <FileText className="size-4" aria-hidden />
-                Resume
-              </Link>
-              <Link
-                href="/#contact"
-                className={buttonStyles({ variant: "ghost", size: "md" })}
-              >
-                Contact
+                Résumé
               </Link>
             </div>
           </div>

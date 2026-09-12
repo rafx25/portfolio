@@ -14,6 +14,9 @@ export const site = {
   summary:
     "Approval workflows, role-based access control, REST APIs and the database design beneath them. Most of it runs on PHP and MySQL, with Slim on the recent systems and plain PHP on the older ones. The newest is built with Laravel, Vue and Inertia.",
 
+  // Shown on the resume page only, and only when set. Left blank on purpose:
+  // a phone number on a public page gets scraped.
+  phone: "",
   email: "rafxd.25@gmail.com",
   github: "https://github.com/rafx25",
   linkedin: "https://www.linkedin.com/in/rafael-domer-3126a1255/",
