@@ -1504,16 +1504,7 @@ $app->group('/delegation', $routes)
     confidential: true,
     // No screenshots: the enrolment screen shows a live capture and beneficiary
     // records. There is no version of that image that is safe to publish.
-    screenshots: [
-      {
-        src: "/projects/tupad-bio.jpg",
-        width: 1446,
-        height: 1107,
-        alt: "Public landing page with application forms for inside and outside the region, and application tracking",
-        caption:
-          "Public side. Separate paths for establishments inside and outside the region, plus tracking by reference number.",
-      },
-    ],
+    screenshots: [],
     caseStudy: {
       overview:
         "TUPAD is an emergency employment programme. Beneficiaries are validated on site before they are paid, and a person must not be able to enrol twice under two records. This work is the fingerprint side of that check: capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled.",
