@@ -33,8 +33,9 @@ export const metadata: Metadata = {
   creator: site.name,
   keywords: [
     "Full Stack Developer",
-    "Laravel Developer",
     "PHP Developer",
+    "Slim Framework",
+    "Laravel Developer",
     "REST API",
     "Vue.js",
     "Next.js",

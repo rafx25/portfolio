@@ -29,7 +29,7 @@ build time, and the only server work at runtime is the contact form.
 - Case study pages generated from typed data (`/projects/[slug]`), prerendered
   at build time
 - Redacted screenshots of the real systems, served through `next/image`
-- Circular profile photo in the hero and on the about page (`public/avatar.jpg`)
+- Circular profile photo in the hero and on the about page (`public/avatar.png`)
 - Architecture diagrams rendered from data rather than shipped as images
 - Light and dark themes with no flash on load
 - Contact form with shared validation, per-IP rate limiting and a honeypot

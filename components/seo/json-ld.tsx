@@ -29,10 +29,12 @@ export function PersonJsonLd() {
         ...(sameAs.length > 0 ? { sameAs } : {}),
         knowsAbout: [
           "PHP",
+          "Slim Framework",
           "Laravel",
           "MySQL",
           "REST API design",
           "Vue.js",
+          "Inertia.js",
           "Role-Based Access Control",
           "Database design",
         ],

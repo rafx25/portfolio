@@ -13,7 +13,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       aria-labelledby={headingId}
-      className="border-border bg-surface hover:border-border-strong group relative flex flex-col overflow-hidden rounded-lg border transition-colors"
+      className="border-border bg-surface hover:border-border-strong group relative flex flex-col overflow-hidden rounded-lg border shadow-sm shadow-accent/5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:shadow-md hover:shadow-accent/10"
     >
       {cover ? (
         <div className="bg-surface-muted border-border border-b">
@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: Project }) {
             width={cover.width}
             height={cover.height}
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="h-48 w-full object-cover object-top"
+            className="h-56 w-full object-cover object-top sm:h-64"
           />
         </div>
       ) : null}
@@ -52,7 +52,22 @@ export function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
 
-        <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
+        {project.metrics && project.metrics.length > 0 ? (
+          <ul className="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs">
+            {project.metrics.map((metric, i) => (
+              <li key={metric} className="flex items-center gap-2">
+                {i > 0 ? (
+                  <span className="text-border-strong" aria-hidden>
+                    ·
+                  </span>
+                ) : null}
+                {metric}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
           {project.tagline}
         </p>
 
@@ -90,7 +105,7 @@ export function ProjectCard({ project }: { project: Project }) {
           )}
 
           {hasCaseStudy ? (
-            <span className="text-accent flex items-center gap-1 text-sm font-medium">
+            <span className="border-border-strong text-accent bg-background/60 flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors group-hover:border-accent/50 group-hover:bg-accent-subtle">
               Read case study
               <ArrowUpRight
                 className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
