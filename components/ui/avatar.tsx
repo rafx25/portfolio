@@ -4,17 +4,21 @@ import { cn } from "@/lib/utils";
 import { site } from "@/lib/site";
 
 type AvatarProps = {
-  /** Rendered pixel size. Also what next/image uses to pick a source width. */
-  size?: number;
+  /** Must set a width and height, e.g. "size-28 lg:size-40". */
   className?: string;
+  /** Should match the widths in className so the right source gets fetched. */
+  sizes?: string;
   /** Set on the one above the fold so it is not lazy-loaded. */
   priority?: boolean;
 };
 
-export function Avatar({ size = 88, className, priority = false }: AvatarProps) {
+export function Avatar({
+  className,
+  sizes = "(min-width: 1024px) 160px, 112px",
+  priority = false,
+}: AvatarProps) {
   return (
     <span
-      style={{ width: size, height: size }}
       className={cn(
         "border-border bg-surface-muted relative inline-block shrink-0 overflow-hidden rounded-full border",
         className,
@@ -24,9 +28,11 @@ export function Avatar({ size = 88, className, priority = false }: AvatarProps) 
         src={site.avatarPath}
         alt={`${site.name}, ${site.role}`}
         fill
-        sizes={`${size}px`}
+        sizes={sizes}
         priority={priority}
-        className="object-cover"
+        // The portrait's crown sits ~7% down the frame, so a centred square crop
+        // clips it. Biased upward to leave roughly 12px of headroom in the circle.
+        className="object-cover object-[50%_12%]"
       />
     </span>
   );
