@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { site } from "@/lib/site";
 import { Container } from "@/components/ui/container";
@@ -22,7 +22,11 @@ export default function AboutPage() {
     <div>
       <Container className="py-14 sm:py-20">
         <header className="flex max-w-2xl flex-col gap-6 sm:flex-row sm:items-center">
-          <Avatar size={104} priority />
+          <Avatar
+            className="size-32 sm:size-40"
+            sizes="(min-width: 640px) 160px, 128px"
+            priority
+          />
           <div>
             <p className="text-accent font-mono text-xs tracking-widest uppercase">
               About
@@ -47,8 +51,8 @@ export default function AboutPage() {
           <p>
             Nearly all of it has been internal: personnel administration, permits and
             inspections, certificate issuance, reporting for field offices. Unglamorous
-            software, and unforgiving. Staff use it every day, the data has to be right,
-            and you cannot take it down while you rework it.
+            software, and it does not forgive mistakes. Staff use it every day, the data
+            has to be right, and you cannot take it down while you rework it.
           </p>
           <p>
             That made me careful in specific ways. Read the surrounding code before
@@ -65,10 +69,11 @@ export default function AboutPage() {
             decision is more interesting than the design it replaced.
           </p>
           <p>
-            What I ship in is PHP, Laravel and MySQL, with Vue on the front end and C#
-            when a desktop device is in the loop. I am working through the modern
-            JavaScript side properly now, and this site is part of that: typed end to
-            end, tested, deployed through CI instead of by hand.
+            What I ship in is PHP on MySQL. Slim on most of it, plain PHP on the older
+            systems, and Laravel with Vue and Inertia on the service desk, which is the
+            newest. C# when a desktop device is in the loop. I am working through the
+            modern JavaScript side properly now, and this site is part of that: typed
+            end to end, tested, deployed through CI instead of by hand.
           </p>
           <p>
             On AI. I use it daily and I am specific about how. Boilerplate, unfamiliar
@@ -79,10 +84,10 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <a href={site.resumePath} download className={buttonStyles()}>
-            <Download className="size-4" aria-hidden />
-            Download resume
-          </a>
+          <Link href={site.resumePath} className={buttonStyles()}>
+            <FileText className="size-4" aria-hidden />
+            View resume
+          </Link>
           <Link href="/#contact" className={buttonStyles({ variant: "secondary" })}>
             Get in touch
           </Link>
