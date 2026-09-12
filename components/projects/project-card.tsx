@@ -13,7 +13,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       aria-labelledby={headingId}
-      className="border-border bg-surface hover:border-border-strong group relative flex flex-col overflow-hidden rounded-lg border shadow-sm shadow-accent/5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:shadow-md hover:shadow-accent/10"
+      className="border-border bg-surface hover:border-border-strong group shadow-accent/5 hover:shadow-accent/10 relative flex flex-col overflow-hidden rounded-lg border shadow-sm transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:shadow-md"
     >
       {cover ? (
         <div className="bg-surface-muted border-border border-b">
@@ -105,7 +105,7 @@ export function ProjectCard({ project }: { project: Project }) {
           )}
 
           {hasCaseStudy ? (
-            <span className="border-border-strong text-accent bg-background/60 flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors group-hover:border-accent/50 group-hover:bg-accent-subtle">
+            <span className="border-border-strong text-accent bg-background/60 group-hover:border-accent/50 group-hover:bg-accent-subtle flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors">
               Read case study
               <ArrowUpRight
                 className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

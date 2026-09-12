@@ -36,13 +36,15 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("next/image", () => ({
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & {
-    alt: string;
-    src: string;
-    fill?: boolean;
-    priority?: boolean;
-    sizes?: string;
-  }) => {
+  default: (
+    props: React.ImgHTMLAttributes<HTMLImageElement> & {
+      alt: string;
+      src: string;
+      fill?: boolean;
+      priority?: boolean;
+      sizes?: string;
+    },
+  ) => {
     const { alt, src, fill, priority, sizes, ...imageProps } = props;
 
     void fill;
@@ -59,8 +61,9 @@ describe("portfolio design adaptation", () => {
 
     const heading = screen.getByRole("heading", { level: 1, name: site.name });
     const section = heading.closest("section");
-    const portraitFrame = screen.getByAltText(`${site.name}, ${site.role}`)
-      .parentElement;
+    const portraitFrame = screen.getByAltText(
+      `${site.name}, ${site.role}`,
+    ).parentElement;
 
     expect(section).toHaveClass("text-center");
     expect(section).toHaveClass("min-h-[calc(100svh-4rem)]");
@@ -94,9 +97,9 @@ describe("portfolio design adaptation", () => {
 
     render(<ProjectCard project={project} />);
 
-    const card = screen.getByRole("heading", { level: 3, name: project.name }).closest(
-      "article",
-    );
+    const card = screen
+      .getByRole("heading", { level: 3, name: project.name })
+      .closest("article");
     const screenshot = screen.getByAltText(screenshotData.alt);
 
     expect(card).toHaveClass("rounded-lg", "shadow-sm");
@@ -110,8 +113,9 @@ describe("portfolio design adaptation", () => {
     const section = screen.getByRole("region", { name: "AI in my workflow" });
 
     expect(section).toHaveClass("py-12");
-    expect(screen.getByRole("heading", { level: 2, name: "AI in my workflow" }))
-      .toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "AI in my workflow" }),
+    ).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Tools" })).not.toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { name: "Where AI sits in the workflow" }),
