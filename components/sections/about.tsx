@@ -10,7 +10,7 @@ export function About() {
       id="about"
       eyebrow="About"
       title="Where the work comes from"
-      description="Ten years of turning paper processes into systems people use every day."
+      description="Turning paper processes into systems people use every day."
     >
       <div className="reveal text-muted-foreground mx-auto max-w-3xl space-y-4 text-center">
         <p className="text-base leading-7 sm:text-lg">
