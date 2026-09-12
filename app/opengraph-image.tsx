@@ -16,14 +16,14 @@ export default function OpengraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#111318",
-        color: "#f3f4f6",
+        background: "#181311",
+        color: "#efeae8",
         padding: "72px",
         fontFamily: "sans-serif",
       }}
     >
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ fontSize: 26, color: "#7aa7ff", letterSpacing: 4 }}>
+        <div style={{ fontSize: 26, color: "#f05560", letterSpacing: 4 }}>
           {site.role.toUpperCase()}
         </div>
         <div
@@ -45,11 +45,11 @@ export default function OpengraphImage() {
           justifyContent: "space-between",
           alignItems: "flex-end",
           fontSize: 26,
-          color: "#9aa2b1",
+          color: "#a29996",
         }}
       >
         <div>{site.name}</div>
-        <div>Laravel · PHP · MySQL · Vue · Node</div>
+        <div>PHP · Slim · Laravel · MySQL · Vue</div>
       </div>
     </div>,
     size,

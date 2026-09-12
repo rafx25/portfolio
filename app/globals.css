@@ -7,32 +7,35 @@
    Colours are OKLCH so light/dark pairs keep the same perceived lightness step.
    Every token is defined here once; components never hard-code a hex value.
 --------------------------------------------------------------------------- */
+/* Sampled from the portrait: low-chroma warm neutrals from the cream ground,
+   and a deep crimson accent taken from the jacket. The accent sits well below
+   the error red in lightness, which is what keeps the two readable apart. */
 :root {
-  --background: oklch(0.995 0 0);
-  --surface: oklch(1 0 0);
-  --surface-muted: oklch(0.972 0.002 260);
-  --foreground: oklch(0.21 0.012 264);
-  --muted-foreground: oklch(0.5 0.014 264);
-  --border: oklch(0.9 0.006 264);
-  --border-strong: oklch(0.83 0.008 264);
-  --accent: oklch(0.55 0.15 252);
-  --accent-foreground: oklch(0.99 0 0);
-  --accent-subtle: oklch(0.955 0.025 252);
-  --ring: oklch(0.55 0.15 252);
+  --background: oklch(0.993 0.004 40);
+  --surface: oklch(0.998 0.003 40);
+  --surface-muted: oklch(0.968 0.007 40);
+  --foreground: oklch(0.21 0.012 35);
+  --muted-foreground: oklch(0.505 0.014 35);
+  --border: oklch(0.895 0.009 40);
+  --border-strong: oklch(0.82 0.013 38);
+  --accent: oklch(0.47 0.16 22);
+  --accent-foreground: oklch(0.99 0.005 40);
+  --accent-subtle: oklch(0.955 0.03 25);
+  --ring: oklch(0.47 0.16 22);
 }
 
 .dark {
-  --background: oklch(0.17 0.012 265);
-  --surface: oklch(0.205 0.013 265);
-  --surface-muted: oklch(0.235 0.014 265);
-  --foreground: oklch(0.94 0.005 260);
-  --muted-foreground: oklch(0.68 0.012 262);
-  --border: oklch(0.29 0.014 265);
-  --border-strong: oklch(0.37 0.016 265);
-  --accent: oklch(0.74 0.13 244);
-  --accent-foreground: oklch(0.18 0.02 260);
-  --accent-subtle: oklch(0.27 0.04 250);
-  --ring: oklch(0.74 0.13 244);
+  --background: oklch(0.17 0.009 40);
+  --surface: oklch(0.205 0.01 40);
+  --surface-muted: oklch(0.24 0.011 40);
+  --foreground: oklch(0.94 0.006 45);
+  --muted-foreground: oklch(0.69 0.012 40);
+  --border: oklch(0.3 0.011 40);
+  --border-strong: oklch(0.38 0.013 40);
+  --accent: oklch(0.66 0.19 20);
+  --accent-foreground: oklch(0.19 0.02 30);
+  --accent-subtle: oklch(0.29 0.06 20);
+  --ring: oklch(0.66 0.19 20);
 }
 
 @theme inline {
@@ -129,5 +132,51 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Print: the resume page should come out as a clean document, so the site
+   chrome and anything decorative is dropped and colours are forced to a
+   light ground regardless of the theme the visitor was using. */
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  .dark {
+    --background: #ffffff;
+    --surface: #ffffff;
+    --surface-muted: #ffffff;
+    --foreground: #111111;
+    --muted-foreground: #333333;
+    --border: #cccccc;
+    --border-strong: #999999;
+    --accent: #8c1f2a;
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm 14mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  /* Site chrome has no place in a printed document. */
+  header[class*="sticky"],
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .resume-page {
+    padding: 0 !important;
+  }
+
+  .resume-page * {
+    color: inherit;
+  }
+
+  a {
+    text-decoration: none;
   }
 }
