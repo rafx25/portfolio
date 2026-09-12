@@ -24,6 +24,13 @@ export interface ExperienceItem {
   technologies: string[];
 }
 
+export interface EducationItem {
+  qualification: string;
+  institution: string;
+  start: string;
+  end: string;
+}
+
 export interface ArchitectureLayer {
   label: string;
   detail: string;
@@ -111,10 +118,12 @@ export interface Project {
   role: string;
   period: string;
   organization: string;
-  status: "In production" | "Delivered" | "Maintained";
+  status: "In production" | "Delivered" | "Maintained" | "UAT";
   technologies: string[];
   /** The hardest part. Shown on the card. */
   keyChallenge: string;
+  /** Three or four facts, shown as one line on the card. Must be verifiable. */
+  metrics?: string[];
   featured: boolean;
   repoUrl?: string;
   liveUrl?: string;
