@@ -21,6 +21,9 @@ export const skills: SkillGroup[] = [
     category: "Backend",
     description: "Where most of my production work lives.",
     items: [
+      { name: "Slim Framework", level: "Production experience" },
+      { name: "Native PHP (no framework)", level: "Production experience" },
+      { name: "PhpSpreadsheet / TCPDF / PhpWord", level: "Production experience" },
       { name: "Laravel", level: "Production experience" },
       { name: "REST API design", level: "Production experience" },
       { name: "Node.js", level: "Working knowledge" },
@@ -33,8 +36,8 @@ export const skills: SkillGroup[] = [
     description: "The interfaces on top of those systems.",
     items: [
       { name: "Vue.js", level: "Production experience" },
+      { name: "Inertia.js", level: "Production experience" },
       { name: "HTML & CSS", level: "Production experience" },
-      { name: "Blade templates", level: "Production experience" },
       { name: "Tailwind CSS", level: "Working knowledge" },
       { name: "React", level: "Currently learning" },
       { name: "Next.js", level: "Currently learning" },
@@ -67,6 +70,11 @@ export const skills: SkillGroup[] = [
       },
       { name: "File upload handling & validation", level: "Production experience" },
       { name: "Excel import / export pipelines", level: "Production experience" },
+      {
+        name: "Government form generation (PhpSpreadsheet, TCPDF)",
+        level: "Production experience",
+      },
+      { name: "PSR-7 / PSR-15 middleware", level: "Production experience" },
     ],
   },
   {
