@@ -52,39 +52,6 @@ export interface TechnicalChallenge {
   result: string;
 }
 
-export interface DatabaseEntity {
-  name: string;
-  purpose: string;
-  notableFields: string[];
-  relations: string[];
-}
-
-export interface ProjectDatabase {
-  note: string;
-  entities: DatabaseEntity[];
-  considerations: string[];
-}
-
-export interface ApiEndpoint {
-  method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
-  path: string;
-  purpose: string;
-  auth: string;
-}
-
-export interface ProjectApi {
-  note: string;
-  endpoints: ApiEndpoint[];
-  conventions: string[];
-}
-
-export interface CodeSample {
-  title: string;
-  language: "php" | "ts" | "js" | "csharp" | "sql" | "http";
-  description: string;
-  code: string;
-}
-
 export interface Screenshot {
   src: string;
   alt: string;
@@ -104,9 +71,6 @@ export interface CaseStudy {
   features: { title: string; detail: string }[];
   challenges: TechnicalChallenge[];
   security: string[];
-  database?: ProjectDatabase;
-  api?: ProjectApi;
-  code?: CodeSample[];
   outcomes: string[];
 }
 

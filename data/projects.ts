@@ -227,228 +227,12 @@ export const projects: Project[] = [
         "The first administrator is seeded from environment config, and that mechanism promotes but never demotes",
         "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
-      database: {
-        note: "Generalised. Representative of the shape, not the production schema.",
-        entities: [
-          {
-            name: "users",
-            purpose:
-              "Local mirror of an HRIS person, plus the role and active flag that belong to this system.",
-            notableFields: [
-              "username",
-              "role",
-              "office_id",
-              "is_active",
-              "hris_user_id",
-            ],
-            relations: [
-              "belongs to offices",
-              "has many tickets as requestor and as assignee",
-            ],
-          },
-          {
-            name: "tickets",
-            purpose: "The request itself, and its lifecycle timestamps.",
-            notableFields: [
-              "ticket_number",
-              "public_token",
-              "status",
-              "priority",
-              "date_reported",
-              "date_assigned",
-              "date_resolved",
-            ],
-            relations: [
-              "belongs to users twice, offices and categories",
-              "has many comments, attachments and activity logs",
-            ],
-          },
-          {
-            name: "ticket_activity_logs",
-            purpose: "Append-only history: actor, action, old value, new value.",
-            notableFields: ["ticket_id", "user_id", "action", "old_value", "new_value"],
-            relations: ["belongs to tickets and users"],
-          },
-          {
-            name: "ticket_attachments",
-            purpose:
-              "Uploaded files, with the stored path kept apart from the display name.",
-            notableFields: ["ticket_id", "path", "original_name", "mime", "size"],
-            relations: ["belongs to tickets and users"],
-          },
-          {
-            name: "ticket_counters",
-            purpose:
-              "One row per year. The row that gets locked when a number is issued.",
-            notableFields: ["year", "last_number"],
-            relations: ["standalone"],
-          },
-          {
-            name: "offices / ticket_categories",
-            purpose:
-              "Reference data. Offices are synced from the HRIS with an exclusion list.",
-            notableFields: ["code", "name", "is_active"],
-            relations: ["referenced by tickets"],
-          },
-        ],
-        considerations: [
-          "Unique index on ticket_number, and another on the public token, so both are enforced by the database rather than by the code that generates them.",
-          "Unique index on the counter year. That is what makes two requests creating the row at once safe.",
-          "Composite index on (status, priority) — the queue is almost always read that way.",
-          "Index on created_at for the ageing queries behind the dashboard.",
-          "Restrictive deletes on the references a ticket depends on, so history cannot be orphaned by tidying up a category.",
-          "Activity rows are written in the same transaction as the change they describe.",
-        ],
-      },
-      api: {
-        note: "Representative. Inertia routes returning props, not a JSON API.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "/tickets",
-            purpose: "File a ticket. Number is issued here",
-            auth: "Any authenticated user",
-          },
-          {
-            method: "POST",
-            path: "/tickets/{ticket}/assign",
-            purpose: "Assign or reassign",
-            auth: "IT staff or admin, and not on a terminal ticket",
-          },
-          {
-            method: "POST",
-            path: "/tickets/{ticket}/status",
-            purpose: "Move the ticket, checked against the transition map",
-            auth: "Policy decides per target status",
-          },
-          {
-            method: "POST",
-            path: "/tickets/{ticket}/resolve",
-            purpose: "Resolve with a resolution note",
-            auth: "IT staff or admin",
-          },
-          {
-            method: "GET",
-            path: "/tickets/{ticket}/attachments/{attachment}/download",
-            purpose: "Stream a file after checking it belongs to the ticket",
-            auth: "Anyone who may view the ticket",
-          },
-          {
-            method: "GET",
-            path: "/track/{token}",
-            purpose: "Public status page",
-            auth: "None. The token is the only credential",
-          },
-        ],
-        conventions: [
-          "Authorization is checked per action through a policy, not once at the top of a controller.",
-          "An illegal status change is a validation error naming the from and to states, not a generic failure.",
-          "Side effects that touch several tables run in a transaction; notifications fire after it commits.",
-          "Reads are scoped in the query rather than filtered after fetching.",
-        ],
-      },
-      code: [
-        {
-          title: "One map of legal transitions",
-          language: "php",
-          description:
-            "Rewritten for this page. Every path that changes a status goes through the same guard, so an illegal move cannot be reached from any screen.",
-          code: `private function transitions(): array
-{
-    return [
-        Status::Open->value       => [Status::Assigned, Status::Cancelled],
-        Status::Assigned->value   => [Status::InProgress, Status::OnHold, Status::Open, Status::Cancelled],
-        Status::InProgress->value => [Status::OnHold, Status::Resolved, Status::Cancelled],
-        Status::OnHold->value     => [Status::InProgress, Status::Cancelled],
-        Status::Resolved->value   => [Status::Closed, Status::InProgress],
-        Status::Closed->value     => [Status::InProgress],
-        Status::Cancelled->value  => [],
-    ];
-}
-
-public function changeStatus(Ticket $ticket, Status $to, User $actor): void
-{
-    $from = $ticket->status;
-
-    if ($from === $to || ! in_array($to, $this->transitions()[$from->value] ?? [], true)) {
-        throw ValidationException::withMessages([
-            'status' => "Cannot move a ticket from {$from->label()} to {$to->label()}.",
-        ]);
-    }
-
-    DB::transaction(function () use ($ticket, $from, $to, $actor) {
-        $ticket->status = $to;
-        $this->stampDatesFor($ticket, $from, $to);
-        $ticket->save();
-
-        $this->log($ticket, $actor, 'status_changed', $from->value, $to->value);
-    });
-
-    // After the commit, so a failed notification cannot roll back the change.
-    $this->notifier->fire('status_changed', $ticket->refresh(), $actor);
-}`,
-        },
-        {
-          title: "Ticket numbers that survive concurrency",
-          language: "php",
-          description:
-            "Rewritten for this page. The unique index makes creating the row safe under a race; the row lock makes incrementing it safe.",
-          code: `public function next(int $year): string
-{
-    return DB::transaction(function () use ($year) {
-        // Unique index on year: if two requests race here, one wins and the
-        // other simply reads the row that already exists.
-        TicketCounter::firstOrCreate(['year' => $year], ['last_number' => 0]);
-
-        // The second caller blocks here until the first commits.
-        $counter = TicketCounter::where('year', $year)->lockForUpdate()->first();
-
-        $counter->last_number++;
-        $counter->save();
-
-        return sprintf('IT-%d-%05d', $year, $counter->last_number);
-    });
-}`,
-        },
-        {
-          title: "The public page decides what it will say",
-          language: "php",
-          description:
-            "Rewritten for this page. The payload is built field by field, so adding a column to the table never quietly publishes it.",
-          code: `public function show(string $token): Response
-{
-    $ticket = Ticket::query()
-        ->where('public_token', $token)
-        ->with(['office:id,name,code', 'category:id,name', 'activityLogs'])
-        ->firstOrFail();
-
-    return Inertia::render('Public/Tickets/Status', [
-        'ticket' => [
-            'ticket_number' => $ticket->ticket_number,
-            'subject'       => $ticket->subject,
-            'status'        => $ticket->status->label(),
-            'priority'      => $ticket->priority->label(),
-            'office'        => $ticket->office?->name,
-            'date_reported' => $ticket->date_reported?->toDateTimeString(),
-            'date_resolved' => $ticket->date_resolved?->toDateTimeString(),
-
-            // Generic labels only. No staff names, no comments, no resolution text.
-            'activity' => $ticket->activityLogs->map(fn ($log) => [
-                'label'      => $this->publicLabel($log->action),
-                'created_at' => $log->created_at?->toDateTimeString(),
-            ]),
-        ],
-    ]);
-}`,
-        },
-      ],
       outcomes: [
         "Requests to IT are recorded, assigned and closed in one place, with a number the reporter can quote.",
         "Staff sign in with the credentials they already have. There is no account to provision and no second password.",
         "Every ticket has a history: who acted, what changed, and when.",
         "A reporter can check their own ticket without logging in, and without seeing anything internal.",
         "Feature tests cover the authorization rules and the transition map, so the rules that matter are the ones under test.",
-        "[Add a figure you can verify once it has been running a while: tickets handled, offices using it, time to first response.]",
       ],
     },
   },
@@ -527,8 +311,6 @@ public function changeStatus(Ticket $ticket, Status $to, User $actor): void
         "In-app notifications and live approval queues",
         "Deployment, production support and bug fixes",
       ],
-      teamNote:
-        "[Say here whether you built this alone or with others, and which parts were yours. It is the largest system in this portfolio, so reviewers will ask.]",
       architecture: {
         summary:
           "A Slim 4 application behind a PSR-15 middleware stack, serving a JSON API to a front end of about ninety AMD modules. Slim gives you routing and PSR-7 and very little else, so the layering is built rather than inherited: route files per module, middleware for the cross-cutting rules, DTOs and validators at the boundary, services for the business logic, and models over PDO.",
@@ -729,278 +511,6 @@ public function changeStatus(Ticket $ticket, Status $to, User $actor): void
         "A maintenance-mode middleware can close the application to users without taking the host down",
         "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
-      database: {
-        note: "Generalised. Table and column names are representative, not the production schema.",
-        entities: [
-          {
-            name: "employees",
-            purpose: "Person of record. Everything else hangs off this.",
-            notableFields: ["employee_no", "office_id", "position_id", "status"],
-            relations: [
-              "has many applications",
-              "has many approval steps as approver",
-              "has one schedule",
-            ],
-          },
-          {
-            name: "applications",
-            purpose: "One row per filed document, typed by request type.",
-            notableFields: ["type", "employee_id", "status", "filed_at", "deleted_at"],
-            relations: [
-              "belongs to employees",
-              "has many approval steps and audit rows",
-            ],
-          },
-          {
-            name: "approval_steps",
-            purpose: "The route. Ordered rows for who must act and what they decided.",
-            notableFields: [
-              "level",
-              "approver_id",
-              "acted_by",
-              "decision",
-              "remarks",
-              "acted_at",
-            ],
-            relations: ["belongs to applications and employees"],
-          },
-          {
-            name: "delegations",
-            purpose:
-              "Temporary transfer of approval authority, valid for a date range.",
-            notableFields: [
-              "delegator_id",
-              "delegate_id",
-              "scope",
-              "starts_on",
-              "ends_on",
-            ],
-            relations: ["belongs to employees, twice"],
-          },
-          {
-            name: "signatory_snapshots",
-            purpose: "Printed name and designation per slot, frozen at approval.",
-            notableFields: [
-              "app_type",
-              "app_id",
-              "slot_order",
-              "printed_name",
-              "printed_desig",
-            ],
-            relations: ["belongs to an application of any type"],
-          },
-          {
-            name: "credit_ledger",
-            purpose: "Credit and debit rows. The balance is their sum.",
-            notableFields: [
-              "employee_id",
-              "credit_type",
-              "credit",
-              "debit",
-              "effective_on",
-            ],
-            relations: ["belongs to employees, optionally to an application"],
-          },
-          {
-            name: "audit_logs / approval_logs / login_logs",
-            purpose:
-              "Three histories, kept apart because they answer different questions.",
-            notableFields: ["actor_id", "action", "target", "created_at"],
-            relations: ["reference employees and applications"],
-          },
-        ],
-        considerations: [
-          "Unique key on (document type, application id, signatory slot), so a slot cannot be snapshotted twice.",
-          "Composite index on (application_id, level). The approval screen always reads a route in order.",
-          "Index on (employee_id, status). 'My pending requests' is the most-hit query in the app.",
-          "Foreign keys with restrictive deletes. Records are soft-deleted rather than removed.",
-          "One transaction covers an application, its approval step, its signatory snapshot and the ledger.",
-          "Audit rows go in the same transaction as the change, so a missing audit row means the change did not happen either.",
-        ],
-      },
-      api: {
-        note: "Representative shapes. Real paths and payloads are not published.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "/api/leave-applications",
-            purpose: "File a leave request",
-            auth: "Authenticated, own records only",
-          },
-          {
-            method: "PATCH",
-            path: "/api/leave-applications/:id/status",
-            purpose: "Approve or reject the current step",
-            auth: "Resolved approver for that step",
-          },
-          {
-            method: "GET",
-            path: "/api/approvals/pending",
-            purpose: "Approver queue, including delegated items",
-            auth: "Holder of an approval permission",
-          },
-          {
-            method: "GET",
-            path: "/api/notifications/poll",
-            purpose: "Cheap endpoint the badge polls",
-            auth: "Authenticated",
-          },
-          {
-            method: "GET",
-            path: "/api/sse/:module/approval",
-            purpose: "Live approval queue stream, open only while the screen is",
-            auth: "Holder of an approval permission",
-          },
-          {
-            method: "GET",
-            path: "/api/profile/pds/export",
-            purpose: "Generate the Personal Data Sheet for a revision year",
-            auth: "Own profile, or HR",
-          },
-        ],
-        conventions: [
-          "Validation runs before authorization, which runs before business logic.",
-          "422 for validation with a field-keyed error object, 403 for permissions, 409 when the application is no longer in a state that allows the action.",
-          "Submitting the same decision twice does not write two audit rows.",
-          "Responses leave out fields the caller is not allowed to see, rather than sending them and hiding them.",
-          "Clients get messages, never stack traces or SQL.",
-        ],
-      },
-      code: [
-        {
-          title: "Freezing the signatory at the moment of approval",
-          language: "php",
-          description:
-            "Rewritten for this page. The decision, the snapshot and the audit row land together or not at all.",
-          code: `public function decide(ApprovalStep $step, int $actorId, Decision $decision): void
-{
-    $this->pdo->beginTransaction();
-
-    try {
-        $this->routes->assertCanAct($step, $actorId, new DateTimeImmutable());
-        $this->steps->recordDecision($step->id, $decision, $actorId);
-
-        // Who signed this is a fact about now, not a lookup for later.
-        $signatory = $this->signatories->resolve($step->approverId);
-
-        $this->snapshots->freeze(
-            appType: $step->appType,
-            appId: $step->appId,
-            slot: $step->level,
-            printedName: $signatory->printedName,
-            printedDesignation: $signatory->designation,
-            decidedBy: $actorId,
-        );
-
-        $this->audit->record($actorId, "application.{$decision->value}", $step->appId);
-
-        $this->pdo->commit();
-    } catch (Throwable $e) {
-        $this->pdo->rollBack();
-        throw $e;
-    }
-}
-
-// Print path: prefer the snapshot, fall back for forms approved before it existed.
-public function printedSignatory(string $appType, int $appId, int $slot): Signatory
-{
-    return $this->snapshots->find($appType, $appId, $slot)
-        ?? $this->signatories->resolveLive($appType, $appId, $slot);
-}`,
-        },
-        {
-          title: "One PDS service per form revision",
-          language: "php",
-          description:
-            "Rewritten for this page. The two revisions share no code on purpose.",
-          code: `final class PdsExportServiceFactory
-{
-    public const DEFAULT_VERSION = '2026';
-
-    private const SERVICES = [
-        '2025' => PdsExportService2025::class,
-        '2026' => PdsExportService2026::class,
-    ];
-
-    /**
-     * Each revision is a frozen government form. A new one is a new class:
-     * copy the latest, apply the template's changes, register it here.
-     * Nothing is shared, on purpose.
-     */
-    public static function make(PDO $db, ?string $version = null): PdsExportService
-    {
-        $version = trim((string) $version) ?: self::DEFAULT_VERSION;
-
-        if (! isset(self::SERVICES[$version])) {
-            throw new InvalidArgumentException("Unsupported PDS revision: {$version}");
-        }
-
-        $class = self::SERVICES[$version];
-
-        return new $class($db);
-    }
-}`,
-        },
-        {
-          title: "A stream that closes itself",
-          language: "js",
-          description:
-            "Rewritten for this page. Every open connection ties up a worker, so the browser has to be the one that closes it.",
-          code: `// One instance per tab. A second call reuses the first.
-if (window.__SSE_INSTANCE__) return window.__SSE_INSTANCE__;
-
-const sse = {
-  open(url) {
-    if (!window.EventSource || !onApprovalRoute()) return;
-    if (source && source.readyState !== EventSource.CLOSED) return;
-
-    source = new EventSource(url);
-    source.onmessage = (e) => debounce(() => refreshTable(JSON.parse(e.data)), 250);
-    watchForStall();
-  },
-
-  close() {
-    source?.close();
-    source = null;
-    clearTimeout(stallTimer);
-  },
-};
-
-// Leaving the screen, hiding the tab or closing it all end the connection.
-window.addEventListener("hashchange", () => onApprovalRoute() || sse.close());
-window.addEventListener("beforeunload", sse.close);
-document.addEventListener("visibilitychange", () =>
-  document.visibilityState === "hidden" ? sse.close() : sse.reopen(),
-);`,
-        },
-        {
-          title: "Role middleware",
-          language: "php",
-          description:
-            "Rewritten for this page. A PSR-15 middleware, so it composes onto any route group.",
-          code: `final class CheckRole implements MiddlewareInterface
-{
-    public function __construct(private array $allowed) {}
-
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        $role = $request->getAttribute('session')['role'] ?? null;
-
-        if ($role === null || ! in_array($role, $this->allowed, true)) {
-            throw new HttpForbiddenException($request);
-        }
-
-        return $handler->handle($request);
-    }
-}
-
-$app->group('/delegation', $routes)
-    ->add(new RateLimiter(ADMIN_MAX_REQ, ADMIN_DEC_SEC))
-    ->add(new CheckCsrf())
-    ->add(new CheckUserActive())
-    ->add(new CheckSession());`,
-        },
-      ],
       outcomes: [
         "Leave, overtime, CTO and office orders are filed and approved in one system instead of on paper.",
         "Approved applications come out as the official forms, with the signatory who actually approved them.",
@@ -1019,7 +529,7 @@ $app->group('/delegation', $routes)
       "Technical Safety Inspection Online System. Establishments apply online for a Permit to Operate or an electrical inspection certificate, and the office runs the inspection, payment and issuance from the same place.",
     type: "Regulatory workflow system",
     role: "Full Stack Developer",
-    period: "[YYYY] — [YYYY]",
+    period: "2024 — Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord", "REST API"],
@@ -1230,51 +740,10 @@ $app->group('/delegation', $routes)
         "Certificates carry a reference that can be checked against the issuance record",
         "Screenshots here show blank account names; no establishment or account data is published",
       ],
-      api: {
-        note: "Representative shapes.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "/api/applications",
-            purpose: "File an application against an enrolled establishment",
-            auth: "Establishment account",
-          },
-          {
-            method: "PATCH",
-            path: "/api/applications/:id/assignment",
-            purpose: "Assign or reassign inspector and evaluator",
-            auth: "Office account with assignment permission",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/inspection",
-            purpose: "Record an inspection result",
-            auth: "Assigned inspector",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/order-of-payment",
-            purpose: "Issue an order of payment",
-            auth: "Evaluator",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/certificate",
-            purpose: "Issue the certificate",
-            auth: "Signatory permission",
-          },
-        ],
-        conventions: [
-          "Stage transitions are their own endpoints, not a PATCH on a status field, so each one can carry its own permission and payload.",
-          "A transition out of order returns 409 with the current stage.",
-          "Reads are scoped to the caller's province at the query level, not filtered in the view.",
-        ],
-      },
       outcomes: [
         "Establishments file and follow their applications online instead of by phone and counter visit.",
         "Backlogs at each stage are visible per province without asking anyone.",
         "Assignment, issuance and corrections all leave a record.",
-        "[Add verifiable figures if you have them, such as enrolled establishments or applications processed.]",
       ],
     },
   },
@@ -1473,7 +942,6 @@ $app->group('/delegation', $routes)
         "Two staff verifying the same company reach the same answer.",
         "Every certificate is traceable to the verification behind it.",
         "A certificate presented by a third party can be confirmed.",
-        "[Add verifiable figures if you have them, such as applications processed.]",
       ],
     },
   },
@@ -1658,129 +1126,6 @@ $app->group('/delegation', $routes)
         "No biometric data, sample template, capture screen or beneficiary record appears anywhere in this portfolio",
         "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
-      api: {
-        note: "Representative shapes. The local service contract and the server endpoints are both simplified here.",
-        endpoints: [
-          {
-            method: "GET",
-            path: "http://127.0.0.1:PORT/status",
-            purpose: "Is the service up, is a reader attached",
-            auth: "Loopback only",
-          },
-          {
-            method: "POST",
-            path: "http://127.0.0.1:PORT/capture",
-            purpose: "Wait for a finger, return a template and a quality score",
-            auth: "Loopback only",
-          },
-          {
-            method: "POST",
-            path: "http://127.0.0.1:PORT/match",
-            purpose: "1:N compare a probe against supplied candidates",
-            auth: "Loopback only",
-          },
-          {
-            method: "POST",
-            path: "http://127.0.0.1:PORT/extract",
-            purpose: "Convert a browser-captured image into a template",
-            auth: "Loopback only",
-          },
-          {
-            method: "GET",
-            path: "/api/biometric/templates",
-            purpose: "Candidate templates for a given finger",
-            auth: "Authenticated field staff",
-          },
-          {
-            method: "POST",
-            path: "/api/biometric/save-template",
-            purpose: "Store a template against a beneficiary record",
-            auth: "Authenticated field staff",
-          },
-        ],
-        conventions: [
-          "Device errors come back as a code the UI maps to an instruction, such as checking the USB connection.",
-          "A capture returns a quality score so a poor scan can be rejected while the person is still there.",
-          "A match returns the score and the threshold, not just a yes or no, so a borderline result can be shown to the operator instead of decided for them.",
-        ],
-      },
-      code: [
-        {
-          title: "Talking to the local service, with a timeout per operation",
-          language: "js",
-          description:
-            "Rewritten for this page. A status check should fail fast; a capture is waiting on a human and should not.",
-          code: `const BASE = "http://127.0.0.1:PORT";
-
-// Short timeout: if the tray app is not running we want to say so immediately.
-async function status() {
-  try {
-    const res = await fetch(\`\${BASE}/status\`, { signal: AbortSignal.timeout(2500) });
-    return res.ok ? await res.json() : null;
-  } catch {
-    return null; // Not running, or no reader. The caller tells the operator.
-  }
-}
-
-// Long timeout: this one blocks until somebody puts a finger on the reader.
-async function capture() {
-  const res = await fetch(\`\${BASE}/capture\`, {
-    method: "POST",
-    signal: AbortSignal.timeout(35000),
-  });
-  return res.json(); // { success, template, quality, error }
-}
-
-// Closing the dialog must not leave the reader waiting for a finger.
-async function stopCapture() {
-  try {
-    await fetch(\`\${BASE}/stop-capture\`, { method: "POST", signal: AbortSignal.timeout(2000) });
-  } catch {
-    /* best effort */
-  }
-}`,
-        },
-        {
-          title: "Choosing who to compare against",
-          language: "sql",
-          description:
-            "Rewritten for this page. Narrow to the same finger, but never drop the records that predate the finger being recorded.",
-          code: `SELECT beneficiary_id, template, finger_position
-FROM   biometric_enrolments
-WHERE  template IS NOT NULL
-  AND  template <> ''
-  AND  (
-        finger_position = :finger_position
-        OR finger_position IS NULL      -- enrolled before the finger was recorded
-        OR finger_position = 'unknown'
-       );`,
-        },
-        {
-          title: "The hand-off",
-          language: "js",
-          description:
-            "Rewritten for this page. The server decides who the candidates are; the local service decides whether any of them match.",
-          code: `async function checkForDuplicate(fingerPosition) {
-  const reader = await status();
-  if (!reader?.readerConnected) {
-    return { error: "No fingerprint reader detected. Check the USB connection." };
-  }
-
-  const probe = await capture();
-  if (!probe.success) return { error: probe.error };
-
-  // The server answers "who should this be compared against".
-  const { templates } = await api.get("biometric/templates", { finger_position: fingerPosition });
-
-  // The local service answers "does it match any of them", using the native SDK.
-  const result = await match(probe.template, templates);
-
-  return result.matched
-    ? { duplicate: true, beneficiaryId: result.matchedOsecId, score: result.score }
-    : { duplicate: false, template: probe.template };
-}`,
-        },
-      ],
       outcomes: [
         "A duplicate enrolment is caught on site, while the person is still present, rather than surfacing later in a payout list.",
         "Field staff work from the browser they already use; the device code lives in one small service on the laptop.",
@@ -1791,8 +1136,7 @@ WHERE  template IS NOT NULL
     },
   },
 
-  // Other systems. These get a card with one screenshot, not a case study.
-  // Adding a `caseStudy` object to any of them gives it a page.
+  // Other systems
   {
     slug: "aep",
     name: "AEP",
@@ -1800,7 +1144,7 @@ WHERE  template IS NOT NULL
       "Alien Employment Permit applications, from filing through pre-evaluation and evaluation to ID card release, with exclusion and exemption handled as separate paths and a pickup schedule at the end.",
     type: "Regulatory workflow system",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - 2026",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord"],
@@ -1832,7 +1176,7 @@ WHERE  template IS NOT NULL
       "Client Satisfaction Measurement. The ARTA survey collected online across offices and services, with the analytics the report needs.",
     type: "Survey and analytics",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["Slim 4", "PHP", "MySQL", "Chart.js", "TCPDF"],
@@ -1865,7 +1209,7 @@ WHERE  template IS NOT NULL
       "Reporting system for Public Employment Service Offices, covering job placement, youth employability, profiling and welfare programme figures per LGU.",
     type: "Reporting system",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["Slim 4", "PHP", "MySQL", "PhpSpreadsheet", "SSE"],
