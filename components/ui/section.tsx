@@ -24,29 +24,34 @@ export function Section({
     <section
       id={id}
       aria-labelledby={headingId}
-      className={cn("border-border scroll-mt-24 border-t py-16 sm:py-24", className)}
+      className={cn("border-border scroll-mt-24 border-t py-20 sm:py-28", className)}
       {...props}
     >
       <Container>
-        <header className="reveal max-w-2xl">
+        <header className="reveal text-center">
           {eyebrow ? (
-            <p className="text-accent font-mono text-xs tracking-widest uppercase">
+            <p className="text-accent font-mono text-xs font-semibold tracking-widest uppercase">
               {eyebrow}
             </p>
           ) : null}
+
           <h2
             id={headingId}
-            className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl"
+            className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl"
           >
             {title}
           </h2>
+
+          <hr className="bg-accent mx-auto my-5 h-1 w-8 rounded border-0" />
+
           {description ? (
-            <p className="text-muted-foreground mt-4 text-base leading-relaxed">
+            <p className="text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed">
               {description}
             </p>
           ) : null}
         </header>
-        <div className="mt-10 sm:mt-12">{children}</div>
+
+        <div className="mt-12 sm:mt-14">{children}</div>
       </Container>
     </section>
   );

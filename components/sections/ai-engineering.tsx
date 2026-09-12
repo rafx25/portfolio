@@ -1,67 +1,46 @@
-import { aiWorkflow, aiTools, aiPrinciple } from "@/data/engineering";
-import { Section } from "@/components/ui/section";
+import { aiNote, aiPrinciple } from "@/data/engineering";
+import { Container } from "@/components/ui/container";
 
 export function AiEngineering() {
   return (
-    <Section
+    <section
       id="ai"
-      eyebrow="AI-assisted engineering"
-      title="How I actually use AI tools"
-      description="AI sits in my workflow the way a linter does. It speeds up the mechanical parts. It does not decide the data model, and it does not get the last word on whether something is right."
+      aria-labelledby="ai-heading"
+      className="border-border scroll-mt-24 border-t py-12 sm:py-14"
     >
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
-        <div className="reveal">
-          <h3 className="text-base font-semibold tracking-tight">Tools</h3>
-          <dl className="mt-4 space-y-4">
-            {aiTools.map((tool) => (
-              <div key={tool.name}>
-                <dt className="text-accent font-mono text-sm">{tool.name}</dt>
-                <dd className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                  {tool.use}
-                </dd>
-              </div>
-            ))}
-          </dl>
+      <Container>
+        <div className="border-border bg-surface reveal rounded-lg border p-5 sm:p-6">
+          <div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div>
+              <p className="text-accent font-mono text-xs font-semibold uppercase">
+                {aiNote.eyebrow}
+              </p>
+              <h2 id="ai-heading" className="mt-2 text-xl font-semibold tracking-tight">
+                {aiNote.title}
+              </h2>
+            </div>
 
-          <blockquote className="border-accent bg-accent-subtle/50 mt-8 border-l-2 py-3 pl-4 text-sm leading-relaxed">
-            {aiPrinciple}
-          </blockquote>
-
-          <p className="text-muted-foreground mt-6 text-sm leading-relaxed">
-            The review step is the part that matters. Generated code sounds sure of
-            itself about permissions, validation and query building, and it is wrong
-            about them often enough that reading it line by line is cheaper than not.
-          </p>
+            <div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {aiNote.summary}
+              </p>
+              <blockquote className="border-accent mt-4 border-l-2 pl-4 text-sm leading-relaxed">
+                {aiPrinciple}
+              </blockquote>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {aiNote.checks.map((check) => (
+                  <li
+                    key={check}
+                    className="border-border bg-background text-muted-foreground rounded border px-2.5 py-1 font-mono text-[0.7rem]"
+                  >
+                    {check}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-
-        <div className="reveal">
-          <h3 className="text-base font-semibold tracking-tight">
-            Where AI sits in the workflow
-          </h3>
-          <ol className="mt-4 space-y-0">
-            {aiWorkflow.map((item, index) => (
-              <li key={item.step} className="relative pb-6 pl-9 last:pb-0">
-                {index < aiWorkflow.length - 1 ? (
-                  <span
-                    className="bg-border absolute top-7 left-[13px] h-full w-px"
-                    aria-hidden
-                  />
-                ) : null}
-                <span
-                  className="border-border bg-surface text-muted-foreground absolute top-0 left-0 flex size-7 items-center justify-center rounded-full border font-mono text-[0.7rem]"
-                  aria-hidden
-                >
-                  {index + 1}
-                </span>
-                <p className="text-sm font-medium">{item.step}</p>
-                <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                  {item.detail}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </Section>
+      </Container>
+    </section>
   );
 }

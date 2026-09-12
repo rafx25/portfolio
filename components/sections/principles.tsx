@@ -7,7 +7,7 @@ export function Principles() {
       id="principles"
       eyebrow="How I work"
       title="How I work"
-      description="Each of these is on the list because ignoring it cost me something in a system that was already live."
+      description="Each one is here because ignoring it cost me something in a live system."
     >
       <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
         {principles.map((principle) => (

@@ -1,4 +1,4 @@
-import { experience } from "@/data/experience";
+import { education, experience } from "@/data/experience";
 import { formatDateRange } from "@/lib/utils";
 import { Section } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,8 @@ export function Experience() {
     <Section
       id="experience"
       eyebrow="Experience"
-      title="Where the production experience comes from"
-      description="Building for an office that has to keep working while you change the software teaches things a side project does not."
+      title="How I got here"
+      description="Data entry to full stack, mostly spent replacing manual work with systems people depend on."
     >
       <ol className="space-y-12">
         {experience.map((item) => (
@@ -56,6 +56,25 @@ export function Experience() {
           </li>
         ))}
       </ol>
+
+      <div className="border-border reveal mt-14 border-t pt-8">
+        <h3 className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
+          Education
+        </h3>
+        <ul className="mt-4 space-y-3">
+          {education.map((item) => (
+            <li
+              key={item.qualification}
+              className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <span className="text-sm font-medium">{item.qualification}</span>
+              <span className="text-muted-foreground text-sm">
+                {item.institution} · {item.start}&ndash;{item.end}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </Section>
   );
 }
