@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/container";
 import { ThemeToggle } from "./theme-toggle";
 
 const links = [
+  { href: "/#home", label: "Home" },
   { href: "/#projects", label: "Projects" },
   { href: "/#experience", label: "Experience" },
   { href: "/#stack", label: "Stack" },

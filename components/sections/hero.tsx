@@ -28,13 +28,14 @@ const focus = [
 export function Hero() {
   return (
     <section
-      className="flex min-h-[calc(100svh-4rem)] items-center pt-8 pb-12 text-center sm:pt-10 sm:pb-16"
+      id="home"
+      className="flex min-h-[calc(100svh-4rem)] scroll-mt-16 items-center pt-8 pb-12 text-center sm:pt-10 sm:pb-16"
       aria-labelledby="hero-heading"
     >
       <Container>
         <div className="mx-auto flex max-w-4xl flex-col items-center">
           <Avatar
-            className="mx-auto size-24 shadow-sm shadow-accent/15 sm:size-28 lg:size-36"
+            className="shadow-accent/15 mx-auto size-24 shadow-sm sm:size-28 lg:size-36"
             sizes="(min-width: 1024px) 144px, (min-width: 640px) 112px, 96px"
             priority
           />
@@ -59,9 +60,7 @@ export function Hero() {
               {site.name}
             </h1>
 
-            <p className="mt-3 text-xl font-medium sm:text-2xl">
-              {site.role}
-            </p>
+            <p className="mt-3 text-xl font-medium sm:text-2xl">{site.role}</p>
 
             <hr className="bg-accent mx-auto mt-4 h-1 w-8 rounded border-0" />
 
