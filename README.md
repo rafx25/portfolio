@@ -11,18 +11,18 @@ build time, and the only server work at runtime is the contact form.
 
 ## Tech stack
 
-| Layer      | Choice                                              |
-| ---------- | --------------------------------------------------- |
-| Framework  | Next.js 16 (App Router, React 19, Turbopack)        |
-| Language   | TypeScript, `strict` + `noUncheckedIndexedAccess`   |
-| Styling    | Tailwind CSS v4, design tokens in `app/globals.css` |
-| Icons      | lucide-react, plus two inlined brand marks          |
-| Theme      | next-themes (class strategy, system default)        |
-| Validation | Zod, one schema shared by client and server         |
-| Email      | Resend (optional — the site works without it)       |
-| Testing    | Vitest, Testing Library, jsdom                      |
-| Analytics  | Vercel Analytics and Speed Insights                 |
-| Hosting    | Vercel                                              |
+| Layer      | Choice                                             |
+| ---------- | -------------------------------------------------- |
+| Framework  | Next.js 16 (App Router, React 19, Turbopack)       |
+| Language   | TypeScript,`strict` + `noUncheckedIndexedAccess`   |
+| Styling    | Tailwind CSS v4, design tokens in`app/globals.css` |
+| Icons      | lucide-react, plus two inlined brand marks         |
+| Theme      | next-themes (class strategy, system default)       |
+| Validation | Zod, one schema shared by client and server        |
+| Email      | Resend (optional — the site works without it)      |
+| Testing    | Vitest, Testing Library, jsdom                     |
+| Analytics  | Vercel Analytics and Speed Insights                |
+| Hosting    | Vercel                                             |
 
 ## Features
 
@@ -180,9 +180,3 @@ The architecture, the technology choices, the trade-offs recorded in
 the developer's own work and responsibility. Generated code was treated as
 untrusted until it was read, understood and tested. That is the same standard
 described in the AI-assisted engineering section of the site itself.
-
-## License
-
-[Choose one, or delete this section. MIT is a reasonable default for a
-portfolio; use "All rights reserved" if you would rather nobody copied the
-content.]
