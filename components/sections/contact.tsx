@@ -61,15 +61,6 @@ export function Contact() {
               {site.location}
             </li>
           </ul>
-
-          <div className="border-border bg-surface text-muted-foreground rounded-lg border p-4 text-xs leading-relaxed">
-            <p className="text-foreground font-medium">How this form works</p>
-            <p className="mt-2">
-              Messages are validated in the browser and again on the server, rate
-              limited per IP, and screened with a hidden honeypot field. They are sent
-              on by email. Nothing is stored, because there is no reason to store it.
-            </p>
-          </div>
         </div>
 
         <div className="reveal">

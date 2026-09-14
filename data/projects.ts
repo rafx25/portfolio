@@ -584,7 +584,6 @@ export const projects: Project[] = [
         "Certificate issuance, status modification and revert paths",
         "Deployment and maintenance",
       ],
-      teamNote: "[Note which parts were yours if this was shared work.]",
       architecture: {
         summary:
           "A PHP application with no framework behind it. The layering is hand-built: config, controllers grouped by audience, models, and a thin service layer for the parts worth naming. Two faces, a public side where establishments enrol and file and an office side scoped by province and by route permission. An application row carries its stage, and each stage transition writes its own record.",
@@ -808,7 +807,6 @@ export const projects: Project[] = [
         "Per-route access to case data",
         "Deployment and maintenance",
       ],
-      teamNote: "[Note which parts were yours if this was shared work.]",
       architecture: {
         summary:
           "A pipeline. Each stage writes a record, so an issued certificate can be traced back to the exact verification behind it.",
