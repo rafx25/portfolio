@@ -4,6 +4,7 @@ import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { site, isPlaceholder } from "@/lib/site";
 import { Section } from "@/components/ui/section";
 import { ContactForm } from "./contact-form";
+import { CopyEmail } from "./copy-email";
 
 export function Contact() {
   const email = isPlaceholder(site.email) ? null : site.email;
@@ -29,7 +30,7 @@ export function Contact() {
         <div className="reveal space-y-6 text-sm">
           <ul className="space-y-3">
             {email ? (
-              <li className="flex items-center gap-3">
+              <li className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <Mail className="text-muted-foreground size-4" aria-hidden />
                 <a
                   href={`mailto:${email}`}
@@ -37,6 +38,7 @@ export function Contact() {
                 >
                   {email}
                 </a>
+                <CopyEmail email={email} />
               </li>
             ) : null}
 
@@ -59,15 +61,6 @@ export function Contact() {
               {site.location}
             </li>
           </ul>
-
-          <div className="border-border bg-surface text-muted-foreground rounded-lg border p-4 text-xs leading-relaxed">
-            <p className="text-foreground font-medium">How this form works</p>
-            <p className="mt-2">
-              Messages are validated in the browser and again on the server, rate
-              limited per IP, and screened with a hidden honeypot field. They are sent
-              on by email. Nothing is stored, because there is no reason to store it.
-            </p>
-          </div>
         </div>
 
         <div className="reveal">

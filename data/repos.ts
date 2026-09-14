@@ -9,11 +9,11 @@ export interface Repo {
 }
 
 export const repos: Repo[] = [
-  // Example shape — replace with a real repository, or delete the entry.
-  // {
-  //   name: "portfolio",
-  //   description: "This site. Next.js App Router, TypeScript, Tailwind, no CMS.",
-  //   url: "https://github.com/YOUR-USERNAME/portfolio",
-  //   technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-  // },
+  {
+    name: "portfolio",
+    description:
+      "This site. Next.js App Router and TypeScript, with Vitest tests and a GitHub Actions pipeline that lints, type-checks, tests and builds every push.",
+    url: "https://github.com/rafx25/portfolio",
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Vitest"],
+  },
 ];

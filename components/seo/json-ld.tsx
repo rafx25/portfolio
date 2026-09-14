@@ -27,15 +27,7 @@ export function PersonJsonLd() {
         description: site.tagline,
         url: site.url,
         ...(sameAs.length > 0 ? { sameAs } : {}),
-        knowsAbout: [
-          "PHP",
-          "Laravel",
-          "MySQL",
-          "REST API design",
-          "Vue.js",
-          "Role-Based Access Control",
-          "Database design",
-        ],
+        knowsAbout: [...site.stack, ...site.focus],
       }}
     />
   );

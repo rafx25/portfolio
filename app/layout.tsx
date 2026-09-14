@@ -31,16 +31,7 @@ export const metadata: Metadata = {
   applicationName: `${site.name} Portfolio`,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
-  keywords: [
-    "Full Stack Developer",
-    "Laravel Developer",
-    "PHP Developer",
-    "REST API",
-    "Vue.js",
-    "Next.js",
-    "MySQL",
-    "Philippines",
-  ],
+  keywords: [site.role, ...site.stack, ...site.focus, site.location, "Philippines"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

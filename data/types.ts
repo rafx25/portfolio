@@ -24,6 +24,13 @@ export interface ExperienceItem {
   technologies: string[];
 }
 
+export interface EducationItem {
+  qualification: string;
+  institution: string;
+  start: string;
+  end: string;
+}
+
 export interface ArchitectureLayer {
   label: string;
   detail: string;
@@ -45,39 +52,6 @@ export interface TechnicalChallenge {
   result: string;
 }
 
-export interface DatabaseEntity {
-  name: string;
-  purpose: string;
-  notableFields: string[];
-  relations: string[];
-}
-
-export interface ProjectDatabase {
-  note: string;
-  entities: DatabaseEntity[];
-  considerations: string[];
-}
-
-export interface ApiEndpoint {
-  method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
-  path: string;
-  purpose: string;
-  auth: string;
-}
-
-export interface ProjectApi {
-  note: string;
-  endpoints: ApiEndpoint[];
-  conventions: string[];
-}
-
-export interface CodeSample {
-  title: string;
-  language: "php" | "ts" | "js" | "csharp" | "sql" | "http";
-  description: string;
-  code: string;
-}
-
 export interface Screenshot {
   src: string;
   alt: string;
@@ -97,9 +71,6 @@ export interface CaseStudy {
   features: { title: string; detail: string }[];
   challenges: TechnicalChallenge[];
   security: string[];
-  database?: ProjectDatabase;
-  api?: ProjectApi;
-  code?: CodeSample[];
   outcomes: string[];
 }
 
@@ -111,10 +82,12 @@ export interface Project {
   role: string;
   period: string;
   organization: string;
-  status: "In production" | "Delivered" | "Maintained";
+  status: "In production" | "Delivered" | "Maintained" | "UAT";
   technologies: string[];
   /** The hardest part. Shown on the card. */
   keyChallenge: string;
+  /** Three or four facts, shown as one line on the card. Must be verifiable. */
+  metrics?: string[];
   featured: boolean;
   repoUrl?: string;
   liveUrl?: string;

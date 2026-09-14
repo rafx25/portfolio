@@ -6,18 +6,264 @@ import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
+    slug: "itsd",
+    name: "IT Service Desk",
+    tagline:
+      "Ticketing for the IT unit. Staff across the regional and provincial offices file a ticket, IT assigns and works it, and the reporter can follow it without an account.",
+    type: "Internal ticketing system",
+    role: "Full Stack Developer",
+    period: "2026 — Present",
+    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
+    status: "UAT",
+    technologies: [
+      "Laravel 12",
+      "PHP 8.2",
+      "Inertia.js",
+      "Vue 3",
+      "TypeScript",
+      "Tailwind CSS",
+      "MySQL",
+      "Pest",
+    ],
+    metrics: ["HRIS-backed login", "7 ticket states", "public tracking", "Pest tests"],
+    keyChallenge:
+      "Identity lives in the HRIS, not here. Logging in means verifying against another system's database without copying its users, and without inheriting its habits.",
+    featured: true,
+    confidential: true,
+    screenshots: [
+      {
+        src: "/projects/itsd-dashboard.png",
+        width: 1498,
+        height: 845,
+        alt: "Service desk dashboard with ticket counts by status and a list of the oldest unresolved tickets",
+        caption: "Ticket queue with the oldest unresolved surfaced first. Test data.",
+      },
+    ],
+    caseStudy: {
+      overview:
+        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It is the newest of the systems here and the only one built on Laravel with Inertia and Vue.",
+      users:
+        "Any employee filing a request, IT staff who pick tickets up and resolve them, and administrators who manage users, offices and categories.",
+      problem: [
+        "Requests reached IT through whatever channel was nearest. Nothing recorded what was asked, who took it, or whether it was finished.",
+        "People who reported a problem had no way to check on it short of asking again.",
+        "A new system normally means a new set of accounts to create and keep in step with HR as people join, move office or leave.",
+      ],
+      responsibilities: [
+        "Full stack development: Laravel 12 back end, Inertia with Vue 3 and TypeScript on the front",
+        "Schema design for tickets, activity logs, attachments, categories and offices",
+        "HRIS-backed authentication over a second, read-only database connection",
+        "The ticket status machine and its transition rules",
+        "Role middleware and per-action policies",
+        "In-app notifications, attachments and the public tracking page",
+        "Reports, CSV export and the dashboard queues",
+        "Feature tests in Pest covering authorization and the transitions",
+      ],
+      architecture: {
+        summary:
+          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to Vue pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behaviour lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
+        layers: [
+          {
+            label: "Browser",
+            detail:
+              "Vue 3 single-file components in TypeScript, Tailwind and Radix primitives",
+          },
+          {
+            label: "Inertia",
+            detail:
+              "Controllers return props to pages. No JSON API, no separate client router",
+          },
+          {
+            label: "HTTP layer",
+            detail:
+              "Routes, then auth, then role middleware on the admin and reporting groups",
+          },
+          {
+            label: "Authorization",
+            detail:
+              "Policies per action, with an admin bypass registered once in a Gate",
+          },
+          {
+            label: "Services",
+            detail:
+              "Workflow and transitions, ticket numbering, notification fan-out, HRIS login",
+          },
+          {
+            label: "Eloquent / MySQL",
+            detail:
+              "Tickets, activity logs, attachments, counters, categories, offices",
+          },
+        ],
+        integrations: [
+          "A second, read-only MySQL connection to the HRIS database, used for login and office sync",
+          "Local disk storage for attachments, outside the web root",
+          "Database-backed notifications for in-app alerts",
+        ],
+      },
+      features: [
+        {
+          title: "Sign in with HRIS credentials",
+          detail:
+            "There is no separate password to remember. The login verifies against the HRIS account, then creates or refreshes a local mirror of the user and their office. Nobody in HR has to provision anything.",
+        },
+        {
+          title: "Status machine with explicit transitions",
+          detail:
+            "Seven statuses and one map of what may follow what. Anything not on the map is rejected before it reaches the database, whichever screen it came from.",
+        },
+        {
+          title: "Assignment and reassignment",
+          detail:
+            "Assigning an open ticket moves it to assigned and stamps the time. Reassignment records who it moved from and to.",
+        },
+        {
+          title: "Public tracking link",
+          detail:
+            "Each ticket carries an unguessable token. The page behind it shows status, dates and a generalised timeline, and nothing else.",
+        },
+        {
+          title: "Activity log on every change",
+          detail:
+            "Status changes, assignment, comments and attachments each write a row with the actor, the old value and the new one, inside the same transaction as the change.",
+        },
+        {
+          title: "Notifications to the people involved",
+          detail:
+            "The requestor and the current assignee are told when something happens, minus whoever did it. On assignment the new assignee is told directly.",
+        },
+        {
+          title: "Attachments",
+          detail:
+            "Stored outside the web root under a generated filename, with the original name kept only as a label. Downloads go through a route that checks the ticket first.",
+        },
+        {
+          title: "Sequential ticket numbers",
+          detail:
+            "One counter per calendar year, so tickets read IT-2026-00001 upward and the number means something to the person quoting it.",
+        },
+        {
+          title: "Dashboard queues and reports",
+          detail:
+            "Counts by status, the oldest unresolved tickets first, and a CSV export for the ones that end up in a report.",
+        },
+      ],
+      challenges: [
+        {
+          title: "Two systems, one set of people",
+          challenge:
+            "The service desk needed to know who everybody is, which office they belong to and whether they still work here. The HRIS already knows all three.",
+          cause:
+            "Giving the service desk its own user table would mean provisioning every employee twice and keeping the copy in step forever. It would drift within a month.",
+          solution:
+            "A second database connection to the HRIS, read-only and used for one thing. Login verifies the submitted password against the HRIS hash, and only on success does the service desk create or refresh a small local row for that person: name, username, office, and its own role and active flag. The HRIS is the authority on identity. The service desk stays the authority on what you can do here.",
+          tradeOff:
+            "The service desk is now coupled to another system's schema and to its availability. If the HRIS is unreachable, nobody can log in. The lookup is wrapped so that a failure is reported and treated as a failed login rather than a stack trace, but the dependency is real and it is the price of not maintaining a second directory.",
+          result:
+            "No second password for staff, no provisioning step, and someone's office follows them automatically. A local deactivation still overrides a valid HRIS login, so the service desk can lock someone out without touching HR data.",
+        },
+        {
+          title: "A legacy column that means the opposite of what it says",
+          challenge:
+            "In the HRIS, an account row with is_active = 0 is the active one. Reading it the obvious way logs in exactly the wrong people.",
+          cause:
+            "Inherited semantics. The column has meant that for years and other systems depend on it, so it is not something to fix from the outside.",
+          solution:
+            "Keep the query faithful to the legacy meaning and confine it. One read-only model owns every HRIS query, with a docblock stating the inversion in plain terms. That convention never crosses the boundary: the service desk's own is_active means what it looks like.",
+          tradeOff:
+            "The same column name now means two opposite things in one codebase, which is exactly the sort of thing that bites someone later. The mitigation is that only one class can see the legacy side, and it says so at the top.",
+          result:
+            "Everyone working on the service desk reads is_active the normal way and is right. The one place where that is false is documented at the point where it matters.",
+        },
+        {
+          title: "Two people filing at once could get the same ticket number",
+          challenge:
+            "Ticket numbers run IT-2026-00001 upward. Reading the last number and adding one is fine until two requests do it in the same moment.",
+          cause:
+            "Read-then-write with nothing holding the row in between. It is a race that testing by hand will almost never reproduce, and production finds immediately.",
+          solution:
+            "One counter row per year. A unique index on the year means two requests racing to create that row is harmless: one wins, the other just reads it. The row is then locked inside a transaction before the number goes up, so the second request waits for the first and gets the next number.",
+          tradeOff:
+            "Ticket creation serialises on one row per year. For this volume that is nothing, but it means the lock must not be held while doing unrelated work, so the numbering runs in its own short transaction rather than inside a longer one.",
+          result:
+            "Numbers are unique and gapless within a year, and the constraint is enforced by the database rather than by hoping.",
+        },
+        {
+          title: "Status rules were spreading across controllers",
+          challenge:
+            "Assigning, resolving, putting on hold and reopening each had to set the status, stamp the right timestamps and write a log row. Each screen was growing its own version.",
+          cause:
+            "The endpoints were built one at a time, and the shared shape only became obvious once there were several.",
+          solution:
+            "One service holds a map of which status may follow which, and every path goes through it. It rejects an illegal move before anything is written, sets the timestamps belonging to the target status, and writes the activity row in the same transaction as the change. Notifications fire after the transaction commits, not inside it.",
+          tradeOff:
+            "New statuses mean editing one central map, and a genuinely odd one-off transition has to be expressed in its terms rather than hacked into a controller. That is the trade, and it is worth it.",
+          result:
+            "Illegal transitions are impossible from any screen. Reopening a resolved ticket clears its resolved and closed dates, so the reports do not count work that was undone.",
+        },
+        {
+          title: "Letting someone check a ticket without an account",
+          challenge:
+            "People who filed a ticket wanted to know where it had got to, and asking for their status meant asking IT, which is the thing the system was supposed to reduce.",
+          cause:
+            "Viewing a ticket required logging in, and some reporters go weeks between logins.",
+          solution:
+            "Each ticket gets a long random token and a public page addressed by it. That page builds its response from an explicit list of fields: number, subject, status, priority, office, category, dates, and a timeline where each entry is reduced to a generic label.",
+          tradeOff:
+            "Anyone with the link sees that much, so the question is what goes in the response, not who is asking. Staff names, internal notes, comments and the resolution text are left out on purpose. It makes the public page less useful than the real one, which is the point.",
+          result:
+            "The reporter can answer their own question, and the page cannot leak who is working on what or what was said internally.",
+        },
+      ],
+      security: [
+        "Passwords are verified against the HRIS hash. The service desk stores a random unusable password so there is no second credential to steal",
+        "A local deactivation overrides a successful HRIS login, so someone can be locked out here without touching HR records",
+        "The HRIS connection is read-only by convention and used only for login and office lookup. Nothing writes to it",
+        "An HRIS outage is caught and reported as a failed login rather than surfacing as an error page",
+        "Role middleware guards the admin and reporting route groups; policies check every ticket action; the admin bypass is registered once rather than repeated in each policy",
+        "The ticket list is scoped in the query: a requestor sees their own tickets, not a filtered view of everyone's",
+        "Attachment downloads check that the attachment belongs to the ticket in the URL before checking anything else, which closes the id-swap",
+        "Uploads are stored outside the web root under a generated filename; the original name is kept only as a display label",
+        "The public tracking page returns a fixed list of fields and a generalised timeline. Staff names, comments and resolution text are never in the payload",
+        "The first administrator is seeded from environment config, and that mechanism promotes but never demotes",
+        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
+      ],
+      outcomes: [
+        "Requests to IT are recorded, assigned and closed in one place, with a number the reporter can quote.",
+        "Staff sign in with the credentials they already have. There is no account to provision and no second password.",
+        "Every ticket has a history: who acted, what changed, and when.",
+        "A reporter can check their own ticket without logging in, and without seeing anything internal.",
+        "Feature tests cover the authorization rules and the transition map, so the rules that matter are the ones under test.",
+      ],
+    },
+  },
+  {
     slug: "prams",
     name: "PRAMS",
     tagline:
-      "HRIS for a regional office. Leave, overtime, CTO and office orders file and route through one approval engine.",
+      "HRIS for DOLE CALABARZON. Leave, overtime, CTO and office orders route through one approval engine, and the forms that come out the other end are the official government ones.",
     type: "HRIS / workflow platform",
     role: "Full Stack Developer",
-    period: "[YYYY] — Present",
+    period: "2025 — Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL", "Vue.js", "Blade", "REST API"],
+    technologies: [
+      "Slim 4",
+      "PHP",
+      "MySQL",
+      "JavaScript",
+      "PhpSpreadsheet",
+      "TCPDF",
+      "REST API",
+      "SSE",
+    ],
+    metrics: [
+      "~500 employees",
+      "6 field offices",
+      "4 document types",
+      "PDS generation",
+    ],
     keyChallenge:
-      "Four document types, each with its own multi-level route, delegated authority and audit trail, without four copies of the workflow code.",
+      "Four document types on one approval engine, and every one of them ends in a government form that has to still be correct when it is reprinted two years later.",
     featured: true,
     confidential: true,
     screenshots: [
@@ -42,152 +288,199 @@ export const projects: Project[] = [
         alt: "PRAMS employee portal login screen",
         caption: "Employee portal login.",
       },
-      {
-        src: "/projects/prams-mobile.png",
-        width: 336,
-        height: 724,
-        alt: "PRAMS dashboard on a phone-sized screen",
-        caption: "Same dashboard on a phone. Staff file requests from mobile.",
-      },
     ],
     caseStudy: {
       overview:
-        "PRAMS is the system employees use to file leave, compensatory time off (CTO), overtime and office orders, and that HR uses to keep employee records, work schedules and balances. It covers the regional office and the provincial field offices under it.",
+        "PRAMS is what employees across the regional office and its provincial field offices use to file leave, compensatory time off, overtime and office orders, and what HR uses to keep employee records, work schedules and leave credits. It also produces the paperwork: approved applications print as the official forms, and an employee can generate their own Personal Data Sheet from the profile they maintain.",
       users:
-        "Employees filing requests, supervisors and division chiefs approving them, and HR staff who maintain records, schedules and balances.",
+        "Roughly 500 employees across the regional office and six field offices: staff filing requests and maintaining their own profile, supervisors and office heads approving, and HR staff who manage records, credits, schedules and reports.",
       problem: [
-        "Requests moved on paper between offices. Nobody could say where a form was or who was holding it.",
-        "Leave and CTO balances lived in spreadsheets. The number an employee believed and the number HR computed did not always match.",
-        "Approval authority changes often. People go on leave, positions sit vacant, officers are designated in an acting capacity. On paper you write a name on a line. In software that has to be modelled.",
+        "Requests moved between offices on paper. Nobody could say where a form was or who was holding it.",
+        "Leave and CTO credits lived in spreadsheets, so the number an employee believed and the number HR computed did not always agree.",
+        "Approval authority moves constantly. People go on leave, posts sit vacant, officers are designated in an acting capacity. On paper you write a name on a line. In software that has to be modelled.",
+        "The Personal Data Sheet was filled in by hand, every time it was needed, from information the office already held.",
         "There was no record of who approved what, or when.",
       ],
       responsibilities: [
-        "Full stack development on the Laravel and MySQL application",
-        "Database design for requests, approval routes, balances and audit records",
-        "Approval workflow engine and delegation",
-        "Role-based access control and permission checks",
-        "REST endpoints for the Vue components",
-        "In-app notifications",
-        "Excel import and export",
+        "Full stack development on the Slim and MySQL application",
+        "Database design for applications, approval routes, credits and audit records",
+        "The approval workflow engine, delegation and signatory resolution",
+        "Role-based access control and the middleware stack behind it",
+        "Official form generation: PDS, leave, overtime, CTO and office order documents",
+        "Bulk Excel import and export for employee records and credits",
+        "In-app notifications and live approval queues",
         "Deployment, production support and bug fixes",
       ],
-      teamNote:
-        "[Say here whether you built this alone or with others, and which parts were yours. Reviewers ask this first.]",
       architecture: {
         summary:
-          "One Laravel application. It serves Blade pages and a JSON API from the same codebase. Business rules sit in service classes, so the same rule runs whether the request came from a form post or from the API.",
+          "A Slim 4 application behind a PSR-15 middleware stack, serving a JSON API to a front end of about ninety AMD modules. Slim gives you routing and PSR-7 and very little else, so the layering is built rather than inherited: route files per module, middleware for the cross-cutting rules, DTOs and validators at the boundary, services for the business logic, and models over PDO.",
         layers: [
           {
             label: "Browser",
-            detail: "Blade pages, Vue components for the interactive parts",
+            detail:
+              "Server-rendered pages with AMD JavaScript modules, one per feature area",
           },
           {
-            label: "HTTP layer",
+            label: "Middleware",
             detail:
-              "Routes, then auth / role / permission middleware, then controllers",
+              "Session, active-user, CSRF, role, rate limit, security headers, maintenance mode",
           },
-          { label: "Validation", detail: "Form Request classes. Bad input stops here" },
+          {
+            label: "Routes",
+            detail:
+              "One Slim route file per module, each group carrying its own middleware",
+          },
+          {
+            label: "Validation and DTOs",
+            detail:
+              "Rule-based validation at the boundary. Nothing past it sees raw input",
+          },
           {
             label: "Services",
-            detail: "Workflow, balance computation, delegation lookup",
+            detail:
+              "Workflow, delegation, overtime computation, credit ledgers, document generation",
           },
           {
-            label: "Data access",
+            label: "Models over PDO",
             detail:
-              "Eloquent models and scopes. Transactions around multi-table writes",
+              "Prepared statements throughout, transactions around multi-table writes",
           },
           {
             label: "MySQL",
-            detail: "Requests, approval steps, ledger, permissions, audit log",
+            detail: "Applications, approval routes, credits, audit and login logs",
           },
         ],
         integrations: [
+          "PhpSpreadsheet for the official Excel form templates and for bulk import and export",
+          "TCPDF, PhpWord, wkhtmltopdf and headless LibreOffice for the printable documents",
+          "PHPMailer for outbound mail",
+          "Server-Sent Events on the approval screens, interval polling for the notification badge",
           "Attendance data used to check overtime against work schedules",
-          "Excel import and export for bulk employee and balance records",
-          "In-app notifications (see the polling trade-off below)",
         ],
       },
       features: [
         {
-          title: "Multi-level approvals",
+          title: "Multi-level approvals across four document types",
           detail:
-            "A request walks an ordered list of steps. Each step stores the approver, the decision, the timestamp and any remarks. A rejection at any level stops the route and sends the request back with the reason attached.",
+            "Leave, overtime, CTO and office orders each walk an ordered route. Every step records the approver, the decision, the time and any remarks. A rejection returns the request to the filer with the reason attached.",
         },
         {
           title: "Delegated approval authority",
           detail:
-            "An approver can hand their authority to someone else for a date range. The engine works out who can act at the moment the decision is submitted, not when the request was filed.",
+            "An approver hands their authority to someone else for a date range. The engine resolves who may act at the moment the decision is submitted, not when the request was filed.",
         },
         {
-          title: "Role-based access control",
+          title: "Personal Data Sheet generation",
           detail:
-            "Roles hold permissions. Permissions are rows, not constants, so a new one does not need a deploy. Every route checks them, and so does the service before it changes anything.",
+            "CS Form No. 212 filled from the employee's own profile: the official spreadsheet template populated section by section, passport photo and e-signature placed into their boxes, and repeating sections that overflow onto cloned annex pages when somebody has more children or eligibilities than the form allows for.",
         },
         {
-          title: "Leave, CTO and COC balances",
+          title: "Official form output",
           detail:
-            "Balances come from credit and debit rows rather than a single stored number. Correcting a record recomputes the balance instead of leaving it wrong.",
+            "Approved applications print as the real government forms rather than as a screen dump, generated from templates and converted to PDF.",
         },
         {
-          title: "Audit log",
+          title: "Signatory snapshots",
           detail:
-            "Every state change writes a row: who, what action, which record, what changed, when. Records are soft-deleted so the history survives.",
+            "The printed name and designation of each signatory are frozen at the moment of approval, so a form reprinted next year still shows who actually signed it.",
         },
         {
-          title: "Work schedules",
+          title: "Credit ledgers",
           detail:
-            "An employee's schedule decides which hours count as overtime and how a half day is deducted from leave.",
+            "Leave, CTO and COC balances are computed from credit and debit rows rather than a stored number, so correcting a record recomputes the balance instead of leaving it wrong.",
         },
         {
-          title: "Excel import and export",
+          title: "Work schedules and overtime rules",
           detail:
-            "Bulk employee and balance records. Validation runs per row and reports every bad row at once instead of stopping at the first.",
+            "An employee's schedule decides which hours count as overtime, how a half day is deducted, and how holidays and special working days are treated.",
         },
         {
-          title: "HR calendar",
+          title: "Three kinds of log",
           detail:
-            "Filed requests laid out by date, filtered by office, type and status. Holidays and suspensions show alongside them.",
+            "Approval history, an audit log of record changes, and a login log, kept separate because they answer different questions.",
+        },
+        {
+          title: "Bulk import and export",
+          detail:
+            "Employee records and credits move in and out as spreadsheets, validated row by row so a bad file reports every problem at once instead of stopping at the first.",
+        },
+        {
+          title: "Live approval queues and notifications",
+          detail:
+            "The approval screen updates itself while you are looking at it. The notification badge polls. The two use different mechanisms on purpose, which is the trade-off below.",
+        },
+        {
+          title: "Chat, calendar and reports",
+          detail:
+            "In-app messaging, a calendar of filed requests, holidays and suspensions, and workforce reports exported for the ones that end up on paper.",
         },
       ],
       challenges: [
         {
-          title: "Server-Sent Events took down the app under real load",
+          title: "A form reprinted a year later showed the wrong signatory",
           challenge:
-            "Notifications were built on Server-Sent Events. Each open tab holds one long-lived HTTP connection. With a few testers it was fine. With staff actually using it, the app started refusing requests.",
+            "Approved applications print with the approving officer's name and designation. Those were resolved live from whoever currently holds the post, so when an office head changed, every historical form silently reprinted with the new person's name under an old approval.",
           cause:
-            "The app runs on shared PHP hosting. Every SSE connection holds a PHP worker for as long as the tab stays open, and the worker pool is small and fixed. Staff leave tabs open all day, so idle notification streams ate the pool and normal page requests had nothing left.",
+            "Treating 'who signs this' as a lookup against current data, when it is really a fact about a moment that has already passed.",
           solution:
-            "Dropped the stream. The client now polls a small endpoint that returns an unread count, and only fetches the notification list when that count changes. Polling slows down when the tab is hidden.",
+            "A snapshot table. At the moment a decision is recorded, the printed name and designation for each signatory slot are written alongside the application, keyed by document type, id and slot. The print path reads the snapshot. Where no snapshot exists it falls back to the live resolver, so forms approved before the table existed still print.",
           tradeOff:
-            "Notifications arrive within the polling interval instead of instantly, and the server takes many small requests instead of a few long ones. In return the worker pool stays free, and a slow poll means a late notification rather than a dead site.",
+            "The same information now lives in two places, and a genuine correction to someone's designation will not propagate to forms already approved. That is the intended behaviour for a signed document, but it does mean a typo caught late has to be fixed as a deliberate act rather than by editing the employee record.",
           result:
-            "The refused requests stopped. The delay does not matter for an approval queue. If the app ever moves to a runtime that handles long connections properly, the client side is small enough to swap back.",
+            "A reprint matches what was signed. The fallback meant the change shipped without a data migration over historical records.",
         },
         {
-          title: "The same approval rules were written four times",
+          title:
+            "The Personal Data Sheet is a frozen government form that keeps changing",
           challenge:
-            "Leave, overtime, CTO and office orders each need a multi-level route. Each was built at a different time, and each grew its own version of who approves next, who is allowed to act, and what happens on rejection. Fixing a rule meant finding every copy.",
+            "The PDS is a fixed government form. The layout, the merged cells and the checkbox positions are set by the CSC, and the filled-in copy has to match the official template exactly. Then a new revision comes out and everything moves.",
           cause:
-            "The shared behaviour was not obvious until the third document type existed.",
+            "Two incompatible pressures: the output must match a document that is not ours to change, and the form does change, on its own schedule, while old revisions stay valid for records already filed.",
           solution:
-            "Pulled sequencing, permission checks, remarks, rejection handling and audit writes into one workflow service with a shared approval-step table keyed by request type and id. A document type now supplies only its route definition and its own validation.",
+            "Each revision is its own service, resolved through a factory keyed by revision year. Nothing is shared by inheritance between revisions. Adding one means copying the latest service, applying the template's changes, and registering it. Every service takes the same input, an employee id, and pulls its data through the one profile service that already aggregates every section.",
           tradeOff:
-            "The shared engine is more abstract than any one document type needs, and an unusual route has to be expressed in its terms. That cost is paid once. The duplication was being paid on every change.",
+            "Deliberate duplication. Two revisions means two near-identical files of over a thousand lines each, and a bug in shared logic has to be fixed in both. Factoring out the common parts would couple revisions that are supposed to be frozen, and the next revision would start bending the abstraction. Duplication was the cheaper mistake.",
           result:
-            "Adding a document type is a route definition plus a form. Workflow bugs get fixed in one place.",
+            "A new revision does not touch the old one. Records generated under a previous revision keep generating under it.",
+        },
+        {
+          title: "Fitting a person into a form that assumes a smaller life",
+          challenge:
+            "The PDS gives you a fixed number of rows for children, eligibilities, work experience and training. People routinely have more than fits.",
+          cause:
+            "It is a paper form. Overflow on paper is an extra sheet, which is a layout problem rather than a data problem.",
+          solution:
+            "Repeating sections write until the template runs out of rows, then clone the section's annex template and continue on a fresh page, for as many pages as the data needs. Children are the exception and stay on the main sheet.",
+          tradeOff:
+            "The cell coordinates are derived from the template's own labels and merged ranges rather than hard-coded by eye, which makes the code harder to read than a list of cell references would be. It also means a revision that moves a label is a change in one place instead of fifty.",
+          result:
+            "Somebody with eleven training records gets a PDS that is correct and printable, without anyone retyping it.",
+        },
+        {
+          title: "Server-Sent Events, kept but put on a short leash",
+          challenge:
+            "Approvers want the queue to update while they are looking at it. Server-Sent Events do that well. They also hold one PHP worker per open connection, and the application runs on shared hosting with a small fixed worker pool. Staff leave tabs open all day.",
+          cause:
+            "The cost of SSE is not per update, it is per open tab per minute. A notification badge that every user has open all day is the worst possible thing to put behind it. An approval queue that somebody is actively working is the best.",
+          solution:
+            "Split them. The notification badge polls a cheap endpoint, and that interval went from three seconds to twenty once it was clear the badge does not need second-level freshness. Live streaming stayed only on the approval screens, and the client closes the stream the moment it is not earning its keep: on navigating away from the route, on the tab being hidden, on unload. It reopens when the tab is visible again. A single shared instance stops a second stream ever being opened, and a stall detector reconnects a connection that has gone quiet.",
+          tradeOff:
+            "Two mechanisms to understand instead of one, and the badge is up to twenty seconds stale. In exchange a connection only exists while somebody is actually watching a queue, which is the only time it was worth paying for.",
+          result:
+            "The worker pool stopped being consumed by idle tabs. The screen that benefits from streaming still streams.",
         },
         {
           title: "Delegation stamped the wrong name on pending requests",
           challenge:
-            "The first version copied the delegate's name onto pending requests when the delegation was created. Requests filed after that, and delegations created after filing, still routed to whoever was away.",
+            "The first attempt copied the delegate's name onto pending requests when the delegation was created. Requests filed afterwards, and delegations created after filing, still routed to whoever was away.",
           cause:
             "Delegation was treated as a one-time data update instead of a rule that is true for a period of time.",
           solution:
-            "Store it as delegator, delegate, scope, start date, end date. Resolve the effective approver when the approval screen loads and again when the decision is submitted.",
+            "Store it as delegator, delegate, scope, start date and end date. Resolve the effective approver when the approval screen loads and again when the decision is submitted.",
           tradeOff:
-            "Two lookups per decision instead of reading one column, and 'who can approve this' is no longer a simple query.",
+            "Two lookups per decision instead of reading one column, and 'who can approve this' stops being a simple query.",
           result:
-            "Delegation behaves the way the office does. An approval cannot go through on authority that expired while the tab sat open.",
+            "Delegation behaves the way the office does, and an approval cannot go through on authority that expired while a tab sat open.",
         },
         {
           title: "Balances drifted away from their own history",
@@ -196,253 +489,35 @@ export const projects: Project[] = [
           cause:
             "Balance was a number that whichever code path ran happened to update. Cancellation and admin correction missed it.",
           solution:
-            "Made the ledger the source of truth. Balance is the sum of credit and debit rows, cached and invalidated on write. Anything touching several rows runs in a transaction.",
+            "Made the ledger the source of truth. The balance is the sum of credit and debit rows, cached and invalidated on write, with anything touching several rows running in a transaction.",
           tradeOff:
             "Reads cost more than reading one column, and the cache has to be invalidated correctly.",
           result:
-            "A corrected record produces a corrected balance. Any balance can be traced to the rows behind it.",
+            "A corrected record produces a corrected balance, and any balance can be traced to the rows behind it.",
         },
       ],
       security: [
-        "Session auth with bcrypt-hashed passwords through the framework hasher",
-        "Permissions checked on the route and again in the service before a state change. Hiding a button is not the control",
-        "Form Request validation at the HTTP boundary, so controllers never see raw input",
-        "CSRF tokens on state-changing posts",
-        "Queries go through the ORM and query builder. No string-concatenated SQL",
-        "Blade escapes output by default, which covers stored XSS from remarks fields",
-        "Uploads checked by extension and MIME type, size-limited, renamed on write, stored outside the web root",
-        "Audit rows written in the same transaction as the change they describe",
-        "Approval permissions granted per role rather than assumed from seniority",
-        "Credentials read from environment config, never committed",
-        "No system is ever fully secure. This is the list of controls that were in place, not a guarantee",
-      ],
-      database: {
-        note: "Generalised. Table and column names are representative, not the production schema.",
-        entities: [
-          {
-            name: "employees",
-            purpose: "Person of record. Everything else hangs off this.",
-            notableFields: ["id", "employee_no", "office_id", "position_id", "status"],
-            relations: [
-              "has many requests",
-              "has many approval_steps as approver",
-              "has one schedule",
-            ],
-          },
-          {
-            name: "requests",
-            purpose: "One row per filed document, typed by request type.",
-            notableFields: [
-              "id",
-              "type",
-              "employee_id",
-              "status",
-              "filed_at",
-              "deleted_at",
-            ],
-            relations: [
-              "belongs to employees",
-              "has many approval_steps",
-              "has many audit_logs",
-            ],
-          },
-          {
-            name: "approval_steps",
-            purpose: "The route. Ordered rows for who must act and what they decided.",
-            notableFields: [
-              "request_id",
-              "level",
-              "approver_id",
-              "acted_by",
-              "decision",
-              "remarks",
-              "acted_at",
-            ],
-            relations: ["belongs to requests", "belongs to employees"],
-          },
-          {
-            name: "delegations",
-            purpose: "Temporary transfer of approval authority.",
-            notableFields: [
-              "delegator_id",
-              "delegate_id",
-              "scope",
-              "starts_on",
-              "ends_on",
-            ],
-            relations: ["belongs to employees, twice"],
-          },
-          {
-            name: "leave_ledger",
-            purpose: "Credit and debit rows. Balance is their sum.",
-            notableFields: [
-              "employee_id",
-              "leave_type",
-              "credit",
-              "debit",
-              "effective_on",
-              "source_request_id",
-            ],
-            relations: ["belongs to employees", "optionally belongs to requests"],
-          },
-          {
-            name: "roles, permissions, role_permission",
-            purpose: "RBAC stored as data so permissions change without a deploy.",
-            notableFields: ["name", "slug"],
-            relations: ["many-to-many with employees and with each other"],
-          },
-          {
-            name: "audit_logs",
-            purpose: "Append-only history of business actions.",
-            notableFields: [
-              "actor_id",
-              "action",
-              "auditable_type",
-              "auditable_id",
-              "changes",
-              "created_at",
-            ],
-            relations: ["polymorphic to any audited record"],
-          },
-        ],
-        considerations: [
-          "Composite index on (request_id, level). The approval screen always reads a route in order.",
-          "Index on (employee_id, status). 'My pending requests' is the most-hit query in the app.",
-          "Foreign keys with restrictive deletes. Records are soft-deleted, not removed.",
-          "One transaction covers a request, its approval step and the ledger together.",
-          "Audit rows go in the same transaction as the change, so a missing audit row means the change did not happen either.",
-        ],
-      },
-      api: {
-        note: "Representative shapes. Real paths and payloads are not published.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "/api/leave-applications",
-            purpose: "File a leave request",
-            auth: "Authenticated, own records only",
-          },
-          {
-            method: "GET",
-            path: "/api/leave-applications/:id",
-            purpose: "Read one request with its route",
-            auth: "Filer, an approver on the route, or an admin",
-          },
-          {
-            method: "PATCH",
-            path: "/api/leave-applications/:id/status",
-            purpose: "Approve or reject the current step",
-            auth: "Resolved approver for that step",
-          },
-          {
-            method: "GET",
-            path: "/api/approvals/pending",
-            purpose: "Approver queue, including delegated items",
-            auth: "Holder of an approval permission",
-          },
-          {
-            method: "GET",
-            path: "/api/notifications/unread-count",
-            purpose: "Small endpoint the client polls",
-            auth: "Authenticated",
-          },
-        ],
-        conventions: [
-          "Validation runs before authorization, which runs before business logic.",
-          "422 for validation with a field-keyed error object, 403 for permissions, 409 when the request is no longer in a state that allows the action.",
-          "Submitting the same decision twice does not write two audit rows.",
-          "Responses leave out fields the caller is not allowed to see, rather than sending them and hiding them.",
-          "Clients get messages, never stack traces or SQL.",
-        ],
-      },
-      code: [
-        {
-          title: "Resolving who can approve",
-          language: "php",
-          description:
-            "Delegation has a validity window, so the answer depends on when you ask.",
-          code: `final class ApprovalRouteService
-{
-    public function __construct(private DelegationRepository $delegations) {}
-
-    public function effectiveApprover(ApprovalStep $step, CarbonInterface $at): int
-    {
-        $delegation = $this->delegations->activeFor(
-            delegatorId: $step->approver_id,
-            scope: $step->request->type,
-            at: $at,
-        );
-
-        return $delegation?->delegate_id ?? $step->approver_id;
-    }
-
-    public function assertCanAct(ApprovalStep $step, User $user, CarbonInterface $at): void
-    {
-        if ($step->decision !== null) {
-            throw new StepAlreadyDecided($step->id);
-        }
-
-        if ($this->effectiveApprover($step, $at) !== $user->id) {
-            throw new NotAuthorisedToApprove($step->id);
-        }
-    }
-}`,
-        },
-        {
-          title: "Recording a decision",
-          language: "php",
-          description:
-            "The step, the next step and the audit row land together or not at all.",
-          code: `public function decide(ApprovalStep $step, User $actor, Decision $decision): Request
-{
-    return DB::transaction(function () use ($step, $actor, $decision) {
-        $this->routes->assertCanAct($step, $actor, now());
-
-        $step->update([
-            'decision' => $decision->value,
-            'acted_by' => $actor->id,
-            'remarks'  => $decision->remarks,
-            'acted_at' => now(),
-        ]);
-
-        $request = $decision->isRejection()
-            ? $this->routes->reject($step->request, $decision->remarks)
-            : $this->routes->advance($step->request);
-
-        $this->audit->record($actor, "request.{$decision->value}", $request, [
-            'level' => $step->level,
-        ]);
-
-        return $request;
-    });
-}`,
-        },
-        {
-          title: "Permission middleware",
-          language: "php",
-          description: "One place decides whether a route is reachable.",
-          code: `class EnsurePermission
-{
-    public function handle(Request $request, Closure $next, string $permission)
-    {
-        if (! $request->user()?->hasPermission($permission)) {
-            abort(403);
-        }
-
-        return $next($request);
-    }
-}
-
-Route::patch('/leave-applications/{application}/status', [LeaveController::class, 'decide'])
-    ->middleware(['auth', 'permission:leave.approve']);`,
-        },
+        "Session auth with passwords hashed by password_hash() and checked with password_verify()",
+        "Every route group carries its own middleware: session, active-user check, CSRF, role, and a rate limiter tuned per group",
+        "Permissions checked in middleware and again in the service before a state change. Hiding a button is not the control",
+        "Validation at the HTTP boundary, so nothing downstream sees raw input",
+        "Every query is a prepared statement with bound parameters. No string-concatenated SQL",
+        "A Content-Security-Policy plus nosniff, DENY framing, HSTS, referrer and permissions policy, set once in middleware",
+        "The CSP still allows inline scripts, because the front end predates it. That is written down as known debt rather than presented as done: removing it means moving every inline script to a per-request nonce",
+        "API responses may carry personal data, so they are sent with no-store rather than left to browser and proxy caches",
+        "HTML is rendered to PDF with JavaScript disabled in the converter",
+        "Uploads validated by extension and MIME type, size-limited, renamed on write and stored outside the web root",
+        "Audit rows are written in the same transaction as the change they describe",
+        "A maintenance-mode middleware can close the application to users without taking the host down",
+        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
         "Leave, overtime, CTO and office orders are filed and approved in one system instead of on paper.",
-        "Every approved document has a history you can query: who acted, when, with what remarks.",
+        "Approved applications come out as the official forms, with the signatory who actually approved them.",
+        "Employees generate their own Personal Data Sheet from a profile they maintain, instead of filling the form in by hand.",
+        "Every approved document has a history you can query: who acted, when, and with what remarks.",
         "Approvals keep moving when an approver is away.",
-        "Adding a document type is a data and validation change, not a new workflow.",
-        "[Add a figure you can actually verify, such as number of users or requests processed. Do not estimate.]",
+        "Used by roughly 500 employees across six field offices.",
       ],
     },
   },
@@ -454,12 +529,13 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
       "Technical Safety Inspection Online System. Establishments apply online for a Permit to Operate or an electrical inspection certificate, and the office runs the inspection, payment and issuance from the same place.",
     type: "Regulatory workflow system",
     role: "Full Stack Developer",
-    period: "[YYYY] — [YYYY]",
+    period: "2024 — Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "REST API"],
+    technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord", "REST API"],
+    metrics: ["PTO & CEI", "province-scoped", "licensed evaluators", "ageing queues"],
     keyChallenge:
-      "An application passes through inspectors, evaluators, cashiering and a signatory, in different provinces, and the office has to see which ones have been sitting too long at each stage.",
+      "An application passes through inspectors, licensed evaluators, cashiering and a signatory, in different provinces, and the office has to see which ones have been sitting too long at each stage.",
     featured: true,
     confidential: true,
     screenshots: [
@@ -508,10 +584,9 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
         "Certificate issuance, status modification and revert paths",
         "Deployment and maintenance",
       ],
-      teamNote: "[Note which parts were yours if this was shared work.]",
       architecture: {
         summary:
-          "A Laravel application with two faces: a public side where establishments enrol and file, and an office side scoped by province and by route permission. An application row carries its stage; each stage transition writes its own record.",
+          "A PHP application with no framework behind it. The layering is hand-built: config, controllers grouped by audience, models, and a thin service layer for the parts worth naming. Two faces, a public side where establishments enrol and file and an office side scoped by province and by route permission. An application row carries its stage, and each stage transition writes its own record.",
         layers: [
           {
             label: "Establishment portal",
@@ -583,6 +658,36 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
           detail:
             "A switch that takes the client side offline during releases without touching the office side.",
         },
+        {
+          title: "Licensed evaluator assignment",
+          detail:
+            "Mechanical applications go to a licensed mechanical engineer and electrical ones to a licensed electrical engineer. Each has its own assign and reassign action, because one cannot stand in for the other.",
+        },
+        {
+          title: "Letters of Authority, issued in batches",
+          detail:
+            "Authority documents are generated for a batch of applications rather than one at a time, with a separate modification path for the ones that have to change after issuing.",
+        },
+        {
+          title: "New applications and renewals",
+          detail:
+            "A renewal starts from the establishment's previous transaction rather than from an empty form, so the inspection history stays attached to the same unit.",
+        },
+        {
+          title: "Unit enrolment",
+          detail:
+            "Establishments register the individual machines and electrical installations being certified, so an application is filed against a known unit rather than free text.",
+        },
+        {
+          title: "Public certificate verification",
+          detail:
+            "A certificate can be checked against the issuance record without an account.",
+        },
+        {
+          title: "Field-level change tracking",
+          detail:
+            "When a record is edited, only the fields that actually changed are recorded, with their before and after values, rather than a snapshot of the whole row.",
+        },
       ],
       challenges: [
         {
@@ -634,51 +739,10 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
         "Certificates carry a reference that can be checked against the issuance record",
         "Screenshots here show blank account names; no establishment or account data is published",
       ],
-      api: {
-        note: "Representative shapes.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "/api/applications",
-            purpose: "File an application against an enrolled establishment",
-            auth: "Establishment account",
-          },
-          {
-            method: "PATCH",
-            path: "/api/applications/:id/assignment",
-            purpose: "Assign or reassign inspector and evaluator",
-            auth: "Office account with assignment permission",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/inspection",
-            purpose: "Record an inspection result",
-            auth: "Assigned inspector",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/order-of-payment",
-            purpose: "Issue an order of payment",
-            auth: "Evaluator",
-          },
-          {
-            method: "POST",
-            path: "/api/applications/:id/certificate",
-            purpose: "Issue the certificate",
-            auth: "Signatory permission",
-          },
-        ],
-        conventions: [
-          "Stage transitions are their own endpoints, not a PATCH on a status field, so each one can carry its own permission and payload.",
-          "A transition out of order returns 409 with the current stage.",
-          "Reads are scoped to the caller's province at the query level, not filtered in the view.",
-        ],
-      },
       outcomes: [
         "Establishments file and follow their applications online instead of by phone and counter visit.",
         "Backlogs at each stage are visible per province without asking anyone.",
         "Assignment, issuance and corrections all leave a record.",
-        "[Add verifiable figures if you have them, such as enrolled establishments or applications processed.]",
       ],
     },
   },
@@ -690,12 +754,13 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
       "Online application for the certification that a company has no pending labour case, from filing through verification to a certificate the applicant can track by reference.",
     type: "Records digitisation / certification",
     role: "Full Stack Developer",
-    period: "[YYYY] — [YYYY]",
+    period: "2024 — Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "REST API"],
+    technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "REST API"],
+    metrics: ["Company certification", "Rule 1020 check", "public verify"],
     keyChallenge:
-      "The certificate states that no record exists. Making that defensible a year later means the search behind it has to be reproducible, not re-run.",
+      "The certificate says no record exists. To still stand behind that a year later, you have to store what was searched, not search again.",
     featured: true,
     confidential: true,
     screenshots: [
@@ -742,7 +807,6 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
         "Per-route access to case data",
         "Deployment and maintenance",
       ],
-      teamNote: "[Note which parts were yours if this was shared work.]",
       architecture: {
         summary:
           "A pipeline. Each stage writes a record, so an issued certificate can be traced back to the exact verification behind it.",
@@ -801,6 +865,11 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
           detail:
             "Most accounts can process applications without being able to read case records.",
         },
+        {
+          title: "Rule 1020 validation against the registration system",
+          detail:
+            "An applicant inside the region has to already be registered under Rule 1020. The number they give is checked live against that separate system before the application is accepted, rather than being taken on trust and rejected later.",
+        },
       ],
       challenges: [
         {
@@ -828,6 +897,19 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
             "Some applications take longer because a person has to look at them. For a document asserting no pending case, that is the right trade.",
           result:
             "Clear cases are automatic, unclear ones reach someone qualified to judge, and the system never quietly guesses.",
+        },
+        {
+          title: "Checking a registration number that lives in another system",
+          challenge:
+            "An application from inside the region is only valid if the establishment is registered under Rule 1020. That registration is held by a different system, with its own database.",
+          cause:
+            "Copying the registration list across would be stale the day after it was copied, and asking staff to check by hand is the manual step the system was built to remove.",
+          solution:
+            "A second, read-only database connection used for exactly one question: does this Rule 1020 number exist and what establishment does it belong to. The answer is checked at the point the number is entered, so a wrong number is caught by the applicant rather than by a reviewer a week later.",
+          tradeOff:
+            "The application now depends on another system being reachable. If that database is down, applications from inside the region cannot be validated, and the coupling is to that system's schema rather than to an interface it promises to keep.",
+          result:
+            "Registration numbers are verified at entry, and nobody maintains a copy of a list that belongs to someone else.",
         },
         {
           title: "Verifying a certificate on paper",
@@ -858,275 +940,214 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
         "Two staff verifying the same company reach the same answer.",
         "Every certificate is traceable to the verification behind it.",
         "A certificate presented by a third party can be confirmed.",
-        "[Add verifiable figures if you have them, such as applications processed.]",
       ],
     },
   },
 
   {
     slug: "biometric-integration",
-    name: "Biometric Attendance Integration",
+    name: "TUPAD Biometric Verification",
     tagline:
-      "Fingerprint enrolment from a DigitalPersona reader into a web application, through a local C# service, with duplicate detection across the whole population.",
-    type: "Desktop to web integration",
-    role: "Full Stack Developer",
-    period: "[YYYY] — [YYYY]",
+      "Fingerprint capture and 1:N matching for an emergency employment programme, bridged from a DigitalPersona reader into a web application through a local C# service.",
+    type: "Desktop-to-web integration",
+    role: "Integration developer",
+    period: "2026",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["C#", ".NET", "DigitalPersona SDK", "PHP", "MySQL", "JavaScript"],
+    technologies: [
+      "C#",
+      ".NET",
+      "DigitalPersona SDK",
+      "Slim 4",
+      "PHP",
+      "MySQL",
+      "JavaScript",
+    ],
+    metrics: ["1:N matching", "local C# service", "ships as an installer"],
     keyChallenge:
-      "A browser cannot talk to a USB fingerprint reader. Bridging the two without sending biometric images across the network, and catching the same person enrolled twice.",
+      "A browser cannot reach a USB fingerprint reader, and the matching SDK is native with no PHP binding. Both constraints push the work off the server and onto the workstation, which is a privacy decision as much as a technical one.",
     featured: true,
     confidential: true,
-    // No screenshots: an enrolment screen shows a live capture, and there is no
-    // version of that image that is safe to publish.
+    // No screenshots: the enrolment screen shows a live capture and beneficiary
+    // records. There is no version of that image that is safe to publish.
     screenshots: [],
     caseStudy: {
       overview:
-        "Employees enrol a fingerprint once, and that enrolment identifies them for attendance afterwards. The reader is a USB DigitalPersona device driven by its Windows SDK. The system of record is a PHP web application. This work is the bridge between them.",
+        "TUPAD is an emergency employment programme. Beneficiaries are validated on site before they are paid, and a person must not be able to enrol twice under two records. This work is the fingerprint side of that check: capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled.",
       users:
-        "HR and admin staff running enrolment, and every employee whose attendance depends on that enrolment being correct and unique.",
+        "Field staff running on-site validation, and the programme itself, which depends on each beneficiary appearing exactly once.",
+      teamNote:
+        "The biometric integration is my work. The rest of the TUPAD system — the work programmes, the approval chain across a dozen roles, the payroll documents — was built by others. This case study covers only the part I did.",
       problem: [
-        "Browsers cannot reach a USB fingerprint reader. The vendor SDK is a Windows .NET library, so capture has to happen in a native process.",
-        "The same person could be enrolled under two employee records, by accident or otherwise, and nothing would catch it. That quietly breaks attendance for both records.",
-        "Fingerprint data is sensitive. Whatever the design was, it could not put images on the network or in a web-accessible folder.",
+        "Validation happens in the field, in front of the person. A duplicate has to be caught while they are still standing there, not reconciled afterwards.",
+        "Browsers cannot talk to a USB fingerprint reader, and the vendor SDK is a native Windows library with no PHP binding.",
+        "Records already existed from an earlier round of enrolment, saved without recording which finger had been scanned.",
+        "Fingerprint data is sensitive, and a decision about where matching runs is a decision about where that data goes.",
       ],
       responsibilities: [
-        "Design of the local service bridge between reader and web application",
-        "The C# service: capture, template extraction, matching, local HTTP surface",
-        "The web side: enrolment screen, API contract, storage, error handling",
-        "Duplicate detection and how a match is shown to the operator",
-        "Handling the failures that actually happen: reader unplugged, service not running, bad scan",
+        "Design of the bridge between the reader and the web application",
+        "The local C# service: reader status, capture, template extraction, 1:N matching",
+        "The browser-side client that drives it, including timeouts and cancellation",
+        "The PHP side: template storage and the candidate query used for matching",
+        "Handling the failures that actually happen in the field: no reader, service not running, poor scan, operator closing the dialog mid-capture",
+        "Packaging the service as an installer so field offices could deploy it without a developer on site",
       ],
-      teamNote:
-        "[State whether the enrolment screen or the wider attendance module was shared work, and what was specifically yours.]",
       architecture: {
         summary:
-          "The browser never touches the reader. A small C# service on the enrolment workstation owns the SDK and exposes a narrow endpoint on localhost. The page calls localhost. The server only ever receives a template.",
+          "The browser never touches the reader. A small C# tray application runs on the validation workstation, owns the vendor SDK, and exposes a narrow HTTP surface on localhost. The page asks PHP for the candidate templates, hands them to the local service along with the freshly captured print, and the local service does the matching with the native SDK.",
         layers: [
-          { label: "Fingerprint reader", detail: "DigitalPersona USB device" },
+          {
+            label: "DigitalPersona reader",
+            detail: "DP4500, USB, attached to the validation laptop",
+          },
           {
             label: "Local C# service",
-            detail: "Capture, quality check, template extraction, matching",
+            detail:
+              "Tray app on 127.0.0.1. Owns the SDK: status, capture, extract, match",
           },
           {
             label: "Browser",
-            detail:
-              "Enrolment page calls localhost, receives a template and a quality score",
+            detail: "Calls localhost for the device work and the server for the data",
           },
           {
-            label: "Web application",
-            detail: "Validates, authorises, repeats the duplicate check, stores",
+            label: "Slim API",
+            detail: "Stores templates and serves the candidate set for a given finger",
           },
-          { label: "MySQL", detail: "Templates against employee records. No images" },
+          {
+            label: "MySQL",
+            detail: "Templates against beneficiary records. No images",
+          },
         ],
         integrations: [
-          "Attendance records used by PRAMS to check overtime against work schedules",
+          "A second capture path: a WebSDK fingerprint image can be sent to the local service and converted into a template",
+          "Face enrolment alongside fingerprint, with fully enrolled records protected from deletion",
         ],
       },
       features: [
         {
-          title: "Guided enrolment",
+          title: "Reader status before anything else",
           detail:
-            "Several captures per finger with a quality floor. A bad scan is rejected while the person is still there.",
+            "The client asks the local service whether it is running and whether a reader is attached, with a short timeout, so the operator is told the reader is unplugged instead of watching a dialog hang.",
         },
         {
-          title: "Template extraction",
+          title: "Capture on the device",
           detail:
-            "The SDK turns the scan into a template. The image is discarded in the local process.",
+            "A capture blocks until a finger is placed, up to a configured timeout, and returns a template with a quality score rather than an image.",
         },
         {
-          title: "Duplicate detection",
+          title: "1:N matching against everyone enrolled",
           detail:
-            "The candidate template is matched against existing ones before enrolment is accepted.",
+            "The captured print is compared against the stored candidates using the vendor SDK, which returns the matched record, the score and the threshold it was judged against.",
         },
         {
-          title: "Errors an operator can act on",
+          title: "Finger-aware candidate selection",
           detail:
-            "Reader unplugged, service not running, driver failure and low quality each produce a different message.",
+            "When the finger being scanned is known, the candidate set is narrowed to templates stored for that same finger, plus the older records where the finger was never recorded.",
         },
         {
-          title: "Re-enrolment",
+          title: "A second way in",
           detail:
-            "Replacing an enrolment is an explicit, recorded action rather than a silent overwrite.",
+            "A fingerprint image captured through the browser SDK can be handed to the local service and converted into a template, so a workstation without the tray app capture path is not stuck.",
+        },
+        {
+          title: "Cancellation",
+          detail:
+            "Closing the dialog mid-capture tells the service to stop, so the reader is not left waiting for a finger that is not coming.",
+        },
+        {
+          title: "Packaged for people who are not developers",
+          detail:
+            "The service ships as an installer, so a field office can set up a validation laptop themselves rather than waiting for someone to come and configure it.",
         },
       ],
       challenges: [
         {
           title: "Getting a browser to talk to a USB device",
           challenge:
-            "The enrolment screen is a web page. The reader is only reachable through a Windows SDK.",
+            "The validation screen is a web page. The reader is only reachable through a native Windows SDK.",
           cause:
-            "Browsers deny pages direct device access, correctly, and the vendor SDK has no web equivalent.",
+            "Browsers deny pages direct device access, correctly, and the vendor SDK has no web or PHP equivalent.",
           solution:
-            "A local C# service owns the device and exposes a minimal HTTP endpoint bound to localhost. The page calls it, gets a template and a quality score, and posts the template to the server through the normal authenticated API.",
+            "A small C# tray application on the validation workstation owns the device and exposes a handful of endpoints bound to localhost. The page posts to it for anything involving the reader, and posts to the normal API for anything involving data.",
           tradeOff:
-            "Enrolment now needs software installed on the workstation, which is one more thing to deploy and keep running. In return the device code stays on the machine that has the device, and the web app stays a web app.",
+            "Every validation laptop now needs software installed and running, which is one more thing to deploy and support in the field. In exchange the device code stays on the machine that physically has the device, and the web application stays an ordinary web application.",
           result:
-            "Staff enrol from the browser they already use, and the device-specific code sits in one small service that can be replaced without touching the web app.",
+            "Staff validate from the browser they already use, and the device-specific code sits in one small service that can be replaced without touching the web side.",
         },
         {
-          title: "Duplicate enrolments were invisible",
+          title: "Matching has to run where the SDK is",
           challenge:
-            "Nothing stopped one person being enrolled under two records. It surfaced weeks later as attendance that made no sense.",
+            "Comparing two fingerprint templates is the vendor SDK's job. The SDK is native. The server is PHP.",
           cause:
-            "Enrolment was 'save this template to this employee', a write with no awareness of anyone else.",
+            "There is no PHP binding for the matcher, and reimplementing biometric matching is not something to attempt.",
           solution:
-            "Match the candidate against existing templates first. A score above the threshold blocks the save and names the record it collided with. The check runs again on the server, so a client that skips it cannot write a duplicate.",
+            "The server stores templates and answers one question: which candidates should this print be compared against. The browser fetches that set and hands it to the local service along with the probe, and the service does the comparison with the native matcher, returning the matched record, the score and the threshold.",
           tradeOff:
-            "Enrolment is slower, and matching cost grows with the number of enrolled fingers. A threshold is also a real trade between false accepts and false rejects, so borderline scores go to the operator instead of being blocked outright.",
-          result: "Duplicates are caught while the person is still in the room.",
+            "This is the honest weak point. The candidate templates leave the server and pass through the browser into the local service, and the server cannot independently confirm a match — it is told the answer. A modified client could lie about the result. For on-site validation with staff operating the machine that is an accepted risk, but it is a real one, and a server-side matcher would be the fix if the threat model ever changed.",
+          result:
+            "Duplicate enrolments are caught in the field, in front of the person, using the matcher the vendor supports.",
         },
         {
-          title: "Keeping fingerprint images out of the system",
+          title: "Older records did not say which finger had been scanned",
           challenge:
-            "The easy implementation sends the scan to the server and processes it there, which puts images on the network and in application storage.",
+            "Matching a right index finger against a left thumb produces a confident non-match. Earlier enrolments were saved without recording the finger at all, so a straight same-finger comparison would silently skip every one of them.",
           cause:
-            "Central processing is simpler than installing the SDK on every enrolment workstation.",
+            "The finger position was added to the enrolment flow after records already existed.",
           solution:
-            "The image never leaves the local process. Only the template crosses the network, over the authenticated session, and only templates are stored. Enrolment needs its own permission and is recorded.",
+            "The query narrows to the same finger when one is given, but keeps the rows where the finger was never recorded. Saving a template now also fills in the finger, so the old rows clear out as people are re-enrolled.",
           tradeOff:
-            "Matching logic exists in two places, and the workstation has to be trusted to run the real service.",
+            "A larger candidate set means more comparisons and a slightly higher chance of a borderline score against a finger that was never the right one to compare. The alternative was quietly not checking older beneficiaries at all, which is worse.",
           result:
-            "If the web application is ever compromised, fingerprint images are not part of what leaks.",
+            "New enrolments get a precise comparison, old ones still get checked, and the untidy rows clear themselves over time rather than needing a migration.",
+        },
+        {
+          title: "A capture blocks, and people close dialogs",
+          challenge:
+            "A capture waits for a finger. If the operator gives up and closes the dialog, the reader is still waiting and the next capture starts in a bad state.",
+          cause:
+            "The natural implementation is a request that blocks until the device returns, with nothing on the other end when the user walks away.",
+          solution:
+            "Every call to the local service carries a timeout suited to what it does — short for a status check, long for a capture that waits on a person — and closing the dialog sends an explicit stop so the service abandons the capture.",
+          tradeOff:
+            "More states to handle in the client than a single blocking call, and the timeouts are values that had to be chosen rather than derived.",
+          result:
+            "An unplugged reader is reported in seconds instead of hanging, and abandoning a capture leaves the device ready for the next person.",
         },
       ],
       security: [
-        "The local service binds to localhost and is not reachable from the network",
-        "Images are never transmitted or stored. Only vendor templates are persisted",
-        "Enrolment requires an authenticated session and its own permission",
-        "The duplicate check runs on the server as well as the client",
-        "Enrolment, re-enrolment and deletion are recorded",
-        "Templates sit under the same access controls as other sensitive HR data",
-        "No biometric data, sample template or capture screen appears anywhere in this portfolio",
-      ],
-      api: {
-        note: "Representative shapes.",
-        endpoints: [
-          {
-            method: "POST",
-            path: "http://127.0.0.1:PORT/capture",
-            purpose:
-              "Local service: capture and return a template with a quality score",
-            auth: "Localhost only",
-          },
-          {
-            method: "POST",
-            path: "/api/biometrics/duplicate-check",
-            purpose: "Match a candidate template against existing enrolments",
-            auth: "biometrics.enrol permission",
-          },
-          {
-            method: "POST",
-            path: "/api/biometrics/enrolments",
-            purpose: "Store an enrolment after the server-side check",
-            auth: "biometrics.enrol permission",
-          },
-          {
-            method: "DELETE",
-            path: "/api/biometrics/enrolments/:id",
-            purpose: "Remove an enrolment",
-            auth: "biometrics.manage permission",
-          },
-        ],
-        conventions: [
-          "Every capture returns a quality score so the UI can reject a bad scan before the operator moves on.",
-          "A duplicate returns 409 with the conflicting record id.",
-          "Device errors come back with a code the UI maps to an instruction, such as checking the USB connection.",
-        ],
-      },
-      code: [
-        {
-          title: "Capture and discard the image",
-          language: "csharp",
-          description: "The image exists inside this method and nowhere else.",
-          code: `public sealed class EnrolmentService
-{
-    private const int MinimumQuality = 60;
-
-    public CaptureResult Capture()
-    {
-        using var sample = _reader.Acquire(timeout: TimeSpan.FromSeconds(15));
-
-        if (sample.Quality < MinimumQuality)
-            return CaptureResult.Rejected("Scan quality too low. Ask for another scan.");
-
-        var template = _extractor.Extract(sample);
-
-        return CaptureResult.Ok(Convert.ToBase64String(template.Bytes), sample.Quality);
-    }
-}`,
-        },
-        {
-          title: "Duplicate scan",
-          language: "csharp",
-          description:
-            "Matching is a threshold decision, so the score comes back with the result.",
-          code: `public DuplicateResult FindDuplicate(byte[] candidate, IReadOnlyList<StoredTemplate> population)
-{
-    foreach (var enrolled in population)
-    {
-        var score = _matcher.Compare(candidate, enrolled.Bytes);
-
-        if (score >= _matcher.IdentificationThreshold)
-            return DuplicateResult.Match(enrolled.EmployeeId, score);
-    }
-
-    return DuplicateResult.None();
-}`,
-        },
-        {
-          title: "The server checks again",
-          language: "php",
-          description:
-            "The browser already checked. That was for the operator, not for the database.",
-          code: `public function store(EnrolFingerprintRequest $request): JsonResponse
-{
-    $this->authorize('biometrics.enrol');
-
-    $conflict = $this->biometrics->findDuplicate(
-        template: $request->validatedTemplate(),
-        excludeEmployeeId: $request->integer('employee_id'),
-    );
-
-    if ($conflict !== null) {
-        return response()->json([
-            'message' => 'This fingerprint is already enrolled under another record.',
-            'conflict_employee_id' => $conflict->employeeId,
-        ], 409);
-    }
-
-    $enrolment = $this->biometrics->enrol($request->validated());
-    $this->audit->record($request->user(), 'biometric.enrolled', $enrolment);
-
-    return response()->json(['id' => $enrolment->id], 201);
-}`,
-        },
+        "The local service binds to the loopback address and is not reachable from the network",
+        "Only templates are stored. No fingerprint image is persisted by the web application",
+        "Template storage and the candidate query sit behind the application's normal session and role checks",
+        "Candidate templates do reach the browser and the local service during matching. That is a deliberate consequence of the SDK being native, and it is the main thing I would revisit if this were rebuilt",
+        "The server does not independently verify a match result. A server-side matcher would be required to close that gap",
+        "Fully enrolled records are protected from deletion, so a validated beneficiary cannot be quietly removed and re-added",
+        "No biometric data, sample template, capture screen or beneficiary record appears anywhere in this portfolio",
+        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
-        "Enrolment runs from the browser staff already use.",
-        "Duplicates are caught at enrolment instead of surfacing later in attendance data.",
-        "Fingerprint images never cross the network or reach application storage.",
-        "[Add verifiable figures if you have them, such as employees enrolled.]",
+        "A duplicate enrolment is caught on site, while the person is still present, rather than surfacing later in a payout list.",
+        "Field staff work from the browser they already use; the device code lives in one small service on the laptop.",
+        "Fingerprint images are never stored by the web application.",
+        "Records enrolled before the finger position was captured are still checked rather than silently skipped.",
+        "Deployed across DOLE Regional Office IV-A field offices, installed by the offices themselves.",
       ],
     },
   },
 
-  // Additional systems. These get a card with one screenshot, not a case study.
-  // Adding a `caseStudy` object to any of them gives it a page.
+  // Other systems
   {
     slug: "aep",
     name: "AEP",
     tagline:
-      "Alien Employment Permit applications, from filing through evaluation to ID card release, with exclusion and exemption handled as separate paths.",
+      "Alien Employment Permit applications, from filing through pre-evaluation and evaluation to ID card release, with exclusion and exemption handled as separate paths and a pickup schedule at the end.",
     type: "Regulatory workflow system",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - 2026",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL"],
+    technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord"],
     keyChallenge:
-      "Three application types share one pipeline but diverge at evaluation, and each stage has its own permission and its own reporting.",
+      "Three application types share one pipeline but diverge at evaluation, and the output is a generated document with a pickup schedule attached to it.",
     featured: false,
     confidential: true,
     screenshots: [
@@ -1153,10 +1174,10 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
       "Client Satisfaction Measurement. The ARTA survey collected online across offices and services, with the analytics the report needs.",
     type: "Survey and analytics",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL", "Chart.js"],
+    technologies: ["Slim 4", "PHP", "MySQL", "Chart.js", "TCPDF"],
     keyChallenge:
       "A fixed government survey instrument that cannot be changed, feeding reporting that has to slice by office, service, period and respondent type.",
     featured: false,
@@ -1186,10 +1207,10 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
       "Reporting system for Public Employment Service Offices, covering job placement, youth employability, profiling and welfare programme figures per LGU.",
     type: "Reporting system",
     role: "Full Stack Developer",
-    period: "[YYYY]",
+    period: "2025 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL"],
+    technologies: ["Slim 4", "PHP", "MySQL", "PhpSpreadsheet", "SSE"],
     keyChallenge:
       "Dozens of programme forms with different shapes, encoded by LGU staff outside the office, rolling up to one regional figure.",
     featured: false,
@@ -1211,46 +1232,6 @@ Route::patch('/leave-applications/{application}/status', [LeaveController::class
           "Access follows the programme structure, down to individual sub-programmes.",
       },
     ],
-  },
-  {
-    slug: "itsd",
-    name: "IT Service Desk",
-    tagline:
-      "Ticketing for the IT unit. Requests come in from every office, get categorised, prioritised and assigned, and the queue shows what has been waiting longest.",
-    type: "Internal ticketing system",
-    role: "Full Stack Developer",
-    period: "[YYYY]",
-    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
-    status: "In production",
-    technologies: ["[Stack — fill in]", "MySQL"],
-    keyChallenge:
-      "[The hardest part of this one, in a sentence. Ageing? Assignment? Categories?]",
-    featured: false,
-    confidential: true,
-    screenshots: [
-      {
-        src: "/projects/itsd-dashboard.png",
-        width: 1498,
-        height: 845,
-        alt: "Service desk dashboard with ticket counts by status and a list of the oldest unresolved tickets",
-        caption: "Ticket queue with the oldest unresolved surfaced first. Test data.",
-      },
-    ],
-  },
-  {
-    slug: "do-174",
-    name: "D.O. 174",
-    tagline: "[One line: what the system does and who uses it.]",
-    type: "Internal system",
-    role: "Full Stack Developer",
-    period: "[YYYY]",
-    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
-    status: "In production",
-    technologies: ["Laravel", "PHP", "MySQL"],
-    keyChallenge: "[The hardest part of this one, in a sentence.]",
-    featured: false,
-    confidential: true,
-    screenshots: [],
   },
 ];
 

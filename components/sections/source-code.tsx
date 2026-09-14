@@ -14,7 +14,7 @@ export function SourceCode() {
     <Section
       id="source"
       eyebrow="Source code"
-      title="What I can and cannot show you"
+      title="What I can show you"
       description="These systems run inside a government office and hold personnel and case records. The source and the schemas are not mine to publish."
     >
       <div className="reveal grid gap-8 lg:grid-cols-[1.2fr_1fr]">

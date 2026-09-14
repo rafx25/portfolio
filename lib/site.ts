@@ -1,24 +1,43 @@
 // Anything in [SQUARE BRACKETS] still needs filling in.
+const role = "Full Stack Developer";
+const headline = "I build the internal systems a government agency depends on.";
+
 export const site = {
-  name: "[YOUR FULL NAME]",
-  shortName: "[YOUR NAME]",
-  role: "Full Stack Developer",
-  location: "[CITY, PROVINCE, PHILIPPINES]",
+  name: "Rafael P. Domer",
+  shortName: "RAF",
+  role,
+  location: "Calamba City, Laguna",
   availability: "Open to full-stack and backend roles",
 
   // Canonical URLs, sitemap, robots, OG tags. Set this in Vercel.
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
 
-  tagline:
-    "Full Stack Developer. I build the internal systems a government office runs on.",
+  // The headline is the OG card; the tagline is the meta description.
+  headline,
+  tagline: `${role}. ${headline}`,
   summary:
-    "Approval workflows, role-based access, REST APIs and the database design under them. Most of my production work is PHP and Laravel on MySQL, with Vue on the front end.",
+    "Approval workflows, role-based access control, REST APIs and the database design beneath them. Most of it runs on PHP and MySQL, with Slim on the recent systems and plain PHP on the older ones. The newest is built with Laravel, Vue and Inertia.",
+  intro:
+    "I build the internal systems a government agency depends on: approval workflows for leave and overtime, permit and certificate applications, biometric verification, and the official forms these processes produce. Around 500 employees across six field offices use them daily.",
 
-  email: "[YOUR PUBLIC EMAIL]",
-  github: "[https://github.com/YOUR-USERNAME]",
-  linkedin: "[https://www.linkedin.com/in/YOUR-HANDLE]",
-  resumePath: "/resume.pdf",
-  avatarPath: "/avatar.jpg",
+  // One list each, shared by the hero, the OG card, JSON-LD and meta keywords.
+  stack: ["PHP", "Slim", "Laravel", "Inertia", "Vue.js", "MySQL", "JavaScript", "C#"],
+  focus: [
+    "REST API design",
+    "Role-Based Access Control",
+    "Approval workflows",
+    "Database design",
+    "Production deployment",
+  ],
+
+  // Shown on the resume page only, and only when set. Left blank on purpose:
+  // a phone number on a public page gets scraped.
+  phone: "",
+  email: "rafxd.25@gmail.com",
+  github: "https://github.com/rafx25",
+  linkedin: "https://www.linkedin.com/in/rafael-domer-3126a1255/",
+  resumePath: "/resume",
+  avatarPath: "/avatar.png",
 } as const;
 
 export type SiteConfig = typeof site;

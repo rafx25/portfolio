@@ -10,6 +10,13 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
   },
+  // Only the directives that need no script or style allowlist. A full
+  // script-src would need per-request nonces, which ends static rendering.
+  {
+    key: "Content-Security-Policy",
+    value:
+      "base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'",
+  },
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",

@@ -29,8 +29,8 @@ export function Skills() {
     <Section
       id="stack"
       eyebrow="Stack"
-      title="What I use, and how far I have taken it"
-      description="No percentage bars. Each item says whether it has been in production, whether I can work in it, or whether I am still learning it."
+      title="What I work with"
+      description="No percentage bars. Each one says how far I have actually taken it."
     >
       <ul className="border-border bg-surface mb-10 grid gap-3 rounded-lg border p-5 sm:grid-cols-3">
         {legend.map(({ level, meaning }) => (

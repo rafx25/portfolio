@@ -110,3 +110,15 @@ export const aiTools = [
 
 export const aiPrinciple =
   "I treat AI-generated code as untrusted until I have read it, understood it and tested it.";
+
+export const aiNote = {
+  eyebrow: "AI-assisted engineering",
+  title: "AI in my workflow",
+  summary:
+    "I use AI for drafts, refactors, tests and documentation, but not as the decision-maker. Architecture, permissions, data modelling and production changes still get read, reasoned through and verified by me.",
+  checks: [
+    "Read every generated line",
+    "Test against real cases",
+    "Review security-sensitive paths",
+  ],
+} as const;
