@@ -138,9 +138,11 @@ export default async function ProjectCaseStudyPage({
             <p className="border-border bg-surface-muted text-muted-foreground mt-6 flex gap-3 rounded-lg border p-4 text-xs leading-relaxed">
               <ShieldAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
               <span>
-                This is an internal system. No production source code, schema, endpoint,
-                screenshot or record appears here. Architecture, entity names and code
-                samples are generalised re-creations written for this portfolio.
+                This is an internal system. No production source code, schema, endpoint
+                or record appears here. Screenshots come from test accounts, with
+                anything that identified a person covered. Architecture, entity names
+                and code samples are generalised re-creations written for this
+                portfolio.
               </span>
             </p>
           ) : null}

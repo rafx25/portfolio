@@ -87,7 +87,6 @@ export function SiteHeader() {
           className="border-border bg-surface hover:bg-surface-muted inline-flex rounded-full border px-3 py-1.5 font-mono text-sm font-semibold transition-colors"
           aria-label={`${site.shortName} — home`}
         >
-          <span className="text-accent"></span>
           {site.shortName}
         </Link>
 
@@ -182,7 +181,7 @@ export function SiteHeader() {
               onResume && "text-accent",
             )}
           >
-            Resume
+            Résumé
           </Link>
         </Container>
       </div>

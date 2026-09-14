@@ -5,7 +5,7 @@ export function Principles() {
   return (
     <Section
       id="principles"
-      eyebrow="How I work"
+      eyebrow="Principles"
       title="How I work"
       description="Each one is here because ignoring it cost me something in a live system."
     >

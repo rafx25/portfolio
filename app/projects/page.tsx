@@ -23,8 +23,8 @@ export default function ProjectsPage() {
             Every system, in one list
           </h1>
           <p className="text-muted-foreground mt-4 text-base leading-relaxed">
-            The three with case studies are the ones worth your time. The rest are
-            listed so the picture is complete.
+            The ones with case studies are worth reading first. The rest are listed so
+            the picture is complete.
           </p>
         </header>
 
