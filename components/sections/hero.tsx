@@ -6,25 +6,6 @@ import { Container } from "@/components/ui/container";
 import { buttonStyles } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 
-const stack = [
-  "PHP",
-  "Slim",
-  "Laravel",
-  "Inertia",
-  "Vue.js",
-  "MySQL",
-  "JavaScript",
-  "C#",
-];
-
-const focus = [
-  "REST API design",
-  "Role-Based Access Control",
-  "Approval workflows",
-  "Database design",
-  "Production deployment",
-];
-
 export function Hero() {
   return (
     <section
@@ -65,14 +46,11 @@ export function Hero() {
             <hr className="bg-accent mx-auto mt-4 h-1 w-8 rounded border-0" />
 
             <p className="text-muted-foreground mx-auto mt-5 max-w-2xl text-base leading-relaxed sm:text-lg">
-              I build the internal systems a government agency depends on: approval
-              workflows for leave and overtime, permit and certificate applications,
-              biometric verification, and the official forms these processes produce.
-              Around 500 employees across six field offices use them daily.
+              {site.intro}
             </p>
 
             <ul className="text-muted-foreground mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
-              {focus.map((item) => (
+              {site.focus.map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="text-accent" aria-hidden>
                     ·
@@ -103,7 +81,7 @@ export function Hero() {
             Working with
           </h2>
           <ul className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-2 font-mono text-sm">
-            {stack.map((tech) => (
+            {site.stack.map((tech) => (
               <li key={tech} className="text-foreground/80">
                 {tech}
               </li>
