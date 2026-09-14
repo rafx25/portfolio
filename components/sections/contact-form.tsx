@@ -13,6 +13,14 @@ const fieldClass =
   "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm " +
   "placeholder:text-muted-foreground/70 focus-visible:border-accent";
 
+// Form order, so focus lands on the first problem a reader would reach.
+const fieldOrder = ["name", "email", "subject", "message"] as const;
+
+function focusFirstInvalid(form: HTMLFormElement, errors: FieldErrors) {
+  const first = fieldOrder.find((field) => errors[field]);
+  if (first) form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+}
+
 export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null }) {
   const id = useId();
   const [status, setStatus] = useState<Status>("idle");
@@ -27,9 +35,11 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
     const parsed = contactSchema.safeParse(raw);
 
     if (!parsed.success) {
-      setErrors(toFieldErrors(parsed.error));
+      const fieldErrors = toFieldErrors(parsed.error);
+      setErrors(fieldErrors);
       setStatus("error");
       setMessage("Please check the highlighted fields.");
+      focusFirstInvalid(form, fieldErrors);
       return;
     }
 
@@ -48,9 +58,11 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
         .catch(() => ({}));
 
       if (!response.ok) {
-        setErrors(payload.errors ?? {});
+        const fieldErrors = payload.errors ?? {};
+        setErrors(fieldErrors);
         setStatus("error");
         setMessage(payload.message ?? "Something went wrong. Please try again.");
+        focusFirstInvalid(form, fieldErrors);
         return;
       }
 
@@ -66,12 +78,25 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
   }
 
   const fields = [
-    { name: "name", label: "Name", type: "text", placeholder: "Jane Santos" },
-    { name: "email", label: "Email", type: "email", placeholder: "jane@company.com" },
+    {
+      name: "name",
+      label: "Name",
+      type: "text",
+      autoComplete: "name",
+      placeholder: "Jane Santos",
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "email",
+      autoComplete: "email",
+      placeholder: "jane@company.com",
+    },
     {
       name: "subject",
       label: "Subject",
       type: "text",
+      autoComplete: "off",
       placeholder: "Full stack role at [company]",
     },
   ] as const;
@@ -92,13 +117,13 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
               name={field.name}
               type={field.type}
               placeholder={field.placeholder}
-              autoComplete={field.name === "email" ? "email" : "on"}
+              autoComplete={field.autoComplete}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? `${fieldId}-error` : undefined}
-              className={cn(fieldClass, "mt-1.5", error && "border-red-500")}
+              className={cn(fieldClass, "mt-1.5", error && "border-danger")}
             />
             {error ? (
-              <p id={`${fieldId}-error`} className="mt-1.5 text-xs text-red-500">
+              <p id={`${fieldId}-error`} className="text-danger mt-1.5 text-xs">
                 {error}
               </p>
             ) : null}
@@ -120,11 +145,11 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
           className={cn(
             fieldClass,
             "mt-1.5 resize-y",
-            errors.message && "border-red-500",
+            errors.message && "border-danger",
           )}
         />
         {errors.message ? (
-          <p id={`${id}-message-error`} className="mt-1.5 text-xs text-red-500">
+          <p id={`${id}-message-error`} className="text-danger mt-1.5 text-xs">
             {errors.message}
           </p>
         ) : null}
@@ -168,7 +193,7 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
         className={cn(
           "flex items-start gap-2 text-sm",
           status === "success" && "text-accent",
-          status === "error" && "text-red-500",
+          status === "error" && "text-danger",
         )}
       >
         {status === "success" ? (

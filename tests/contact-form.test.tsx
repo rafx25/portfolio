@@ -46,6 +46,17 @@ describe("ContactForm", () => {
     );
   });
 
+  it("moves focus to the first invalid field", async () => {
+    const user = userEvent.setup();
+    render(<ContactForm fallbackEmail={null} />);
+
+    await user.type(screen.getByLabelText("Name"), "Jane Santos");
+    await user.type(screen.getByLabelText("Email"), "not-an-email");
+    await user.click(screen.getByRole("button", { name: "Send message" }));
+
+    expect(screen.getByLabelText("Email")).toHaveFocus();
+  });
+
   it("posts valid input and shows the success message", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
