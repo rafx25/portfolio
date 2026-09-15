@@ -98,6 +98,10 @@ export const skills: SkillGroup[] = [
       { name: "Shared hosting (cPanel / Hostinger)", level: "Production experience" },
       { name: "Vercel", level: "Working knowledge" },
       { name: "GitHub Actions / CI", level: "Working knowledge" },
+      {
+        name: "AI-assisted development (Claude Code, OpenAI Codex, ChatGPT)",
+        level: "Production experience",
+      },
       { name: "Vitest / automated testing", level: "Currently learning" },
     ],
   },
