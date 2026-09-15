@@ -78,6 +78,16 @@ export const skills: SkillGroup[] = [
     ],
   },
   {
+    category: "Security testing",
+    description: "Looking for vulnerabilities in web applications.",
+    items: [
+      { name: "Web application penetration testing", level: "Working knowledge" },
+      { name: "ZAP (Zed Attack Proxy)", level: "Working knowledge" },
+      { name: "Kali Linux", level: "Working knowledge" },
+      { name: "Oracle VirtualBox", level: "Working knowledge" },
+    ],
+  },
+  {
     category: "Tooling & operations",
     description: "Getting it out the door and keeping it running.",
     items: [
