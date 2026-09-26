@@ -103,6 +103,7 @@ export const skills: SkillGroup[] = [
         level: "Production experience",
       },
       { name: "Vitest / automated testing", level: "Currently learning" },
+      { name: "RAG / LLM integration (Gemini API)", level: "Working knowledge" },
     ],
   },
 ];

@@ -82,7 +82,7 @@ export interface Project {
   role: string;
   period: string;
   organization: string;
-  status: "In production" | "Delivered" | "Maintained" | "UAT";
+  status: "In production" | "Delivered" | "Maintained" | "UAT" | "In development";
   technologies: string[];
   /** The hardest part. Shown on the card. */
   keyChallenge: string;

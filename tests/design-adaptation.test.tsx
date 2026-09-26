@@ -85,7 +85,7 @@ describe("portfolio design adaptation", () => {
   });
 
   it("keeps project cards screenshot-forward and case-study oriented", () => {
-    const project = featuredProjects[0];
+    const project = featuredProjects.find((p) => p.screenshots.length > 0);
 
     expect(project).toBeDefined();
     if (!project) throw new Error("Expected at least one featured project");

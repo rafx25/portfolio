@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/resume" },
 };
 
-const summary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organisations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, multi-level approval workflows, audit logging, legacy system maintenance, document generation and production support. Currently building with Laravel 12, Inertia.js and Vue 3.`;
+const summary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organisations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, multi-level approval workflows, audit logging, legacy system maintenance, document generation and production support. Built a RAG-based AI assistant for the HRIS on the Gemini API. Currently building with Laravel 12, Inertia.js and Vue 3.`;
 
 /** Hyphen rather than an em dash: dash variants trip some date parsers. */
 function dateRange(start: string, end: string | null) {

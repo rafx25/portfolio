@@ -6,6 +6,216 @@ import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
+    slug: "vcs",
+    name: "VCS",
+    tagline:
+      "Vendor Charges & Settlement System. Every utility, rental, courier and fuel bill of the regional office and five provinces, tracked from the day it arrives to the ADA that pays it, replacing six Excel workbooks.",
+    type: "Billing monitoring and settlement system",
+    role: "Full Stack Developer",
+    period: "2026 — Present",
+    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
+    status: "In development",
+    technologies: [
+      "Laravel 12",
+      "PHP 8.2",
+      "Inertia.js",
+      "Vue 3",
+      "TypeScript",
+      "Tailwind CSS",
+      "Spatie Permission",
+      "MySQL",
+      "Pest",
+    ],
+    metrics: ["6 workbooks replaced", "4 reports", "page-level RBAC", "Pest tests"],
+    keyChallenge:
+      "Six years of hand-typed workbooks had to come in without retyping them, and without importing their typos: dates in the year 20226, amounts like 4.899.00, and account numbers Excel had turned into scientific notation.",
+    featured: true,
+    confidential: true,
+    screenshots: [],
+    caseStudy: {
+      overview:
+        "VCS records the fixed expenses of the regional office and its five provincial offices: electricity, water, telephone and internet lines, rentals, photocopiers, courier, fuel and postage. Each bill is tracked from the day it is received, through bill-out to Accounting, to the ADA, check or official receipt that pays it. It produces the same monitoring sheets, monthly comparisons and signed reports the workbooks were kept for.",
+      users:
+        "Billing encoders in the regional and provincial offices who log bills, the property officer who manages service accounts and imports, Accounting staff who record payments, the IMSD chief, and auditors with read-only access.",
+      problem: [
+        "Each operating unit kept its own \"Monitoring of Fixed Expenses\" workbook, one sheet per meter, line or lease. Nothing added them up across the region.",
+        "Dates, amounts and account numbers were typed by hand, and the mistakes stayed in: impossible years, misspelt months, amounts with two decimal points.",
+        "Knowing which bills were still waiting for payment meant reading every sheet.",
+        "One ADA often pays several bills, and one courier invoice often covers several offices. A spreadsheet row holds neither cleanly.",
+        "The monthly comparison against previous years was maintained by hand, separately from the bills it was supposed to summarise.",
+      ],
+      responsibilities: [
+        "Full stack development: Laravel 12 back end, Inertia with Vue 3 and TypeScript on the front",
+        "Schema design for service accounts, bills, office breakdown lines, carried-over totals and import batches",
+        "The Excel workbook importer, its date and amount repair rules, and its preview and undo modes",
+        "Validation written against the mistakes found in the workbooks",
+        "Page-level access control on Spatie Permission, and province scoping",
+        "Bill-out and settlement workflow, including voiding a payment",
+        "Dashboard, charts and the four printable reports with CSV export",
+        "Feature and unit tests in Pest",
+      ],
+      architecture: {
+        summary:
+          "A Laravel application with Inertia and Vue, the same shape as the IT Service Desk. Controllers validate through form requests and return props to Vue pages. Anything that is not a single request's concern, such as identifier normalisation, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
+        layers: [
+          {
+            label: "Browser",
+            detail:
+              "Vue 3 pages in TypeScript, Tailwind, searchable dropdowns and printable charts",
+          },
+          {
+            label: "Inertia",
+            detail:
+              "Controllers return props to pages. No separate JSON API",
+          },
+          {
+            label: "Access middleware",
+            detail:
+              "Every route declares the page it belongs to and the ability it needs",
+          },
+          {
+            label: "Form requests",
+            detail:
+              "Date, order, amount, duplicate and province rules before anything is written",
+          },
+          {
+            label: "Support classes",
+            detail:
+              "Normaliser, monthly comparison, report builder, workbook reader, parser and importer",
+          },
+          {
+            label: "Eloquent / MySQL",
+            detail:
+              "Service accounts, bills, bill lines, carried-over totals, signatories, import batches",
+          },
+        ],
+        integrations: [
+          "Excel workbook import, from the admin screen or an Artisan command",
+          "Print layouts with the province's signatories, and CSV downloads that open in Excel",
+          "Frontend assets built in CI rather than on the host",
+        ],
+      },
+      features: [
+        {
+          title: "A monitoring sheet per service account",
+          detail:
+            "Each meter, line, lease and photocopier unit has its own page for the year, laid out like the workbook sheet it replaces, with the three-year monthly comparison underneath.",
+        },
+        {
+          title: "Received, billed out, paid",
+          detail:
+            "A bill moves through three states, each with its own date. Bill-out is done in bulk from the register, and the date order is enforced: nothing is paid before it is billed out.",
+        },
+        {
+          title: "One payment, many bills",
+          detail:
+            "Settlement records one ADA, check or OR against every bill it pays. A payment can be voided, which sends the bill back to the payment queue instead of deleting anything.",
+        },
+        {
+          title: "Office breakdowns",
+          detail:
+            "A courier invoice covering several offices, or a bill carrying a previous balance, is entered once with breakdown lines that must add up to the total. Office and province figures follow the lines, not the bill.",
+        },
+        {
+          title: "Workbook import with a report",
+          detail:
+            "The six province workbooks are read directly. Every repair the importer makes is listed, a preview runs the whole import and rolls it back, and an import can be undone.",
+        },
+        {
+          title: "Province-bound users",
+          detail:
+            "A provincial encoder is tied to their province, and every list, dashboard, report and form is limited to it.",
+        },
+        {
+          title: "Page-level access",
+          detail:
+            "Each page grants view, create, update, delete or generate. Roles are starting templates, and a single user's access can be adjusted without inventing a new role.",
+        },
+        {
+          title: "Dashboard and charts",
+          detail:
+            "Billed, paid and unpaid for the year, the bill-out and payment queues with the oldest item waiting, month-against-last-year charts, and accounts with no bill logged for last month.",
+        },
+        {
+          title: "Reports",
+          detail:
+            "Monitoring of Fixed Expenses, Monthly Expense Summary, Unpaid Bills and Payment Register, on screen, printed with the province's signatories, or downloaded for Excel.",
+        },
+      ],
+      challenges: [
+        {
+          title: "Importing six workbooks without importing their mistakes",
+          challenge:
+            "Years of bills lived in hand-typed workbooks. Retyping them was not realistic, and importing them as they were would carry every typo into a system that was supposed to fix them.",
+          cause:
+            "The workbooks were never validated. Dates were typed as text with impossible years and misspelt months, amounts had stray commas and extra decimal points, and Excel had turned long account numbers into scientific notation and dropped the leading zero from phone lines.",
+          solution:
+            "An importer that finds each table by its column titles rather than fixed positions, and repairs what it can in a predictable way: a year typed with an extra digit is corrected against the billing period, a future date is left blank, a number in scientific notation is expanded and matched to the account it belongs to. Every repair is written into the import report. Anything that cannot be repaired is skipped with a reason.",
+          tradeOff:
+            "The importer makes decisions on the user's behalf, and a repair can be wrong. That is why every one is listed, a preview mode runs the full import and then rolls the transaction back, and an import can be undone afterwards.",
+          result:
+            "The existing records come in without retyping, and the person importing can see exactly what was changed and why before committing to it.",
+        },
+        {
+          title: "An import that can be run twice",
+          challenge:
+            "The workbooks kept being updated while the system was being built. A second import had to add what was new and fill in payments recorded since, without duplicating bills that were already in.",
+          cause:
+            "A one-shot import assumes the source stops changing. This one did not, and the same bill can also appear on a summary sheet and on its per-unit sheet in the same workbook.",
+          solution:
+            "Match before inserting. A bill with the same account and billing period, or the same invoice number and amount, is treated as the existing one, and only its blank fields, such as the date paid, the ADA number and who paid, are filled from the workbook.",
+          tradeOff:
+            "The import never overwrites a value that is already there, so a correction made in the workbook after the first import does not flow through. The system is the authority once a bill is in it.",
+          result:
+            "Re-importing is safe, and the summary and per-unit sheets meet in one set of bills.",
+        },
+        {
+          title: "Validation written from the actual mistakes",
+          challenge:
+            "Generic rules such as \"must be a date\" and \"must be a number\" would have accepted most of what went wrong in the workbooks.",
+          cause:
+            "The errors were plausible values: a real date in the wrong order, a payment reference with no payment date, the same invoice logged twice on one account.",
+          solution:
+            "Rules taken from the workbooks themselves. Dates must be real, not in the future and not before 2000. Bill-out cannot precede receipt, payment cannot precede bill-out, and a payment needs both its mode and its reference. The applicable month must fall within the billing period. Invoice numbers and billing periods cannot repeat on one account. Account, meter and phone identifiers are normalised before they are compared, so formatting differences do not hide a duplicate.",
+          tradeOff:
+            "Stricter forms, and occasionally a real-world exception the rules did not anticipate has to be handled deliberately rather than typed in.",
+          result:
+            "The typing errors the workbooks accumulated cannot be entered, and the importer and the forms reject the same things.",
+        },
+        {
+          title: "Access that fits pages, not just roles",
+          challenge:
+            "Offices wanted to give one person a little more or less than their role, and to confine provincial encoders to their own province.",
+          cause:
+            "Role-only checks mean a new role for every exception, and a province is a data boundary, not a page permission.",
+          solution:
+            "Two separate checks. Every route names its page and the ability it needs, and a user's grants start from their roles but can be adjusted per person. Province is a property of the user, applied as a scope on the queries themselves, so a provincial user's bill list, dashboard and reports never contain another province's rows. Actions on a single bill check the province again.",
+          tradeOff:
+            "Per-user adjustments make \"what can this person do\" something to look up rather than infer from the role name. The access grid on the user's page is the answer.",
+          result:
+            "An office can adjust access without a developer, and a provincial encoder cannot see or record anything outside their province.",
+        },
+      ],
+      security: [
+        "Every route is guarded by the page it belongs to and the ability it needs; hiding a button is not the control",
+        "Province scoping is applied in the query, and single-bill actions such as voiding a payment check the province again",
+        "Recording a payment only touches bills that are visible to the user and awaiting payment. Anything else in the request is skipped and reported",
+        "Form requests validate every write, and identifiers are normalised before duplicate checks",
+        "Offices, categories, providers and service accounts in use cannot be deleted, only deactivated, so history is never orphaned",
+        "A paid bill cannot be deleted until its payment is voided",
+        "Imports run inside a transaction, and each import records who ran it and what it changed",
+        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
+      ],
+      outcomes: [
+        "The regional office and five provinces record fixed expenses in one system instead of six workbooks.",
+        "Unpaid bills, and how long they have been waiting, are visible without reading every sheet.",
+        "The existing workbook data is imported with every repair listed, instead of being retyped.",
+        "The monitoring sheets, monthly comparisons and signed reports come out of the same data as the bills.",
+        "Feature tests cover validation, settlement, province scoping, reports and the import end to end.",
+      ],
+    },
+  },
+  {
     slug: "itsd",
     name: "IT Service Desk",
     tagline:
@@ -41,7 +251,7 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It is the newest of the systems here and the only one built on Laravel with Inertia and Vue.",
+        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It was the first of the systems here built on Laravel with Inertia and Vue.",
       users:
         "Any employee filing a request, IT staff who pick tickets up and resolve them, and administrators who manage users, offices and categories.",
       problem: [
@@ -255,6 +465,7 @@ export const projects: Project[] = [
       "TCPDF",
       "REST API",
       "SSE",
+      "Gemini API",
     ],
     metrics: [
       "~500 employees",
@@ -310,6 +521,7 @@ export const projects: Project[] = [
         "Bulk Excel import and export for employee records and credits",
         "In-app notifications and live approval queues",
         "Deployment, production support and bug fixes",
+        "A RAG-based AI assistant on the Gemini API that answers employee questions from the HRIS's own data",
       ],
       architecture: {
         summary:
@@ -356,6 +568,7 @@ export const projects: Project[] = [
           "PHPMailer for outbound mail",
           "Server-Sent Events on the approval screens, interval polling for the notification badge",
           "Attendance data used to check overtime against work schedules",
+          "The Gemini API behind the AI assistant, answering from context retrieved out of the HRIS",
         ],
       },
       features: [
@@ -408,6 +621,11 @@ export const projects: Project[] = [
           title: "Live approval queues and notifications",
           detail:
             "The approval screen updates itself while you are looking at it. The notification badge polls. The two use different mechanisms on purpose, which is the trade-off below.",
+        },
+        {
+          title: "AI assistant",
+          detail:
+            "Employees ask questions in plain language about their records and HR processes. Relevant data is retrieved from the HRIS first and passed to Gemini, so answers come from the system's own records rather than the model's general knowledge.",
         },
         {
           title: "Chat, calendar and reports",

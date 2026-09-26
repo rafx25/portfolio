@@ -16,7 +16,7 @@ export const site = {
   headline,
   tagline: `${role}. ${headline}`,
   summary:
-    "Approval workflows, role-based access control, REST APIs and the database design beneath them. Most of it runs on PHP and MySQL, with Slim on the recent systems and plain PHP on the older ones. The newest is built with Laravel, Vue and Inertia.",
+    "Approval workflows, role-based access control, REST APIs and the database design beneath them. Most of it runs on PHP and MySQL, with Slim on the recent systems and plain PHP on the older ones. The newest are built with Laravel, Vue and Inertia, and the HRIS now has a RAG-based AI assistant on the Gemini API.",
   intro:
     "I build the internal systems a government agency depends on: approval workflows for leave and overtime, permit and certificate applications, biometric verification, and the official forms these processes produce. Around 500 employees across six field offices use them daily.",
 
