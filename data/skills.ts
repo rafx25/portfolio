@@ -35,11 +35,10 @@ export const skills: SkillGroup[] = [
     category: "Frontend",
     description: "The interfaces on top of those systems.",
     items: [
-      { name: "Vue.js", level: "Production experience" },
+      { name: "React", level: "Production experience" },
       { name: "Inertia.js", level: "Production experience" },
       { name: "HTML & CSS", level: "Production experience" },
       { name: "Tailwind CSS", level: "Working knowledge" },
-      { name: "React", level: "Currently learning" },
       { name: "Next.js", level: "Currently learning" },
     ],
   },

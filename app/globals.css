@@ -7,37 +7,38 @@
    Colours are OKLCH so light/dark pairs keep the same perceived lightness step.
    Every token is defined here once; components never hard-code a hex value.
 --------------------------------------------------------------------------- */
-/* Sampled from the portrait: low-chroma warm neutrals from the cream ground,
-   and a deep crimson accent taken from the jacket. The accent sits well below
-   the error red in lightness, which is what keeps the two readable apart. */
+/* Sampled from the portrait, a night shot: near-black neutrals with a faint
+   blue cast from the sky, and one icy cyan accent taken from the string lights
+   behind. Dark is the default theme because the photo is. Every text pair
+   below clears WCAG AA (accent on background: 10.7:1 dark, 5.1:1 light). */
 :root {
-  --background: oklch(0.993 0.004 40);
-  --surface: oklch(0.998 0.003 40);
-  --surface-muted: oklch(0.968 0.007 40);
-  --foreground: oklch(0.21 0.012 35);
-  --muted-foreground: oklch(0.505 0.014 35);
-  --border: oklch(0.895 0.009 40);
-  --border-strong: oklch(0.82 0.013 38);
-  --accent: oklch(0.47 0.16 22);
-  --accent-foreground: oklch(0.99 0.005 40);
-  --accent-subtle: oklch(0.955 0.03 25);
-  --ring: oklch(0.47 0.16 22);
+  --background: oklch(0.985 0.003 240);
+  --surface: oklch(1 0 0);
+  --surface-muted: oklch(0.965 0.006 240);
+  --foreground: oklch(0.2 0.02 250);
+  --muted-foreground: oklch(0.5 0.02 245);
+  --border: oklch(0.91 0.008 240);
+  --border-strong: oklch(0.84 0.012 240);
+  --accent: oklch(0.52 0.12 232);
+  --accent-foreground: oklch(0.99 0.004 240);
+  --accent-subtle: oklch(0.95 0.025 230);
+  --ring: oklch(0.52 0.12 232);
   --danger: oklch(0.577 0.245 27);
 }
 
 .dark {
-  --background: oklch(0.17 0.009 40);
-  --surface: oklch(0.205 0.01 40);
-  --surface-muted: oklch(0.24 0.011 40);
-  --foreground: oklch(0.94 0.006 45);
-  --muted-foreground: oklch(0.69 0.012 40);
-  --border: oklch(0.3 0.011 40);
-  --border-strong: oklch(0.38 0.013 40);
-  --accent: oklch(0.66 0.19 20);
-  --accent-foreground: oklch(0.19 0.02 30);
-  --accent-subtle: oklch(0.29 0.06 20);
-  --ring: oklch(0.66 0.19 20);
-  --danger: oklch(0.72 0.18 30);
+  --background: oklch(0.16 0.014 250);
+  --surface: oklch(0.195 0.015 248);
+  --surface-muted: oklch(0.23 0.016 246);
+  --foreground: oklch(0.95 0.006 240);
+  --muted-foreground: oklch(0.7 0.018 245);
+  --border: oklch(0.27 0.016 245);
+  --border-strong: oklch(0.36 0.02 245);
+  --accent: oklch(0.8 0.12 225);
+  --accent-foreground: oklch(0.18 0.03 240);
+  --accent-subtle: oklch(0.27 0.05 230);
+  --ring: oklch(0.8 0.12 225);
+  --danger: oklch(0.7 0.17 25);
 }
 
 @theme inline {

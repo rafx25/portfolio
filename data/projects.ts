@@ -19,7 +19,7 @@ export const projects: Project[] = [
       "Laravel 12",
       "PHP 8.2",
       "Inertia.js",
-      "Vue 3",
+      "React",
       "TypeScript",
       "Tailwind CSS",
       "Spatie Permission",
@@ -45,7 +45,7 @@ export const projects: Project[] = [
         "The monthly comparison against previous years was maintained by hand, separately from the bills it was supposed to summarise.",
       ],
       responsibilities: [
-        "Full stack development: Laravel 12 back end, Inertia with Vue 3 and TypeScript on the front",
+        "Full stack development: Laravel 12 back end, Inertia with React and TypeScript on the front",
         "Schema design for service accounts, bills, office breakdown lines, carried-over totals and import batches",
         "The Excel workbook importer, its date and amount repair rules, and its preview and undo modes",
         "Validation written against the mistakes found in the workbooks",
@@ -56,12 +56,12 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia and Vue, the same shape as the IT Service Desk. Controllers validate through form requests and return props to Vue pages. Anything that is not a single request's concern, such as identifier normalisation, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
+          "A Laravel application with Inertia and React, the same shape as the IT Service Desk. Controllers validate through form requests and return props to React pages. Anything that is not a single request's concern, such as identifier normalisation, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
         layers: [
           {
             label: "Browser",
             detail:
-              "Vue 3 pages in TypeScript, Tailwind, searchable dropdowns and printable charts",
+              "React pages in TypeScript, Tailwind, searchable dropdowns and printable charts",
           },
           {
             label: "Inertia",
@@ -229,7 +229,7 @@ export const projects: Project[] = [
       "Laravel 12",
       "PHP 8.2",
       "Inertia.js",
-      "Vue 3",
+      "React",
       "TypeScript",
       "Tailwind CSS",
       "MySQL",
@@ -251,7 +251,7 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It was the first of the systems here built on Laravel with Inertia and Vue.",
+        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It was the first of the systems here built on Laravel with Inertia and React.",
       users:
         "Any employee filing a request, IT staff who pick tickets up and resolve them, and administrators who manage users, offices and categories.",
       problem: [
@@ -260,7 +260,7 @@ export const projects: Project[] = [
         "A new system normally means a new set of accounts to create and keep in step with HR as people join, move office or leave.",
       ],
       responsibilities: [
-        "Full stack development: Laravel 12 back end, Inertia with Vue 3 and TypeScript on the front",
+        "Full stack development: Laravel 12 back end, Inertia with React and TypeScript on the front",
         "Schema design for tickets, activity logs, attachments, categories and offices",
         "HRIS-backed authentication over a second, read-only database connection",
         "The ticket status machine and its transition rules",
@@ -271,12 +271,12 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to Vue pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behaviour lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
+          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to React pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behaviour lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
         layers: [
           {
             label: "Browser",
             detail:
-              "Vue 3 single-file components in TypeScript, Tailwind and Radix primitives",
+              "React components in TypeScript, Tailwind and Radix primitives",
           },
           {
             label: "Inertia",

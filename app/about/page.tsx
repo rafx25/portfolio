@@ -23,8 +23,8 @@ export default function AboutPage() {
       <Container className="py-14 sm:py-20">
         <header className="flex max-w-2xl flex-col gap-6 sm:flex-row sm:items-center">
           <Avatar
-            className="size-32 sm:size-40"
-            sizes="(min-width: 640px) 160px, 128px"
+            className="w-32 sm:w-40"
+            sizes="(min-width: 640px) 200px, 160px"
             priority
           />
           <div>
@@ -70,7 +70,7 @@ export default function AboutPage() {
           </p>
           <p>
             What I ship in is PHP on MySQL. Slim on most of it, plain PHP on the older
-            systems, and Laravel with Vue and Inertia on the service desk, which is the
+            systems, and Laravel with React and Inertia on the service desk, which is the
             newest. C# when a desktop device is in the loop. I am working through the
             modern JavaScript side properly now, and this site is part of that: typed
             end to end, tested, deployed through CI instead of by hand.

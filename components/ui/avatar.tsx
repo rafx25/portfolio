@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 import { site } from "@/lib/site";
 
 type AvatarProps = {
-  /** Must set a width and height, e.g. "size-28 lg:size-40". */
+  /** Must set a width, e.g. "w-40 lg:w-80". The 4:5 frame sets the height. */
   className?: string;
-  /** Should match the widths in className so the right source gets fetched. */
+  /** Should be ~1.25x the widths in className, to cover the zoom below. */
   sizes?: string;
   /** Set on the one above the fold so it is not lazy-loaded. */
   priority?: boolean;
@@ -14,13 +14,13 @@ type AvatarProps = {
 
 export function Avatar({
   className,
-  sizes = "(min-width: 1024px) 160px, 112px",
+  sizes = "(min-width: 640px) 200px, 160px",
   priority = false,
 }: AvatarProps) {
   return (
     <span
       className={cn(
-        "border-border bg-surface-muted relative inline-block shrink-0 overflow-hidden rounded-full border",
+        "border-border bg-surface-muted shadow-accent/10 relative block aspect-[4/5] shrink-0 overflow-hidden rounded-2xl border shadow-xl",
         className,
       )}
     >
@@ -30,9 +30,10 @@ export function Avatar({
         fill
         sizes={sizes}
         priority={priority}
-        // The portrait's crown sits ~7% down the frame, so a centred square crop
-        // clips it. Biased upward to leave roughly 12px of headroom in the circle.
-        className="object-cover object-[50%_12%]"
+        // The photo is 3:4 with the head ~42% down and sky above it. Zoomed
+        // 1.25x from the bottom edge, so the frame keeps the shoulders, centres
+        // the face and still shows the string lights to the right.
+        className="origin-[64%_100%] scale-125 object-cover object-bottom"
       />
     </span>
   );
