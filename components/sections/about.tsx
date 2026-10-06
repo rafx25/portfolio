@@ -27,7 +27,7 @@ export function About() {
         <p className="text-sm leading-7 sm:text-base">
           Most of the code I touch was written by someone else first, so I read it
           before I change it. PHP and MySQL day to day, Slim on most of the systems,
-          Laravel with Vue and Inertia on the newest.
+          Laravel with React and Inertia on the newest.
         </p>
       </div>
 

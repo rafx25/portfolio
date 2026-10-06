@@ -56,18 +56,16 @@ vi.mock("next/image", () => ({
 }));
 
 describe("portfolio design adaptation", () => {
-  it("centers the hero around the portrait and primary message", () => {
+  it("sets the portrait beside the primary message on wide screens", () => {
     render(<Hero />);
 
     const heading = screen.getByRole("heading", { level: 1, name: site.name });
     const section = heading.closest("section");
-    const portraitFrame = screen.getByAltText(
-      `${site.name}, ${site.role}`,
-    ).parentElement;
+    const portrait = screen.getByAltText(`${site.name}, ${site.role}`);
 
-    expect(section).toHaveClass("text-center");
     expect(section).toHaveClass("min-h-[calc(100svh-4rem)]");
-    expect(portraitFrame).toHaveClass("mx-auto");
+    expect(portrait).toHaveAttribute("src", site.avatarPath);
+    expect(portrait.parentElement).toHaveClass("aspect-[4/5]", "lg:order-last");
   });
 
   it("uses a pill navigation shell that echoes the reference without changing copy", () => {

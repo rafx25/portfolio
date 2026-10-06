@@ -8,10 +8,10 @@ export const ogSize = { width: 1200, height: 630 };
 // Hex rather than the OKLCH tokens in globals.css: the OG renderer does not
 // parse oklch(). These match the dark theme.
 const colors = {
-  background: "#181311",
-  foreground: "#efeae8",
-  accent: "#f05560",
-  muted: "#a29996",
+  background: "#090e13",
+  foreground: "#ebeff2",
+  accent: "#58cef8",
+  muted: "#96a0a9",
 };
 
 type OgCardProps = {
