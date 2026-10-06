@@ -95,13 +95,15 @@ export function Hero() {
           </ul>
         </div>
 
-        <a
-          href="#projects"
+        {/* Link, not a bare <a href="#projects">: a native hash change bypasses
+            the router, which then ignores the next click on Home. */}
+        <Link
+          href="/#projects"
           className="text-muted-foreground hover:text-foreground mt-10 hidden items-center justify-center gap-2 font-mono text-[0.7rem] uppercase transition-colors lg:flex"
         >
           Scroll
           <ChevronDown className="size-3.5" aria-hidden />
-        </a>
+        </Link>
       </Container>
     </section>
   );

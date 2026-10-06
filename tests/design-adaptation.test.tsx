@@ -66,6 +66,11 @@ describe("portfolio design adaptation", () => {
     expect(section).toHaveClass("min-h-[calc(100svh-4rem)]");
     expect(portrait).toHaveAttribute("src", site.avatarPath);
     expect(portrait.parentElement).toHaveClass("aspect-[4/5]", "lg:order-last");
+    // A bare "#projects" skips the router and breaks the next Home click.
+    expect(screen.getByRole("link", { name: "Scroll" })).toHaveAttribute(
+      "href",
+      "/#projects",
+    );
   });
 
   it("uses a pill navigation shell that echoes the reference without changing copy", () => {
