@@ -12,7 +12,7 @@ export const projects: Project[] = [
       "Vendor Charges & Settlement System. Every utility, rental, courier and fuel bill of the regional office and five provinces, tracked from the day it arrives to the ADA that pays it, replacing six Excel workbooks.",
     type: "Billing monitoring and settlement system",
     role: "Full Stack Developer",
-    period: "2026 — Present",
+    period: "2026 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In development",
     technologies: [
@@ -222,7 +222,7 @@ export const projects: Project[] = [
       "Ticketing for the IT unit. Staff across the regional and provincial offices file a ticket, IT assigns and works it, and the reporter can follow it without an account.",
     type: "Internal ticketing system",
     role: "Full Stack Developer",
-    period: "2026 — Present",
+    period: "2026 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "UAT",
     technologies: [
@@ -453,7 +453,7 @@ export const projects: Project[] = [
       "HRIS for DOLE CALABARZON. Leave, overtime, CTO and office orders route through one approval engine, and the forms that come out the other end are the official government ones.",
     type: "HRIS / workflow platform",
     role: "Full Stack Developer",
-    period: "2025 — Present",
+    period: "2025 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: [
@@ -747,7 +747,7 @@ export const projects: Project[] = [
       "Technical Safety Inspection Online System. Establishments apply online for a Permit to Operate or an electrical inspection certificate, and the office runs the inspection, payment and issuance from the same place.",
     type: "Regulatory workflow system",
     role: "Full Stack Developer",
-    period: "2024 — Present",
+    period: "2024 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord", "REST API"],
@@ -972,7 +972,7 @@ export const projects: Project[] = [
       "Online application for the certification that a company has no pending labour case, from filing through verification to a certificate the applicant can track by reference.",
     type: "Records digitisation / certification",
     role: "Full Stack Developer",
-    period: "2024 — Present",
+    period: "2024 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "REST API"],
@@ -1195,7 +1195,7 @@ export const projects: Project[] = [
       users:
         "Field staff running on-site validation, and the programme itself, which depends on each beneficiary appearing exactly once.",
       teamNote:
-        "The biometric integration is my work. The rest of the TUPAD system — the work programmes, the approval chain across a dozen roles, the payroll documents — was built by others. This case study covers only the part I did.",
+        "The biometric integration is my work. The rest of the TUPAD system (the work programmes, the approval chain across a dozen roles, the payroll documents) was built by others. This case study covers only the part I did.",
       problem: [
         "Validation happens in the field, in front of the person. A duplicate has to be caught while they are still standing there, not reconciled afterwards.",
         "Browsers cannot talk to a USB fingerprint reader, and the vendor SDK is a native Windows library with no PHP binding.",
@@ -1301,7 +1301,7 @@ export const projects: Project[] = [
           solution:
             "The server stores templates and answers one question: which candidates should this print be compared against. The browser fetches that set and hands it to the local service along with the probe, and the service does the comparison with the native matcher, returning the matched record, the score and the threshold.",
           tradeOff:
-            "This is the honest weak point. The candidate templates leave the server and pass through the browser into the local service, and the server cannot independently confirm a match — it is told the answer. A modified client could lie about the result. For on-site validation with staff operating the machine that is an accepted risk, but it is a real one, and a server-side matcher would be the fix if the threat model ever changed.",
+            "This is the honest weak point. The candidate templates leave the server and pass through the browser into the local service, and the server cannot independently confirm a match. It is told the answer. A modified client could lie about the result. For on-site validation with staff operating the machine that is an accepted risk, but it is a real one, and a server-side matcher would be the fix if the threat model ever changed.",
           result:
             "Duplicate enrolments are caught in the field, in front of the person, using the matcher the vendor supports.",
         },
@@ -1325,7 +1325,7 @@ export const projects: Project[] = [
           cause:
             "The natural implementation is a request that blocks until the device returns, with nothing on the other end when the user walks away.",
           solution:
-            "Every call to the local service carries a timeout suited to what it does — short for a status check, long for a capture that waits on a person — and closing the dialog sends an explicit stop so the service abandons the capture.",
+            "Every call to the local service carries a timeout suited to what it does (short for a status check, long for a capture that waits on a person), and closing the dialog sends an explicit stop so the service abandons the capture.",
           tradeOff:
             "More states to handle in the client than a single blocking call, and the timeouts are values that had to be chosen rather than derived.",
           result:

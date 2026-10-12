@@ -24,8 +24,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.role}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} | ${site.role}`,
+    template: `%s | ${site.name}`,
   },
   description: site.tagline,
   applicationName: `${site.name} Portfolio`,
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: site.url,
-    siteName: `${site.name} — ${site.role}`,
-    title: `${site.name} — ${site.role}`,
+    siteName: `${site.name} | ${site.role}`,
+    title: `${site.name} | ${site.role}`,
     description: site.tagline,
     locale: "en_PH",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.role}`,
+    title: `${site.name} | ${site.role}`,
     description: site.tagline,
   },
   robots: {

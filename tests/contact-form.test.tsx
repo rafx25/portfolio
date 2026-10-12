@@ -60,7 +60,7 @@ describe("ContactForm", () => {
   it("posts valid input and shows the success message", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
-        JSON.stringify({ message: "Thanks — your message has been sent." }),
+        JSON.stringify({ message: "Thanks, your message has been sent." }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ describe("ContactForm", () => {
     await user.click(screen.getByRole("button", { name: "Send message" }));
 
     expect(
-      await screen.findByText("Thanks — your message has been sent."),
+      await screen.findByText("Thanks, your message has been sent."),
     ).toBeInTheDocument();
     expect(fetchSpy).toHaveBeenCalledOnce();
 

@@ -81,7 +81,7 @@ describe("portfolio design adaptation", () => {
       "border",
       "bg-surface/80",
     );
-    expect(screen.getByLabelText(`${site.shortName} — home`)).toHaveClass(
+    expect(screen.getByLabelText(`${site.shortName} home`)).toHaveClass(
       "rounded-full",
       "border",
     );

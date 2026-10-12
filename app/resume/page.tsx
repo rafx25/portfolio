@@ -126,7 +126,7 @@ export default function ResumePage() {
               >
                 {"• "}
                 <span className="font-semibold">{project.name}</span>
-                {" — "}
+                {": "}
                 {project.tagline} Built with {project.technologies.join(", ")}.
               </li>
             ))}

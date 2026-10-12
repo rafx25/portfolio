@@ -45,8 +45,8 @@ export default function AboutPage() {
             I came into development through IT work, and that shaped how I build. I saw
             the processes before I saw any code. Forms moving between desks. The same
             record kept in three places. The one person everyone has to wait for. So
-            when I start something now the first question is not which framework, it is
-            what the process actually is, including the exceptions nobody documented.
+            when I start something now I ask what the process actually is first,
+            including the exceptions nobody documented. The framework comes after.
           </p>
           <p>
             Nearly all of it has been internal: personnel administration, permits and
@@ -78,8 +78,7 @@ export default function AboutPage() {
           <p>
             On AI. I use it daily and I am specific about how. Boilerplate, unfamiliar
             APIs, first drafts of tests. It does not decide the data model, and nothing
-            it writes goes in until I have read it and can say why it works. That review
-            step is the whole difference between a tool and a liability.
+            it writes goes in until I have read it and can say why it works.
           </p>
         </div>
 

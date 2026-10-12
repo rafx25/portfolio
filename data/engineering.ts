@@ -32,7 +32,7 @@ export const principles: Principle[] = [
   {
     title: "Handle the failures that actually happen",
     detail:
-      "The reader gets unplugged. The connection drops halfway through an approval. The import file has one bad row out of four hundred. Those are not edge cases, they are Tuesday.",
+      "The reader gets unplugged. The connection drops halfway through an approval. The import file has one bad row out of four hundred. I treat these as normal cases to handle, not edge cases.",
   },
   {
     title: "Boring code is easier to keep",

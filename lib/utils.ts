@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDateRange(start: string, end: string | null) {
-  return `${start} — ${end ?? "Present"}`;
+  return `${start} - ${end ?? "Present"}`;
 }

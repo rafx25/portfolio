@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
   // Answer as if it worked. A bot gets nothing useful back.
   if (parsed.data.company) {
-    return NextResponse.json({ message: "Thanks — your message has been sent." });
+    return NextResponse.json({ message: "Thanks, your message has been sent." });
   }
 
   if (!isMailConfigured()) {
@@ -60,5 +60,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ message: "Thanks — your message has been sent." });
+  return NextResponse.json({ message: "Thanks, your message has been sent." });
 }

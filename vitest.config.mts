@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  // Resolves the "@/*" alias from tsconfig.json — no extra plugin needed.
+  // Resolves the "@/*" alias from tsconfig.json, no extra plugin needed.
   resolve: { tsconfigPaths: true },
   test: {
     environment: "jsdom",

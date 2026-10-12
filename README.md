@@ -5,7 +5,7 @@ static site with one dynamic endpoint: the content is typed data compiled at
 build time, and the only server work at runtime is the contact form.
 
 > **Placeholders.** Personal details are not filled in yet. Anything wrapped in
-> `[SQUARE BRACKETS]` still needs replacing — start with `lib/site.ts`, then
+> `[SQUARE BRACKETS]` still needs replacing. Start with `lib/site.ts`, then
 > `data/experience.ts` and the `[YYYY]` / `[ORGANIZATION]` fields in
 > `data/projects.ts`.
 
@@ -19,7 +19,7 @@ build time, and the only server work at runtime is the contact form.
 | Icons      | lucide-react, plus two inlined brand marks         |
 | Theme      | next-themes (class strategy, system default)       |
 | Validation | Zod, one schema shared by client and server        |
-| Email      | Resend (optional — the site works without it)      |
+| Email      | Resend (optional, the site works without it)       |
 | Testing    | Vitest, Testing Library, jsdom                     |
 | Analytics  | Vercel Analytics and Speed Insights                |
 | Hosting    | Vercel                                             |
@@ -43,7 +43,7 @@ build time, and the only server work at runtime is the contact form.
 
 ```
 app/                    Routes. Server components unless marked "use client".
-  page.tsx              Home — composes the sections
+  page.tsx              Home, composes the sections
   about/                Long-form about page
   projects/             Index, and [slug] case studies (generateStaticParams)
   colophon/             Build decisions for this site
@@ -71,7 +71,7 @@ lib/
   mail.ts               Resend delivery, configuration read at call time
   utils.ts              cn() and small helpers
 
-tests/                  Vitest — validation, rate limiting, form, content model
+tests/                  Vitest: validation, rate limiting, form, content model
 docs/                   Local learning notes (git-ignored on purpose)
 ```
 
@@ -80,7 +80,7 @@ Three decisions worth stating up front, with the reasoning in
 
 1. **No database.** Content is typed files; the contact form sends an email and
    stores nothing. A database added only to look "full stack" is a liability,
-   not a feature — the projects demonstrate that skill.
+   not a feature. The projects demonstrate that skill.
 2. **No component library.** The site needs four primitives. Writing them is a
    better trade than installing a library and its peer dependencies.
 3. **No animation library.** The one effect is a CSS scroll-driven fade, behind
@@ -111,7 +111,6 @@ Documented in full in `.env.example`.
 
 Without the Resend variables the form still renders and validates; the API
 returns a clear "not configured" response and the UI points at the email link.
-Nothing crashes and nothing leaks.
 
 ## Scripts
 
@@ -125,7 +124,7 @@ Nothing crashes and nothing leaks.
 | `npm run test`       | Vitest, once                                   |
 | `npm run test:watch` | Vitest, watching                               |
 | `npm run format`     | Prettier                                       |
-| `npm run verify`     | lint → typecheck → test → build (what CI runs) |
+| `npm run verify`     | lint, typecheck, test, build (what CI runs)    |
 
 ## Testing
 
@@ -162,7 +161,7 @@ The step-by-step version, written for a first deployment, is in
 - The sender's address goes in `replyTo`, never in `from`; header values are
   stripped of newlines to prevent header injection
 - HTML email content is escaped
-- No secrets in the repository — `.env*` is git-ignored, `.env.example` is not
+- No secrets in the repository: `.env*` is git-ignored, `.env.example` is not
 - Errors returned to the browser are messages; stack traces stay on the server
 - Every project here is an internal government system. No production source,
   schema, endpoint or record appears in this repository. The code samples were
@@ -173,7 +172,7 @@ The step-by-step version, written for a first deployment, is in
 ## AI-assisted development
 
 AI tools (Claude Code, OpenAI Codex, ChatGPT) were used while building this
-site — for boilerplate, drafts, refactoring suggestions and documentation.
+site, for boilerplate, drafts, refactoring suggestions and documentation.
 
 The architecture, the technology choices, the trade-offs recorded in
 `/colophon`, the review of every line, the tests and the final validation are
