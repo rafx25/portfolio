@@ -23,7 +23,7 @@ const decisions = [
   {
     decision: "Contact form over a route handler, delivered by email",
     reason:
-      "Same Zod schema on both sides, rate limited per IP, honeypot on the form. Nothing is stored. No store means nothing to leak.",
+      "Same Zod schema on both sides, rate limited per IP, honeypot on the form. Nothing is stored, so there is nothing to leak.",
   },
   {
     decision: "Components written by hand",

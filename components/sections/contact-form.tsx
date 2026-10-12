@@ -68,7 +68,7 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string | null })
 
       form.reset();
       setStatus("success");
-      setMessage(payload.message ?? "Thanks — your message has been sent.");
+      setMessage(payload.message ?? "Thanks, your message has been sent.");
     } catch {
       setStatus("error");
       setMessage(

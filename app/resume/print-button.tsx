@@ -4,7 +4,7 @@ import { buttonStyles } from "@/components/ui/button";
 
 /**
  * A real download rather than window.print(). The print dialog cannot be told
- * to save a PDF — the browser picks the destination, and it often picks a
+ * to save a PDF: the browser picks the destination, and it often picks a
  * physical printer.
  */
 export function PrintButton() {

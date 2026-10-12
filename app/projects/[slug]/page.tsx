@@ -25,7 +25,7 @@ export async function generateMetadata({
 
   if (!project?.caseStudy) return {};
 
-  const title = `${project.name} — case study`;
+  const title = `${project.name} | case study`;
   const description = project.tagline;
   const url = `/projects/${project.slug}`;
 
@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       url,
-      title: `${project.name} — ${site.name}`,
+      title: `${project.name} | ${site.name}`,
       description,
     },
     twitter: { card: "summary_large_image", title, description },

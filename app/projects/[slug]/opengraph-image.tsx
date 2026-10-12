@@ -4,7 +4,7 @@ import { ogCard, ogSize } from "@/lib/og-card";
 
 // One card per case study, so a shared link previews that project rather
 // than the home page.
-export const alt = `Case study — ${site.name}`;
+export const alt = `Case study | ${site.name}`;
 export const size = ogSize;
 export const contentType = "image/png";
 
