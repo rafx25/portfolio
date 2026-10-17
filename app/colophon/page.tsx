@@ -36,11 +36,6 @@ const decisions = [
       "One effect: sections fade up on entry, using CSS scroll-driven animation behind a @supports check, and it disappears entirely under prefers-reduced-motion. That is a few lines of CSS.",
   },
   {
-    decision: "No syntax highlighter",
-    reason:
-      "The code samples are short enough to read plain. If that stops being true, Shiki at build time is the upgrade, and it adds nothing to the client bundle.",
-  },
-  {
     decision: "Architecture diagrams rendered from data",
     reason:
       "They are typed data drawn as lists, not images. They reflow on a phone, work in both themes, are readable by screen readers and search engines, and cannot go stale against the text next to them.",
@@ -74,8 +69,7 @@ export default function ColophonPage() {
             How this site is built
           </h1>
           <p className="text-muted-foreground mt-4 text-base leading-relaxed">
-            A portfolio is a small system too, so the decisions in it are fair game.
-            Here are the ones worth asking about.
+            The main decisions behind this site, and the reason for each one.
           </p>
         </header>
 

@@ -21,9 +21,8 @@ export function SourceCode() {
         <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
           <p>
             What I can share is the engineering. The case studies cover the
-            architecture, the decisions and what each one cost. Code samples in them are
-            written from scratch for this site rather than copied out of the projects,
-            and the schemas and endpoints are generalised.
+            architecture, the decisions and what each one cost. Nothing in them is
+            copied out of the projects, and the schemas and endpoints are generalized.
           </p>
           <p>
             Screenshots are from test accounts, and anything that identified a person

@@ -2,6 +2,7 @@ import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/rendere
 
 import { site } from "@/lib/site";
 import {
+  resumeCaseStudiesLink,
   resumeContactLines,
   resumeEducation,
   resumeExperience,
@@ -17,15 +18,20 @@ import {
 // exactly the kind of thing that breaks keyword matching.
 Font.registerHyphenationCallback((word) => [word]);
 
+// A plain hyphen, not "•". The bullet glyph in the built-in font has no
+// Unicode mapping, so a parser reads it as a broken character on every line.
+const BULLET = "-";
+
 const styles = StyleSheet.create({
-  page: { paddingVertical: 40, paddingHorizontal: 44, fontFamily: "Helvetica" },
-  name: { fontSize: 17, fontFamily: "Helvetica-Bold", letterSpacing: 0.4 },
+  page: { paddingVertical: 36, paddingHorizontal: 44, fontFamily: "Helvetica" },
+  // No letterSpacing anywhere: spaced-out capitals extract as separate letters
+  // ("E D U C A T I O N"), and a parser then misses the section entirely.
+  name: { fontSize: 17, fontFamily: "Helvetica-Bold" },
   role: { fontSize: 11, fontFamily: "Helvetica-Bold", marginTop: 3 },
   contact: { fontSize: 9, color: "#333333", marginTop: 5 },
   sectionTitle: {
     fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
-    letterSpacing: 0.8,
     marginTop: 14,
     paddingBottom: 3,
     borderBottomWidth: 0.75,
@@ -35,6 +41,8 @@ const styles = StyleSheet.create({
   entry: { marginTop: 9 },
   entryRole: { fontSize: 10, fontFamily: "Helvetica-Bold" },
   entryMeta: { fontSize: 9, color: "#333333", marginTop: 1.5 },
+  position: { fontSize: 9.5, marginTop: 2 },
+  positions: { marginTop: 2, marginBottom: 2 },
   bulletRow: { flexDirection: "row", marginTop: 3 },
   bulletMark: { fontSize: 9.5, width: 10 },
   bulletText: { fontSize: 9.5, lineHeight: 1.4, flex: 1 },
@@ -53,6 +61,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function ResumeDocument() {
   const { contact, links } = resumeContactLines();
+  const caseStudies = resumeCaseStudiesLink();
 
   return (
     <Document
@@ -85,13 +94,28 @@ export function ResumeDocument() {
 
         <Section title="Professional Experience">
           {resumeExperience().map((item) => (
-            // wrap={false} keeps a single job from splitting across pages.
-            <View key={item.meta} style={styles.entry} wrap={false}>
-              <Text style={styles.entryRole}>{item.role}</Text>
-              <Text style={styles.entryMeta}>{item.meta}</Text>
+            // An organization with many positions is longer than the space left
+            // on a page, so the entry may break between bullets. The heading
+            // block keeps the first bullets with it, and no bullet splits.
+            <View key={item.organization} style={styles.entry}>
+              <View wrap={false} minPresenceAhead={40}>
+                <Text style={styles.entryRole}>{item.organization}</Text>
+                <Text style={styles.entryMeta}>{item.meta}</Text>
+                <View style={styles.positions}>
+                  {item.positions.map((position) => (
+                    <Text
+                      key={`${position.title}-${position.dates}`}
+                      style={styles.position}
+                    >
+                      <Text style={styles.label}>{position.title}</Text>
+                      {` | ${position.dates}`}
+                    </Text>
+                  ))}
+                </View>
+              </View>
               {item.highlights.map((line) => (
-                <View key={line} style={styles.bulletRow}>
-                  <Text style={styles.bulletMark}>•</Text>
+                <View key={line} style={styles.bulletRow} wrap={false}>
+                  <Text style={styles.bulletMark}>{BULLET}</Text>
                   <Text style={styles.bulletText}>{line}</Text>
                 </View>
               ))}
@@ -102,13 +126,14 @@ export function ResumeDocument() {
         <Section title="Delivered Systems">
           {resumeSystems().map((system) => (
             <View key={system.name} style={styles.bulletRow} wrap={false}>
-              <Text style={styles.bulletMark}>•</Text>
+              <Text style={styles.bulletMark}>{BULLET}</Text>
               <Text style={styles.bulletText}>
-                <Text style={styles.label}>{system.name} </Text>
-                {`- ${system.detail}`}
+                <Text style={styles.label}>{system.name}</Text>
+                {` - ${system.detail}`}
               </Text>
             </View>
           ))}
+          {caseStudies ? <Text style={styles.skillRow}>{caseStudies}</Text> : null}
         </Section>
 
         <Section title="Education">

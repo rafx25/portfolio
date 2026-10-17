@@ -1,5 +1,4 @@
-// Numbers a hiring manager can read in two seconds. Every one of these has to
-// be something you can back up in an interview.
+// The figures in the About section.
 export interface Stat {
   value: string;
   label: string;

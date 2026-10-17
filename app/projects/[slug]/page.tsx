@@ -113,7 +113,7 @@ export default async function ProjectCaseStudyPage({
           <dl className="border-border mt-8 grid gap-x-8 gap-y-4 border-y py-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { label: "Role", value: project.role },
-              { label: "Organisation", value: project.organization },
+              { label: "Organization", value: project.organization },
               { label: "Period", value: project.period },
               { label: "Status", value: project.status },
             ].map((item) => (
@@ -140,9 +140,8 @@ export default async function ProjectCaseStudyPage({
               <span>
                 This is an internal system. No production source code, schema, endpoint
                 or record appears here. Screenshots come from test accounts, with
-                anything that identified a person covered. Architecture, entity names
-                and code samples are generalised re-creations written for this
-                portfolio.
+                anything that identified a person covered. Architecture and entity names
+                are generalized for this portfolio.
               </span>
             </p>
           ) : null}

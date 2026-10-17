@@ -4,7 +4,7 @@
 
 /* ---------------------------------------------------------------------------
    Design tokens.
-   Colours are OKLCH so light/dark pairs keep the same perceived lightness step.
+   Colors are OKLCH so light/dark pairs keep the same perceived lightness step.
    Every token is defined here once; components never hard-code a hex value.
 --------------------------------------------------------------------------- */
 /* Sampled from the portrait, a night shot: near-black neutrals with a faint
@@ -140,7 +140,7 @@
 }
 
 /* Print: the resume page should come out as a clean document, so the site
-   chrome and anything decorative is dropped and colours are forced to a
+   chrome and anything decorative is dropped and colors are forced to a
    light ground regardless of the theme the visitor was using. */
 @media print {
   :root,
@@ -176,7 +176,7 @@
     padding: 0 !important;
   }
 
-  /* One flat colour: nothing in a resume should depend on being coloured. */
+  /* One flat color: nothing in a resume should depend on being colored. */
   .resume-page,
   .resume-page * {
     color: #000 !important;

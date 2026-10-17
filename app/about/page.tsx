@@ -60,20 +60,20 @@ export default function AboutPage() {
             and reused. Check permissions on the server, every time. Log what the office
             would be asked to prove later. And make the failure modes dull: a bad
             fingerprint scan rejected while the person is still standing there beats a
-            broken enrolment found three weeks on.
+            broken enrollment found three weeks on.
           </p>
           <p>
             Some of it has been unbuilding. Notifications in PRAMS started as
             Server-Sent Events and had to become polling, because the hosting could not
-            hold that many open connections. The case study says so plainly. That
-            decision is more interesting than the design it replaced.
+            hold that many open connections. The PRAMS case study explains how that was
+            split.
           </p>
           <p>
             What I ship in is PHP on MySQL. Slim on most of it, plain PHP on the older
-            systems, and Laravel with React and Inertia on the service desk, which is the
-            newest. C# when a desktop device is in the loop. I am working through the
-            modern JavaScript side properly now, and this site is part of that: typed
-            end to end, tested, deployed through CI instead of by hand.
+            systems, and Laravel with React and Inertia on the service desk, which is
+            the newest. C# when a desktop device is in the loop. I am working through
+            the modern JavaScript side properly now, and this site is part of that:
+            typed end to end, tested, deployed through CI instead of by hand.
           </p>
           <p>
             On AI. I use it daily and I am specific about how. Boilerplate, unfamiliar
@@ -85,7 +85,7 @@ export default function AboutPage() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Link href={site.resumePath} className={buttonStyles()}>
             <FileText className="size-4" aria-hidden />
-            View résumé
+            View resume
           </Link>
           <Link href="/#contact" className={buttonStyles({ variant: "secondary" })}>
             Get in touch

@@ -1,7 +1,6 @@
 import type { SkillGroup } from "./types";
 
-// No percentages. "PHP 92%" means nothing and invites a question you cannot
-// answer. Three levels:
+// Three levels, deliberately no percentages:
 //   Production experience - shipped and maintained with real users
 //   Working knowledge     - used it, productive with it
 //   Currently learning    - studying it, nothing more
@@ -47,7 +46,7 @@ export const skills: SkillGroup[] = [
     description: "Schema design, queries and the parts that bite in production.",
     items: [
       { name: "MySQL / MariaDB", level: "Production experience" },
-      { name: "Schema design & normalisation", level: "Production experience" },
+      { name: "Schema design & normalization", level: "Production experience" },
       { name: "Indexing & query tuning", level: "Working knowledge" },
       { name: "MongoDB", level: "Working knowledge" },
       { name: "PostgreSQL", level: "Currently learning" },
@@ -58,20 +57,34 @@ export const skills: SkillGroup[] = [
     description: "Patterns I have actually had to get right in a live system.",
     items: [
       { name: "Multi-level approval workflows", level: "Production experience" },
+      { name: "Configurable approval routing", level: "Production experience" },
       { name: "Role-Based Access Control", level: "Production experience" },
       { name: "Authentication & authorization", level: "Production experience" },
+      {
+        name: "Single sign-on (authorization code flow)",
+        level: "Production experience",
+      },
       { name: "Audit logging", level: "Production experience" },
       { name: "Service-layer separation", level: "Production experience" },
-      { name: "Soft deletes & data retention", level: "Production experience" },
+      {
+        name: "Soft deletes & data retention",
+        level: "Production experience",
+        resume: false,
+      },
       {
         name: "Real-time notifications (SSE, polling)",
         level: "Production experience",
       },
-      { name: "File upload handling & validation", level: "Production experience" },
+      {
+        name: "File upload handling & validation",
+        level: "Production experience",
+        resume: false,
+      },
       { name: "Excel import / export pipelines", level: "Production experience" },
       {
         name: "Government form generation (PhpSpreadsheet, TCPDF)",
         level: "Production experience",
+        resume: false,
       },
       { name: "PSR-7 / PSR-15 middleware", level: "Production experience" },
     ],
@@ -83,7 +96,7 @@ export const skills: SkillGroup[] = [
       { name: "Web application penetration testing", level: "Working knowledge" },
       { name: "ZAP (Zed Attack Proxy)", level: "Working knowledge" },
       { name: "Kali Linux", level: "Working knowledge" },
-      { name: "Oracle VirtualBox", level: "Working knowledge" },
+      { name: "Oracle VirtualBox", level: "Working knowledge", resume: false },
     ],
   },
   {
@@ -92,8 +105,12 @@ export const skills: SkillGroup[] = [
     items: [
       { name: "Git & GitHub", level: "Production experience" },
       { name: "Production deployment & maintenance", level: "Production experience" },
-      { name: "Debugging live issues", level: "Production experience" },
-      { name: "Environment configuration & secrets", level: "Production experience" },
+      { name: "Debugging live issues", level: "Production experience", resume: false },
+      {
+        name: "Environment configuration & secrets",
+        level: "Production experience",
+        resume: false,
+      },
       { name: "Shared hosting (cPanel / Hostinger)", level: "Production experience" },
       { name: "Vercel", level: "Working knowledge" },
       { name: "GitHub Actions / CI", level: "Working knowledge" },

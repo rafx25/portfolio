@@ -31,7 +31,7 @@ export function Avatar({
         sizes={sizes}
         priority={priority}
         // The photo is 3:4 with the head ~42% down and sky above it. Zoomed
-        // 1.25x from the bottom edge, so the frame keeps the shoulders, centres
+        // 1.25x from the bottom edge, so the frame keeps the shoulders, centers
         // the face and still shows the string lights to the right.
         className="origin-[64%_100%] scale-125 object-cover object-bottom"
       />
