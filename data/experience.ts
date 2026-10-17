@@ -61,7 +61,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     organization: "Gruppo EMS, Inc.",
-    location: "Philippines",
+    location: "Biñan City, Laguna",
     positions: [
       { title: "Application Specialist", start: "July 2021", end: "March 2023" },
     ],
