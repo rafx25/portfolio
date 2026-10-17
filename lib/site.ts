@@ -35,7 +35,7 @@ export const site = {
   phone: "",
   email: "rafxd.25@gmail.com",
   github: "https://github.com/rafx25",
-  linkedin: "https://www.linkedin.com/in/rafael-domer-3126a1255/",
+  linkedin: "https://www.linkedin.com/in/rafaeldomer/",
   resumePath: "/resume",
   avatarPath: "/avatar.jpg",
 } as const;
