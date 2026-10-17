@@ -818,9 +818,14 @@ export const projects: Project[] = [
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "PhpWord", "REST API"],
-    metrics: ["PTO & CEI", "province-scoped", "licensed evaluators", "ageing queues"],
+    metrics: [
+      "PTO & CEI",
+      "admin-set approval route",
+      "e-signed certificates",
+      "unit enrollment",
+    ],
     keyChallenge:
-      "An application passes through inspectors, licensed evaluators, cashiering and a signatory, in different provinces, and the office has to see which ones have been sitting too long at each stage.",
+      "Every new Regional Director wants certificates approved along a different route. The current one wants approval to end at the ARD's account, while the certificate still carries the RD's name and e-signature.",
     featured: true,
     confidential: true,
     screenshots: [
@@ -828,17 +833,15 @@ export const projects: Project[] = [
         src: "/projects/tsios-dashboard.png",
         width: 1436,
         height: 848,
-        alt: "TSIOS dashboard showing enrolled establishments and ageing charts for pending evaluations",
-        caption:
-          "Dashboard. The ageing panels are the whole point: evaluations pending over three days, orders of payment over five.",
+        alt: "TSIOS dashboard showing enrolled establishments and charts of pending evaluations",
+        caption: "Office dashboard.",
       },
       {
         src: "/projects/tsios-user-access.png",
         width: 1450,
         height: 1581,
         alt: "Account management screen with per-route access tags on each user",
-        caption:
-          "Account management. Access is a set of route tags per user, not a fixed role. Names and usernames are blank in this screen.",
+        caption: "Account management. Names and usernames are blank in this screen.",
       },
       {
         src: "/projects/tsios-login.png",
@@ -851,23 +854,24 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "TSIOS handles Permit to Operate and Certificate of Electrical Inspection applications. An establishment enrolls, files, and is assigned an inspector and an evaluator. Inspection results lead to an order of payment, and payment leads to a certificate. The office side covers assignment, inspection, evaluation, payment, issuance, and the corrections that follow.",
+        "TSIOS handles Permit to Operate and Certificate of Electrical Inspection applications. An establishment enrolls, files, and is assigned an inspector and an evaluator. Inspection results lead to an order of payment, and payment leads to a certificate that goes through the Division Head, the ARD and the RD before it is released.",
       users:
-        "Industrial establishments and contractors filing applications, inspectors and evaluators in the regional and provincial offices, cashiering, and the signatory who issues certificates.",
+        "Industrial establishments and contractors filing applications, inspectors and evaluators in the regional and provincial offices, cashiering, and the officials who review and sign certificates.",
+      teamNote:
+        "TSIOS is built by a team. My parts are establishment and unit enrollment, the client's application pages, the inspection and evaluation steps, certificate issuance, and the approval chain with e-signatures, including the approval route described below. The dashboard, account access and certificate corrections are teammates' work.",
       problem: [
         "Applications were filed and tracked on paper across a regional office and several provincial offices. Nobody had one view of where anything was.",
-        "Work stalls silently. An application waiting on an evaluator or an unpaid order of payment looks the same as one moving normally.",
-        "Assignment changes constantly. Inspectors get reassigned, evaluators change, and the record has to follow.",
-        "Certificates sometimes need correction or revocation after issuance, and there was no controlled way to do it.",
+        "A certificate could be issued in the system, but the review and sign-off by the Division Head, the ARD and the RD still happened outside it.",
+        "Certificate approval was then fixed in the code as Division Head, then ARD, then RD. Each new Regional Director wanted a different route, and every change meant a code change.",
       ],
       responsibilities: [
-        "Full stack development",
-        "Database design for establishments, applications, inspections, payments and certificates",
-        "The stage-by-stage application workflow and reassignment",
-        "Per-route user access and provincial scoping",
-        "Ageing reports on the dashboard",
-        "Certificate issuance, status modification and revert paths",
-        "Deployment and maintenance",
+        "Full stack development, as part of a team",
+        "Establishment and unit enrollment, and the client's application and transaction pages",
+        "The inspection and evaluation steps, with inspection history",
+        "Certificate issuance, including correcting company and unit details before a certificate is made",
+        "The certificate approval chain and e-signatures on certificates",
+        "The certificate approval route the administrator sets up",
+        "Maintenance mode, deployment and production support",
       ],
       architecture: {
         summary:
@@ -883,18 +887,19 @@ export const projects: Project[] = [
             detail: "Assignment, inspection result, order of payment, issuance",
           },
           {
-            label: "Reporting",
-            detail: "Ageing queries per stage, transaction lists, exports",
+            label: "Certificate approval",
+            detail: "Route steps set by the administrator, e-signatures, QR token",
           },
           {
             label: "MySQL",
             detail:
-              "Establishments, applications, assignments, inspections, payments, certificates",
+              "Establishments, applications, units, inspections, payments, certificates, approval route",
           },
         ],
         integrations: [
           "Rule 1020 establishment registration as a prerequisite for an account",
-          "Letter of Authority and certificate documents generated from templates",
+          "Certificate documents generated from templates, with e-signatures placed on approval",
+          "Email to the client with the signed certificate",
         ],
       },
       features: [
@@ -904,130 +909,87 @@ export const projects: Project[] = [
             "Companies register once and file against that record afterwards, so applications from the same establishment stay linked.",
         },
         {
-          title: "Inspector and evaluator assignment",
+          title: "Unit enrollment",
           detail:
-            "Assignment and reassignment are explicit actions with their own records, so the current owner of a file is always known.",
+            "Establishments register the individual machines and electrical installations being certified, with details like voltage, piping diameter and year of make, so an application is filed against a known unit rather than free text.",
         },
         {
-          title: "Mechanical and electrical inspection",
+          title: "Inspection and evaluation",
           detail:
-            "Inspection results are captured per application and drive what happens next.",
-        },
-        {
-          title: "Order of payment",
-          detail:
-            "Evaluation produces an order of payment that has to be received before issuance can proceed.",
+            "Inspectors record mechanical and electrical inspection results, including a not-recommended path, and evaluators review them before payment. Each unit keeps its inspection history.",
         },
         {
           title: "Certificate issuance",
           detail:
-            "Certificates are generated from a template with their own reference, and issuance is a separate permission.",
+            "Certificates are generated from a template with their own code. Company and unit details can be corrected on the issuance page first, so a typo in the application does not end up on the certificate.",
         },
         {
-          title: "Status modification and revert",
+          title: "Approval with e-signatures",
           detail:
-            "Corrections after issuance go through controlled actions instead of direct edits.",
+            "Each reviewer recommends or returns the certificate with remarks. On final approval it gets its code and validity, the signatory's e-signature and a QR token, and the signed copy is emailed to the client.",
         },
         {
-          title: "Ageing views",
+          title: "Certificate approval route",
           detail:
-            "The dashboard lists evaluations pending more than three days and orders of payment pending more than five, per province.",
+            "An administrator sets the approval steps for certificates and the accounts that can act on each one. Who approves is kept apart from who signs, so a certificate still carries the RD's name and e-signature even when approval ends at the ARD.",
         },
         {
-          title: "Per-route access",
+          title: "Certificate history",
           detail:
-            "Each account carries the specific routes it can reach, plus the province it is scoped to.",
+            "RD and admin accounts can look up every issued certificate, and the admin timeline shows which approval step made the final decision.",
+        },
+        {
+          title: "Client transaction pages",
+          detail:
+            "Clients follow each application, read the office's transaction notes, and answer a feedback form.",
         },
         {
           title: "Maintenance mode",
           detail:
             "A switch that takes the client side offline during releases without touching the office side.",
         },
-        {
-          title: "Licensed evaluator assignment",
-          detail:
-            "Mechanical applications go to a licensed mechanical engineer and electrical ones to a licensed electrical engineer. Each has its own assign and reassign action, because one cannot stand in for the other.",
-        },
-        {
-          title: "Letters of Authority, issued in batches",
-          detail:
-            "Authority documents are generated for a batch of applications rather than one at a time, with a separate modification path for the ones that have to change after issuing.",
-        },
-        {
-          title: "New applications and renewals",
-          detail:
-            "A renewal starts from the establishment's previous transaction rather than from an empty form, so the inspection history stays attached to the same unit.",
-        },
-        {
-          title: "Unit enrollment",
-          detail:
-            "Establishments register the individual machines and electrical installations being certified, so an application is filed against a known unit rather than free text.",
-        },
-        {
-          title: "Public certificate verification",
-          detail:
-            "A certificate can be checked against the issuance record without an account.",
-        },
-        {
-          title: "Field-level change tracking",
-          detail:
-            "When a record is edited, only the fields that actually changed are recorded, with their before and after values, rather than a snapshot of the whole row.",
-        },
       ],
       challenges: [
         {
-          title: "Nobody could see what was stuck",
+          title: "The approval route changed with every Regional Director",
           challenge:
-            "Applications sat at a stage for days. The only way to find them was to ask the person holding them.",
+            "Certificate approval was written into the code as Division Head, then ARD, then RD. Each new Regional Director wants a different route. The current one wants approval to end at the ARD's account, while the certificate still carries the RD's name and e-signature.",
           cause:
-            "The application row stored its current stage but not when it entered that stage, so 'how long has this been waiting' had no answer.",
+            "Who approves and who signs were treated as the same thing, and both were fixed in the code, with one screen and one query per approver.",
           solution:
-            "Timestamped every stage transition and built the dashboard from those timestamps: pending evaluation over three days, pending order of payment over five, grouped by province.",
+            "Separated the two. The administrator sets the route on a settings page: ordered steps, each with one or more accounts that may act on it, while the name and e-signature on the certificate still come from the signatory record. Each certificate in approval stores the step it is waiting at, and that step is never past the last step of the current route. So when a step is removed, the certificates waiting there move to the new last step right away, and a timeline entry records the move. Approving or returning locks that row, so two approvers cannot act on the same step, and the server checks that the person acting is assigned to it.",
           tradeOff:
-            "One more row per transition, and the thresholds are policy baked into a query. Changing them means changing code rather than a setting.",
+            "A shorter route applies to certificates already waiting, not only to new ones. That is what the office wants when a director changes, but it means a route change takes effect the moment it is saved.",
           result:
-            "Backlogs are visible without asking anyone. The numbers on the dashboard are the same numbers used in reports.",
+            "A new director's route is set up from the settings page without a code change, and nobody can approve a step they are not assigned to. The same design now runs certificate approval in the No Pending Case system.",
         },
         {
-          title: "Roles did not fit the way the offices actually work",
+          title: "Approving and signing certificates inside the system",
           challenge:
-            "The office is not a clean hierarchy. Someone in a provincial office might evaluate and handle orders of payment but never touch companies. A role called 'evaluator' was either too wide or multiplied into a dozen near-identical roles.",
+            "A certificate needs the Division Head, the ARD and the RD to sign off, and the client needs a signed copy. The system could issue a certificate, but that review and signing still happened outside it.",
           cause:
-            "Access here is really a set of capabilities per person, and it differs between provinces.",
+            "Issuance was built as the last step, with nothing between the draft certificate and the signed one.",
           solution:
-            "Made access a set of route tags on the account, with province as a separate scope. Adding a capability to one person is a checkbox, not a new role.",
+            "An approval chain inside TSIOS. Each reviewer recommends or returns the draft with remarks, and every action is logged. A return goes back to the regional focal person, who fixes it and forwards it again from the start. On final approval the certificate gets its code and validity, the signatory's e-signature is placed on it, a QR token is created so it can be verified, and the signed PDF is emailed to the client.",
           tradeOff:
-            "Per-user access is harder to audit than a handful of named roles. It needs a screen that shows exactly what each account can reach, which is why that screen exists.",
+            "The e-signature has to land in the right place on an official layout, for names and designations of different lengths. The name and designation are centered under each other and the signature is sized per signatory, which took a few rounds of adjustment against real certificates.",
           result:
-            "Access matches what people actually do. Adding a provincial office does not mean inventing new roles.",
-        },
-        {
-          title: "Issued certificates needed correcting",
-          challenge:
-            "A certificate would go out with a wrong detail, or need to be pulled back. Editing the record directly would have broken the link between the certificate and the inspection behind it.",
-          cause:
-            "The first design treated issuance as the end of the line, with nothing after it.",
-          solution:
-            "Added explicit status modification and revert actions, each behind its own permission and each writing a record of who did it and why. The original stays.",
-          tradeOff:
-            "More steps for staff than editing a field, and two more permissions to manage.",
-          result:
-            "Corrections happen without losing the history, and it is always clear which certificate is current.",
+            "Certificates are reviewed, signed and sent from the system, every return has a reason on record, and the client gets the signed copy by email.",
         },
       ],
       security: [
         "Establishment accounts are separate from office accounts, with no shared routes",
         "Every office route checks a permission, and queries are scoped to the user's province",
-        "Issuance, status modification and revert each require their own permission",
+        "Approving or returning a certificate is checked on the server against the step it is waiting at, and only administrators can change the route",
+        "Every approval and return is logged with the reviewer and the remarks",
         "Uploaded documents are validated by type and size and served through an authorized route, not from a public folder",
-        "Corrections are recorded rather than applied silently",
-        "Certificates carry a reference that can be checked against the issuance record",
+        "Certificates carry a QR token that can be checked against the issuance record",
         "Screenshots here show blank account names; no establishment or account data is published",
       ],
       outcomes: [
         "Establishments file and follow their applications online instead of by phone and counter visit.",
-        "Backlogs at each stage are visible per province without asking anyone.",
-        "Assignment, issuance and corrections all leave a record.",
+        "Certificates are reviewed, e-signed and sent to the client from the system.",
+        "A change of Regional Director no longer needs a code change to reroute certificate approval.",
       ],
     },
   },
@@ -1043,7 +1005,12 @@ export const projects: Project[] = [
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
     technologies: ["PHP", "MySQL", "JavaScript", "TCPDF", "REST API"],
-    metrics: ["Company certification", "Rule 1020 check", "public verify"],
+    metrics: [
+      "Company certification",
+      "Rule 1020 check",
+      "admin-set approval route",
+      "public verify",
+    ],
     keyChallenge:
       "The certificate says no record exists. To still stand behind that a year later, you have to store what was searched, not search again.",
     featured: true,
@@ -1083,12 +1050,13 @@ export const projects: Project[] = [
         "Certificates were prepared one at a time, which invites errors in the fields that matter: company name, date, reference.",
         "Nothing tied an issued certificate to the search that justified it, so it could not be checked later.",
         "A third party holding a printed certificate had no way to confirm it was real.",
+        "Approval followed a fixed chain written into the code. Each new director wanted a different one, and every change meant a code change.",
       ],
       responsibilities: [
         "Full stack development",
         "Database design for applications, case records, verification results and the issuance log",
         "Verification and matching logic, including how partial matches are handled",
-        "Approval routing and certificate generation",
+        "The certificate approval route the administrator sets up, and certificate generation",
         "Per-route access to case data",
         "Deployment and maintenance",
       ],
@@ -1106,7 +1074,11 @@ export const projects: Project[] = [
             detail: "Deterministic search against case records, result stored",
           },
           { label: "Review", detail: "Records staff confirm or flag partial matches" },
-          { label: "Approval", detail: "Signing official approves issuance" },
+          {
+            label: "Approval",
+            detail:
+              "Steps and approvers set by the administrator; the last step approves issuance",
+          },
           {
             label: "Issuance",
             detail: "Certificate generated with a reference number",
@@ -1141,6 +1113,11 @@ export const projects: Project[] = [
           detail: "A certificate cannot be issued without an authorized approval.",
         },
         {
+          title: "Approval route set by the administrator",
+          detail:
+            "The administrator decides the approval steps and which accounts act on each one from an Approval Management page, so a new director's preferred route needs no code change.",
+        },
+        {
           title: "Reference number tracking",
           detail:
             "Applicants follow their application, and third parties can confirm a certificate was issued.",
@@ -1169,6 +1146,19 @@ export const projects: Project[] = [
             "More storage, and fixing a wrong certificate is heavier than editing one.",
           result:
             "Any certificate can be explained by exactly what was checked when it was issued.",
+        },
+        {
+          title: "A new director, a new approval route",
+          challenge:
+            "Certificate approval followed a fixed chain in the code. Each new Regional Director or Assistant Regional Director wanted certificates to pass through them, or not, and each change was a code change.",
+          cause:
+            "The chain was built as one screen and one query per approver, so the route and the code were the same thing.",
+          solution:
+            "The same design as in TSIOS. The administrator sets the route on an Approval Management page: ordered steps, each with the accounts that may act on it. Each application in approval stores the step it is waiting at, and that step is never past the last step of the current route, so shortening the route moves waiting applications to the new last step right away. The server checks that the person approving is assigned to that step.",
+          tradeOff:
+            "A route change applies to applications already waiting, not just new ones. That is what the office wants when a director changes, but it takes effect the moment it is saved.",
+          result:
+            "A change of director is a settings change instead of a release, and nobody can approve a step they are not assigned to.",
         },
         {
           title: "Company names never match exactly",
@@ -1216,6 +1206,7 @@ export const projects: Project[] = [
         "Issued certificates are immutable. Corrections supersede",
         "The public verification page returns issuance status only",
         "Issuance and approval are recorded with actor and timestamp",
+        "Approval actions are checked on the server against the step the application is waiting at, and only the Approval Management page can change the route",
         "Input validated and normalized at the boundary, queries parameterised",
         "Generated documents are served through an authorized route",
         "Screenshots here show test data with account names covered",
@@ -1225,17 +1216,18 @@ export const projects: Project[] = [
         "Two staff verifying the same company reach the same answer.",
         "Every certificate is traceable to the verification behind it.",
         "A certificate presented by a third party can be confirmed.",
+        "A change of director no longer needs a code change to reroute certificate approval.",
       ],
     },
   },
 
   {
     slug: "biometric-integration",
-    name: "TUPAD Biometric Verification",
+    name: "TUPAD BIOS",
     tagline:
-      "Fingerprint capture and 1:N matching for an emergency employment program, bridged from a DigitalPersona reader into a web application through a local C# service.",
-    type: "Desktop-to-web integration",
-    role: "Integration developer",
+      "Biometrics and offline registration for TUPAD, an emergency employment program: fingerprint matching through a local C# service, and a registration page that works without internet and prints beneficiary IDs on the spot.",
+    type: "Biometrics and offline-first registration",
+    role: "Developer, biometrics and offline registration",
     period: "2026",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "In production",
@@ -1247,27 +1239,58 @@ export const projects: Project[] = [
       "PHP",
       "MySQL",
       "JavaScript",
+      "Service Worker",
+      "IndexedDB",
     ],
-    metrics: ["1:N matching", "local C# service", "ships as an installer"],
+    metrics: [
+      "1:N matching",
+      "works offline",
+      "printed IDs on site",
+      "local C# service",
+    ],
     keyChallenge:
-      "A browser cannot reach a USB fingerprint reader, and the matching SDK is native with no PHP binding. Both constraints push the work off the server and onto the workstation, which is a privacy decision as much as a technical one.",
+      "Some work sites have no internet. Beneficiaries still have to be registered, fingerprinted and handed an ID that day, and every record has to reach the server later without clashing with ID numbers given out anywhere else.",
     featured: true,
     confidential: true,
-    // No screenshots: the enrollment screen shows a live capture and beneficiary
-    // records. There is no version of that image that is safe to publish.
-    screenshots: [],
+    // Only an empty form and test records. No real capture or beneficiary record.
+    screenshots: [
+      {
+        src: "/projects/tupad-offline-registration.png",
+        width: 1523,
+        height: 1391,
+        alt: "Offline beneficiary registration form with personal details, a photo panel and a fingerprint panel",
+        caption:
+          "Offline registration. The page works without internet: details, photo and fingerprint are saved on the laptop, and the ID prints from there.",
+      },
+      {
+        src: "/projects/tupad-offline-sync.png",
+        width: 1523,
+        height: 790,
+        alt: "Records and sync tab listing one registration not yet synced, with Print ID and Cancel buttons",
+        caption:
+          "Records waiting to sync. Photos and fingerprints are deleted from the laptop once the server has them. Test record.",
+      },
+      {
+        src: "/projects/tupad-login-page.jpg",
+        width: 1523,
+        height: 790,
+        alt: "TUPAD Biometrics Integrated Online System sign-in page",
+        caption: "BIOS sign-in page.",
+      },
+    ],
     caseStudy: {
       overview:
-        "TUPAD is an emergency employment program. Beneficiaries are validated on site before they are paid, and a person must not be able to enroll twice under two records. This work is the fingerprint side of that check: capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled.",
+        "TUPAD is an emergency employment program. Beneficiaries are validated on site before they are paid, and a person must not be able to enroll twice under two records. My work covers two parts of BIOS: the fingerprint check, capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled, and offline registration for sites with no internet, where beneficiaries are registered and given a printed ID on the day and synced later.",
       users:
         "Field staff running on-site validation, and the program itself, which depends on each beneficiary appearing exactly once.",
       teamNote:
-        "The biometric integration is my work. The rest of the TUPAD system (the work programs, the approval chain across a dozen roles, the payroll documents) was built by others. This case study covers only the part I did.",
+        "The biometric integration and the offline registration are my work, along with the fix that keeps TUPAD ID numbers permanent. The rest of BIOS (the work programs, the beneficiary records, the approval chain across a dozen roles, the payroll documents) was built by others. This case study covers only my parts.",
       problem: [
         "Validation happens in the field, in front of the person. A duplicate has to be caught while they are still standing there, not reconciled afterwards.",
         "Browsers cannot talk to a USB fingerprint reader, and the vendor SDK is a native Windows library with no PHP binding.",
         "Records already existed from an earlier round of enrollment, saved without recording which finger had been scanned.",
         "Fingerprint data is sensitive, and a decision about where matching runs is a decision about where that data goes.",
+        "Some work sites have no internet at all, but registration and ID release happen on the day.",
       ],
       responsibilities: [
         "Design of the bridge between the reader and the web application",
@@ -1276,10 +1299,12 @@ export const projects: Project[] = [
         "The PHP side: template storage and the candidate query used for matching",
         "Handling the failures that actually happen in the field: no reader, service not running, poor scan, operator closing the dialog mid-capture",
         "Packaging the service as an installer so field offices could deploy it without a developer on site",
+        "Offline registration: the offline page, on-device storage, reserved ID numbers, printed IDs and sync",
+        "Keeping TUPAD ID numbers permanent and unique per work program",
       ],
       architecture: {
         summary:
-          "The browser never touches the reader. A small C# tray application runs on the validation workstation, owns the vendor SDK, and exposes a narrow HTTP surface on localhost. The page asks PHP for the candidate templates, hands them to the local service along with the freshly captured print, and the local service does the matching with the native SDK.",
+          "The browser never touches the reader. A small C# tray application runs on the validation workstation, owns the vendor SDK, and exposes a narrow HTTP surface on localhost. The page asks PHP for the candidate templates, hands them to the local service along with the freshly captured print, and the local service does the matching with the native SDK. Offline registration is a separate page with its own service worker, so the main system is not affected.",
         layers: [
           {
             label: "DigitalPersona reader",
@@ -1306,6 +1331,7 @@ export const projects: Project[] = [
         integrations: [
           "A second capture path: a WebSDK fingerprint image can be sent to the local service and converted into a template",
           "Face enrollment alongside fingerprint, with fully enrolled records protected from deletion",
+          "An offline registration page: a service worker keeps it available without internet, IndexedDB holds the records, and sync sends them through the normal upload and review",
         ],
       },
       features: [
@@ -1343,6 +1369,26 @@ export const projects: Project[] = [
           title: "Packaged for people who are not developers",
           detail:
             "The service ships as an installer, so a field office can set up a validation laptop themselves rather than waiting for someone to come and configure it.",
+        },
+        {
+          title: "Registration without internet",
+          detail:
+            "The offline page keeps working with no connection: the form, the photo, the fingerprint through the local service, the next ID number and a printed card-size ID with a QR code.",
+        },
+        {
+          title: "Reserved ID numbers",
+          detail:
+            "While online, the focal person reserves a block of TUPAD ID numbers for a municipality. Each offline save takes the next one, so IDs printed on site never clash with numbers given out by the normal upload.",
+        },
+        {
+          title: "Sync through the normal review",
+          detail:
+            "Synced records go through the same upload queue as everyone else's, so validation and review do not change. The printed ID number and QR code stay valid once the record is in.",
+        },
+        {
+          title: "Knowing when it is really online",
+          detail:
+            "A laptop on Wi-Fi without internet still reports itself online. The page checks whether the server answers, on load, on network changes and every 30 seconds, and syncs as soon as it does.",
         },
       ],
       challenges: [
@@ -1398,20 +1444,48 @@ export const projects: Project[] = [
           result:
             "An unplugged reader is reported in seconds instead of hanging, and abandoning a capture leaves the device ready for the next person.",
         },
+        {
+          title: "Registering beneficiaries where there is no internet",
+          challenge:
+            "Some work sites have no connection, but beneficiaries are registered and given their TUPAD ID on the day. A web page that needs the server for every save, and ID numbers that the server hands out at upload, both stop working there.",
+          cause:
+            "Everything assumed a connection: the page, the save, and the numbering.",
+          solution:
+            "A separate offline page with its own service worker, which serves the files from the network when it can and from the cache when it cannot, and carries a version so a new release gets past the hosting CDN's week-long cache. Records live in IndexedDB and are written to disk before Save finishes, so one survives the laptop losing power right after. While still online, the focal person reserves a block of ID numbers for the municipality, starting above the work program's target so it never meets the numbers the Excel upload gives out. Each save takes the next number in the same transaction as the record and prints the ID with a random QR token. When the server is reachable again, sync sends the records through the normal upload queue, then saves the photos and fingerprints and deletes them from the laptop.",
+          tradeOff:
+            "Until it syncs, the data lives in one browser profile on one laptop; clearing site data or using a private window loses it. An ID is printed before anyone reviews the record, so scanning an ID whose record is still being processed says so, and one whose record was cancelled or removed shows as void.",
+          result:
+            "Sites without internet register beneficiaries and hand out IDs on the day, and the records join the normal review later without any number clashing.",
+        },
+        {
+          title: "Duplicate fingerprints could slip through the sync",
+          challenge:
+            "On-site validation matches a new fingerprint against everyone enrolled through the local DigitalPersona service. The first version of the offline sync only used the server's simpler image check, so a duplicate fingerprint could pass.",
+          cause: "The sync reused the fallback check instead of the real one.",
+          solution:
+            "Sync now runs the same 1:N match first, including against records saved earlier in the same sync. If the local service is not running, the record is marked as checked by the server only, so the person's identity can be confirmed in on-site validation.",
+          tradeOff:
+            "Sync is slower, and the full check needs the local service running on the laptop that syncs.",
+          result:
+            "Offline records get the same duplicate check as on-site ones, or are clearly marked when they could not.",
+        },
       ],
       security: [
         "The local service binds to the loopback address and is not reachable from the network",
-        "Only templates are stored. No fingerprint image is persisted by the web application",
+        "The 1:N match runs on fingerprint templates in the local service",
+        "On the offline laptop, photos and fingerprints are deleted as soon as the server has saved them",
+        "A printed ID whose record was cancelled or removed in review shows as void when its QR code is scanned",
         "Template storage and the candidate query sit behind the application's normal session and role checks",
         "Candidate templates do reach the browser and the local service during matching. That is a deliberate consequence of the SDK being native, and it is the main thing I would revisit if this were rebuilt",
         "The server does not independently verify a match result. A server-side matcher would be required to close that gap",
         "Fully enrolled records are protected from deletion, so a validated beneficiary cannot be quietly removed and re-added",
-        "No biometric data, sample template, capture screen or beneficiary record appears anywhere in this portfolio",
+        "The screenshots show an empty registration form and a test record. No real biometric data, template or beneficiary record appears in this portfolio",
       ],
       outcomes: [
         "A duplicate enrollment is caught on site, while the person is still present, rather than surfacing later in a payout list.",
         "Field staff work from the browser they already use; the device code lives in one small service on the laptop.",
-        "Fingerprint images are never stored by the web application.",
+        "Sites without internet register beneficiaries and hand out printed IDs on the day, then sync when they are back online.",
+        "Offline records get the same duplicate fingerprint check as on-site ones, or are marked when they could not.",
         "Records enrolled before the finger position was captured are still checked rather than silently skipped.",
         "Deployed across DOLE Regional Office IV-A field offices, installed by the offices themselves.",
       ],
