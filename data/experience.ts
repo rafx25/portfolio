@@ -40,7 +40,7 @@ export const experience: ExperienceItem[] = [
       "Integrated HID DigitalPersona DP4500 readers with the PHP application through a local .NET service, running 1:N deduplication against the TUPAD registry to catch duplicate enrollments before payouts. Packaged the service with an installer so field offices set it up without a developer on site.",
       "Built the PESO Online Report System so employment service offices across Region IV-A submit monthly reports through one portal instead of emailing spreadsheets, ending the manual re-keying at the regional office.",
       "Built the Client Satisfaction Measurement System to capture and score walk-in feedback for ARTA reporting, replacing paper surveys and manual tallying.",
-      "Built the IT Service Desk on Laravel, Inertia and React: staff sign in with their existing HRIS credentials, and reporters can track a ticket without an account.",
+      "Built the Request Processing Desk, an IT ticketing system on Laravel and React: staff sign in through PRAMS single sign-on, and reporters can track a ticket without an account.",
       "Building VCS on Laravel, Inertia and React to replace the region's six fixed-expense workbooks: bills tracked from receipt to payment, page-level access with province scoping, and an importer that repairs and reports the workbooks' typing errors.",
       "Owned production support: reproduced reported bugs, wrote the corrective SQL, then fixed the root cause so the same correction did not come back the following month.",
     ],
