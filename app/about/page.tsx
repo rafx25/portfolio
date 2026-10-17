@@ -70,8 +70,8 @@ export default function AboutPage() {
           </p>
           <p>
             What I ship in is PHP on MySQL. Slim on most of it, plain PHP on the older
-            systems, and Laravel with React and Inertia on the service desk, which is
-            the newest. C# when a desktop device is in the loop. I am working through
+            systems, and Laravel with React on the newest two, the Request Processing
+            Desk and VCS. C# when a desktop device is in the loop. I am working through
             the modern JavaScript side properly now, and this site is part of that:
             typed end to end, tested, deployed through CI instead of by hand.
           </p>

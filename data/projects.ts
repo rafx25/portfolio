@@ -31,7 +31,23 @@ export const projects: Project[] = [
       "Six years of hand-typed workbooks had to come in without retyping them, and without importing their typos: dates in the year 20226, amounts like 4.899.00, and account numbers Excel had turned into scientific notation.",
     featured: true,
     confidential: true,
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/projects/vcs-dashboard.png",
+        width: 1523,
+        height: 2160,
+        alt: "VCS dashboard with bill counts, the bill-out and payment queues, bills per month against last year, and breakdowns by type of expense, province and service provider",
+        caption:
+          "Dashboard for all provinces, with peso amounts hidden. The two queues show how long the oldest bill has been waiting.",
+      },
+      {
+        src: "/projects/vcs-login-page.png",
+        width: 1523,
+        height: 790,
+        alt: "VCS sign-in page",
+        caption: "Sign-in page.",
+      },
+    ],
     caseStudy: {
       overview:
         "VCS records the fixed expenses of the regional office and its five provincial offices: electricity, water, telephone and internet lines, rentals, photocopiers, courier, fuel and postage. Each bill is tracked from the day it is received, through bill-out to Accounting, to the ADA, check or official receipt that pays it. It produces the same monitoring sheets, monthly comparisons and signed reports the workbooks were kept for.",
@@ -39,7 +55,7 @@ export const projects: Project[] = [
         "Billing encoders in the regional and provincial offices who log bills, the property officer who manages service accounts and imports, Accounting staff who record payments, the IMSD chief, and auditors with read-only access.",
       problem: [
         'Each operating unit kept its own "Monitoring of Fixed Expenses" workbook, one sheet per meter, line or lease. Nothing added them up across the region.',
-        "Dates, amounts and account numbers were typed by hand, and the mistakes stayed in: impossible years, misspelt months, amounts with two decimal points.",
+        "Dates, amounts and account numbers were typed by hand, and the mistakes stayed in: impossible years, misspelled months, amounts with two decimal points.",
         "Knowing which bills were still waiting for payment meant reading every sheet.",
         "One ADA often pays several bills, and one courier invoice often covers several offices. A spreadsheet row holds neither cleanly.",
         "The monthly comparison against previous years was maintained by hand, separately from the bills it was supposed to summarize.",
@@ -56,7 +72,7 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia and React, the same shape as the IT Service Desk. Controllers validate through form requests and return props to React pages. Anything that is not a single request's concern, such as identifier normalization, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
+          "A Laravel application with Inertia and React. Controllers validate through form requests and return props to React pages. Anything that is not a single request's concern, such as identifier normalization, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
         layers: [
           {
             label: "Browser",
@@ -215,103 +231,119 @@ export const projects: Project[] = [
   },
   {
     slug: "itsd",
-    name: "IT Service Desk",
+    name: "Request Processing Desk",
     tagline:
-      "Ticketing for the IT unit. Staff across the regional and provincial offices file a ticket, IT assigns and works it, and the reporter can follow it without an account.",
+      "Ticketing for the IT unit. Staff across the regional and provincial offices sign in with their PRAMS account and file a ticket, IT assigns and works it, and the reporter can follow it without logging in.",
     type: "Internal ticketing system",
     role: "Full Stack Developer",
     period: "2026 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
     status: "UAT",
     technologies: [
-      "Laravel 12",
-      "PHP 8.2",
-      "Inertia.js",
+      "Laravel 13",
+      "PHP 8.3",
       "React",
       "TypeScript",
+      "Sanctum",
+      "TanStack Query",
       "Tailwind CSS",
       "MySQL",
-      "Pest",
+      "PHPUnit",
     ],
-    metrics: ["HRIS-backed login", "7 ticket states", "public tracking", "Pest tests"],
+    metrics: ["PRAMS sign-in", "7 ticket states", "public tracking", "feature tests"],
     keyChallenge:
-      "Identity lives in the HRIS, not here. Logging in means verifying against another system's database without copying its users, and without inheriting its habits.",
+      "Identity lives in PRAMS, not here. Staff sign in through PRAMS, and the desk has to notice within minutes when someone joins or leaves the IT unit or is deactivated, without keeping a second set of passwords.",
     featured: true,
     confidential: true,
     screenshots: [
       {
-        src: "/projects/itsd-dashboard.png",
-        width: 1498,
-        height: 845,
-        alt: "Service desk dashboard with ticket counts by status and a list of the oldest unresolved tickets",
-        caption: "Ticket queue with the oldest unresolved surfaced first. Test data.",
+        src: "/projects/rpd-dashboard.png",
+        width: 1523,
+        height: 896,
+        alt: "Request Processing Desk dashboard with ticket counts by status, urgent tickets waiting, and lists of the oldest waiting and most recent tickets",
+        caption:
+          "Dashboard, with the oldest waiting tickets first. Requester names are covered.",
+      },
+      {
+        src: "/projects/rpd-login-page.png",
+        width: 1523,
+        height: 790,
+        alt: "Request Processing Desk sign-in page with a Sign in with PRAMS button",
+        caption:
+          "Staff sign in with their PRAMS account. The password form is only for an emergency administrator.",
       },
     ],
     caseStudy: {
       overview:
-        "The IT unit supports every office in the region. This is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It was the first of the systems here built on Laravel with Inertia and React.",
+        "The IT unit supports every office in the region, and this is where those requests land. An employee files a ticket against a category and their office, IT assigns it, works it and resolves it, and every step is recorded. It is the first system to sign people in through PRAMS instead of keeping its own passwords.",
       users:
-        "Any employee filing a request, IT staff who pick tickets up and resolve them, and administrators who manage users, offices and categories.",
+        "Any employee filing a request, IT staff who pick tickets up and resolve them, and administrators who manage users, roles, offices and categories.",
       problem: [
         "Requests reached IT through whatever channel was nearest. Nothing recorded what was asked, who took it, or whether it was finished.",
         "People who reported a problem had no way to check on it short of asking again.",
         "A new system normally means a new set of accounts to create and keep in step with HR as people join, move office or leave.",
       ],
       responsibilities: [
-        "Full stack development: Laravel 12 back end, Inertia with React and TypeScript on the front",
-        "Schema design for tickets, activity logs, attachments, categories and offices",
-        "HRIS-backed authentication over a second, read-only database connection",
+        "Full stack development: a Laravel 13 API and a React and TypeScript single-page front end",
+        "Schema design for tickets, activity logs, attachments, categories, offices and roles",
+        "Sign-in through PRAMS single sign-on, replacing the earlier HRIS password sign-in",
         "The ticket status machine and its transition rules",
-        "Role middleware and per-action policies",
+        "Roles, permissions and per-action policies",
         "In-app notifications, attachments and the public tracking page",
-        "Reports, CSV export and the dashboard queues",
-        "Feature tests in Pest covering authorization and the transitions",
+        "Reports and the dashboard queues",
+        "Feature tests covering sign-in, authorization and the transitions",
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to React pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behavior lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
+          "A Laravel API with a React single-page front end. Sanctum signs the browser in with the normal session cookie and CSRF protection, so no token is kept in the browser. TanStack Query fetches and caches the data and refreshes lists after every change. Ticket behavior lives in service classes rather than controllers, and identity comes from PRAMS rather than from a user table of its own.",
         layers: [
           {
             label: "Browser",
-            detail: "React components in TypeScript, Tailwind and Radix primitives",
+            detail:
+              "React and TypeScript, React Router, TanStack Query, Tailwind and Radix primitives",
           },
           {
-            label: "Inertia",
-            detail:
-              "Controllers return props to pages. No JSON API, no separate client router",
+            label: "Sanctum",
+            detail: "Session cookie and CSRF protection for the single-page app",
           },
           {
             label: "HTTP layer",
             detail:
-              "Routes, then auth, then role middleware on the admin and reporting groups",
+              "Routes, then auth, then active-account and PRAMS access checks on every API call",
           },
           {
             label: "Authorization",
             detail:
-              "Policies per action, with an admin bypass registered once in a Gate",
+              "Policies per action and permissions per role, with the super administrator allowed once in a Gate",
           },
           {
             label: "Services",
             detail:
-              "Workflow and transitions, ticket numbering, notification fan-out, HRIS login",
+              "Workflow and transitions, ticket numbering, notifications, PRAMS sign-in and account sync",
           },
           {
             label: "Eloquent / MySQL",
             detail:
-              "Tickets, activity logs, attachments, counters, categories, offices",
+              "Tickets, activity logs, attachments, counters, categories, offices, roles",
           },
         ],
         integrations: [
-          "A second, read-only MySQL connection to the HRIS database, used for login and office sync",
-          "Local disk storage for attachments, outside the web root",
+          "PRAMS single sign-on for sign-in, with a check back every ten minutes",
+          "A read-only connection to the HRIS database, now used only to sync the office list",
+          "Private disk storage for attachments, outside the web root",
           "Database-backed notifications for in-app alerts",
         ],
       },
       features: [
         {
-          title: "Sign in with HRIS credentials",
+          title: "Sign in with PRAMS",
           detail:
-            "There is no separate password to remember. The login verifies against the HRIS account, then creates or refreshes a local mirror of the user and their office. Nobody in HR has to provision anything.",
+            "Staff press one button and use the account they already have. On the first sign-in, members of the IT unit get the IT Staff role and everyone else gets the Requestor role, so nobody has to create accounts by hand.",
+        },
+        {
+          title: "Access that keeps up with PRAMS",
+          detail:
+            "Every ten minutes the desk asks PRAMS about the user again. A new IT unit head becomes an administrator, and a deactivated account is signed out, without waiting for the next login.",
         },
         {
           title: "Status machine with explicit transitions",
@@ -319,19 +351,19 @@ export const projects: Project[] = [
             "Seven statuses and one map of what may follow what. Anything not on the map is rejected before it reaches the database, whichever screen it came from.",
         },
         {
-          title: "Assignment and reassignment",
+          title: "Assignment",
           detail:
-            "Assigning an open ticket moves it to assigned and stamps the time. Reassignment records who it moved from and to.",
+            "Assigning an open ticket moves it to assigned and stamps the time, and unassigning sends it back to open. Administrators can assign several tickets at once.",
         },
         {
           title: "Public tracking link",
           detail:
-            "Each ticket carries an unguessable token. The page behind it shows status, dates and a generalized timeline, and nothing else.",
+            "Each ticket carries an unguessable token and a QR code. The page behind it shows status, dates and a generalized timeline, and nothing else.",
         },
         {
           title: "Activity log on every change",
           detail:
-            "Status changes, assignment, comments and attachments each write a row with the actor, the old value and the new one, inside the same transaction as the change.",
+            "Status changes, assignment, comments and attachments each write a row with who did it and what changed, inside the same transaction as the change.",
         },
         {
           title: "Notifications to the people involved",
@@ -349,37 +381,37 @@ export const projects: Project[] = [
             "One counter per calendar year, so tickets read IT-2026-00001 upward and the number means something to the person quoting it.",
         },
         {
-          title: "Dashboard queues and reports",
+          title: "Dashboard, live lists and reports",
           detail:
-            "Counts by status, the oldest unresolved tickets first, and a CSV export for the ones that end up in a report.",
+            "Counts by status, urgent tickets still waiting, and the oldest unresolved tickets first. Tables, tickets and the dashboard refresh on their own, and a reports page covers the monthly figures.",
         },
       ],
       challenges: [
         {
           title: "Two systems, one set of people",
           challenge:
-            "The service desk needed to know who everybody is, which office they belong to and whether they still work here. The HRIS already knows all three.",
+            "The desk needs to know who everybody is, which office and unit they belong to, and whether they still work here. PRAMS already knows all of it.",
           cause:
-            "Giving the service desk its own user table would mean provisioning every employee twice and keeping the copy in step forever. It would drift within a month.",
+            "Giving the desk its own user list would mean creating every employee twice and keeping the copy in step forever. It would drift within a month.",
           solution:
-            "A second database connection to the HRIS, read-only and used for one thing. Login verifies the submitted password against the HRIS hash, and only on success does the service desk create or refresh a small local row for that person: name, username, office, and its own role and active flag. The HRIS is the authority on identity. The service desk stays the authority on what you can do here.",
+            "The first version read the HRIS database directly and checked the password against the HRIS hash. Once PRAMS had single sign-on, the desk moved to it: the user signs in on PRAMS, the desk exchanges a one-time code for the user's details in a server-to-server call, and keeps a small local row with its own roles and active flag. PRAMS is the authority on who someone is. The desk stays the authority on what they can do here.",
           tradeOff:
-            "The service desk is now coupled to another system's schema and to its availability. If the HRIS is unreachable, nobody can log in. The lookup is wrapped so that a failure is reported and treated as a failed login rather than a stack trace, but the dependency is real and it is the price of not maintaining a second directory.",
+            "The desk now depends on PRAMS being up. Someone already signed in keeps working for up to an hour if PRAMS cannot be reached, and an emergency administrator password can be switched on, but nobody new can sign in until PRAMS is back.",
           result:
-            "No second password for staff, no provisioning step, and someone's office follows them automatically. A local deactivation still overrides a valid HRIS login, so the service desk can lock someone out without touching HR data.",
+            "No second password for staff, no account to create, and a person's office and unit follow them automatically. A local deactivation still overrides a valid PRAMS sign-in, so the desk can lock someone out without touching HR data.",
         },
         {
           title: "A legacy column that means the opposite of what it says",
           challenge:
             "In the HRIS, an account row with is_active = 0 is the active one. Reading it the obvious way logs in exactly the wrong people.",
           cause:
-            "Inherited semantics. The column has meant that for years and other systems depend on it, so it is not something to fix from the outside.",
+            "Inherited meaning. The column has meant that for years and other systems depend on it, so it is not something to fix from the outside.",
           solution:
-            "Keep the query faithful to the legacy meaning and confine it. One read-only model owns every HRIS query, with a docblock stating the inversion in plain terms. That convention never crosses the boundary: the service desk's own is_active means what it looks like.",
+            "Keep the query faithful to the legacy meaning and keep it in one place. A small set of read-only models owns every HRIS query, with a comment stating the inversion in plain terms. That convention never crosses the boundary: the desk's own is_active means what it looks like.",
           tradeOff:
-            "The same column name now means two opposite things in one codebase, which is exactly the sort of thing that bites someone later. The mitigation is that only one class can see the legacy side, and it says so at the top.",
+            "The same column name now means two opposite things in one codebase, which is exactly the sort of thing that bites someone later. The only defense is that just those models can see the legacy side, and they say so at the top.",
           result:
-            "Everyone working on the service desk reads is_active the normal way and is right. The one place where that is false is documented at the point where it matters.",
+            "Everyone working on the desk reads is_active the normal way and is right. The one place where that is false is documented where it matters.",
         },
         {
           title: "Two people filing at once could get the same ticket number",
@@ -390,7 +422,7 @@ export const projects: Project[] = [
           solution:
             "One counter row per year. A unique index on the year means two requests racing to create that row is harmless: one wins, the other just reads it. The row is then locked inside a transaction before the number goes up, so the second request waits for the first and gets the next number.",
           tradeOff:
-            "Ticket creation serializes on one row per year. For this volume that is nothing, but it means the lock must not be held while doing unrelated work, so the numbering runs in its own short transaction rather than inside a longer one.",
+            "Ticket creation waits on one row per year. For this volume that is nothing, but it means the lock must not be held while doing unrelated work, so the numbering runs in its own short transaction.",
           result:
             "Numbers are unique and gapless within a year, and the constraint is enforced by the database, not by application code.",
         },
@@ -401,9 +433,9 @@ export const projects: Project[] = [
           cause:
             "The endpoints were built one at a time, and the shared shape only became obvious once there were several.",
           solution:
-            "One service holds a map of which status may follow which, and every path goes through it. It rejects an illegal move before anything is written, sets the timestamps belonging to the target status, and writes the activity row in the same transaction as the change. Notifications fire after the transaction commits, not inside it.",
+            "One service holds a map of which status may follow which, and every path goes through it. It rejects an illegal move before anything is written, sets the timestamps belonging to the target status, and writes the activity row in the same transaction as the change. Notifications go out after the transaction commits, not inside it.",
           tradeOff:
-            "New statuses mean editing one central map, and a genuinely odd one-off transition has to be expressed in its terms rather than hacked into a controller.",
+            "New statuses mean editing one central map, and an odd one-off transition has to fit that map rather than being hacked into a controller.",
           result:
             "Illegal transitions are impossible from any screen. Reopening a resolved ticket clears its resolved and closed dates, so the reports do not count work that was undone.",
         },
@@ -414,7 +446,7 @@ export const projects: Project[] = [
           cause:
             "Viewing a ticket required logging in, and some reporters go weeks between logins.",
           solution:
-            "Each ticket gets a long random token and a public page addressed by it. That page builds its response from an explicit list of fields: number, subject, status, priority, office, category, dates, and a timeline where each entry is reduced to a generic label.",
+            "Each ticket gets a long random token and a public page addressed by it, also printed as a QR code. That page builds its response from an explicit list of fields: number, subject, status, priority, office, category, dates, and a timeline where each entry is reduced to a generic label.",
           tradeOff:
             "Anyone with the link sees that much, so the question is what goes in the response, not who is asking. Staff names, internal notes, comments and the resolution text are left out on purpose. The public page is deliberately less useful than the internal one.",
           result:
@@ -422,23 +454,24 @@ export const projects: Project[] = [
         },
       ],
       security: [
-        "Passwords are verified against the HRIS hash. The service desk stores a random unusable password so there is no second credential to steal",
-        "A local deactivation overrides a successful HRIS login, so someone can be locked out here without touching HR records",
-        "The HRIS connection is read-only by convention and used only for login and office lookup. Nothing writes to it",
-        "An HRIS outage is caught and reported as a failed login rather than surfacing as an error page",
-        "Role middleware guards the admin and reporting route groups; policies check every ticket action; the admin bypass is registered once rather than repeated in each policy",
+        "With PRAMS sign-in on, the desk never sees a password. The sign-in carries a state value tied to the browser, and the one-time code is exchanged server to server with the desk's own secret",
+        "Every ten minutes the account is checked against PRAMS again; a deactivated PRAMS account is signed out on its next request",
+        "A local deactivation overrides a successful PRAMS sign-in, so someone can be locked out here without touching HR records",
+        "The HRIS connection is read-only and now used only to sync offices. Nothing writes to it",
+        "Every sign-in, failed sign-in and forced sign-out is written to the audit log",
+        "Permissions guard the management and reporting routes; policies check every ticket action; the super administrator is allowed once in a Gate rather than in each policy",
         "The ticket list is scoped in the query: a requestor sees their own tickets, not a filtered view of everyone's",
-        "Attachment downloads check that the attachment belongs to the ticket in the URL before checking anything else, which closes the id-swap",
+        "Attachment downloads check that the attachment belongs to the ticket in the URL before anything else, which closes the id-swap",
         "Uploads are stored outside the web root under a generated filename; the original name is kept only as a display label",
         "The public tracking page returns a fixed list of fields and a generalized timeline. Staff names, comments and resolution text are never in the payload",
-        "The first administrator is seeded from environment config, and that mechanism promotes but never demotes",
+        "The emergency administrator password sign-in is off unless it is switched on in the server config",
       ],
       outcomes: [
         "Requests to IT are recorded, assigned and closed in one place, with a number the reporter can quote.",
-        "Staff sign in with the credentials they already have. There is no account to provision and no second password.",
+        "Staff sign in with their PRAMS account. There is no account to create and no second password.",
         "Every ticket has a history: who acted, what changed, and when.",
         "A reporter can check their own ticket without logging in, and without seeing anything internal.",
-        "Feature tests cover the authorization rules and the transition map, so the rules that matter are the ones under test.",
+        "Feature tests cover sign-in, the authorization rules and the transition map, so the rules that matter are the ones under test.",
       ],
     },
   },
