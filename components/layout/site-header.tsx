@@ -127,7 +127,7 @@ export function SiteHeader() {
                 : "border-border-strong hover:bg-surface-muted",
             )}
           >
-            Résumé
+            Resume
           </Link>
           <button
             type="button"
@@ -181,7 +181,7 @@ export function SiteHeader() {
               onResume && "text-accent",
             )}
           >
-            Résumé
+            Resume
           </Link>
         </Container>
       </div>

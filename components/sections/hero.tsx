@@ -76,7 +76,7 @@ export function Hero() {
                 className={buttonStyles({ variant: "secondary" })}
               >
                 <FileText className="size-4" aria-hidden />
-                Résumé
+                Resume
               </Link>
             </div>
           </div>

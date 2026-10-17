@@ -1,7 +1,7 @@
 import type { Project } from "./types";
 
 // Internal government systems. No production code, schema, endpoint or record is
-// reproduced here. Code samples are rewritten from scratch for this site.
+// reproduced here.
 // Screenshots use test data; anything identifying was covered before upload.
 
 export const projects: Project[] = [
@@ -38,11 +38,11 @@ export const projects: Project[] = [
       users:
         "Billing encoders in the regional and provincial offices who log bills, the property officer who manages service accounts and imports, Accounting staff who record payments, the IMSD chief, and auditors with read-only access.",
       problem: [
-        "Each operating unit kept its own \"Monitoring of Fixed Expenses\" workbook, one sheet per meter, line or lease. Nothing added them up across the region.",
+        'Each operating unit kept its own "Monitoring of Fixed Expenses" workbook, one sheet per meter, line or lease. Nothing added them up across the region.',
         "Dates, amounts and account numbers were typed by hand, and the mistakes stayed in: impossible years, misspelt months, amounts with two decimal points.",
         "Knowing which bills were still waiting for payment meant reading every sheet.",
         "One ADA often pays several bills, and one courier invoice often covers several offices. A spreadsheet row holds neither cleanly.",
-        "The monthly comparison against previous years was maintained by hand, separately from the bills it was supposed to summarise.",
+        "The monthly comparison against previous years was maintained by hand, separately from the bills it was supposed to summarize.",
       ],
       responsibilities: [
         "Full stack development: Laravel 12 back end, Inertia with React and TypeScript on the front",
@@ -56,7 +56,7 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia and React, the same shape as the IT Service Desk. Controllers validate through form requests and return props to React pages. Anything that is not a single request's concern, such as identifier normalisation, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
+          "A Laravel application with Inertia and React, the same shape as the IT Service Desk. Controllers validate through form requests and return props to React pages. Anything that is not a single request's concern, such as identifier normalization, the monthly comparison, the report builder and the workbook importer, lives in support classes rather than controllers, so the importer and the forms share one set of rules.",
         layers: [
           {
             label: "Browser",
@@ -65,8 +65,7 @@ export const projects: Project[] = [
           },
           {
             label: "Inertia",
-            detail:
-              "Controllers return props to pages. No separate JSON API",
+            detail: "Controllers return props to pages. No separate JSON API",
           },
           {
             label: "Access middleware",
@@ -81,7 +80,7 @@ export const projects: Project[] = [
           {
             label: "Support classes",
             detail:
-              "Normaliser, monthly comparison, report builder, workbook reader, parser and importer",
+              "Normalizer, monthly comparison, report builder, workbook reader, parser and importer",
           },
           {
             label: "Eloquent / MySQL",
@@ -172,11 +171,11 @@ export const projects: Project[] = [
         {
           title: "Validation written from the actual mistakes",
           challenge:
-            "Generic rules such as \"must be a date\" and \"must be a number\" would have accepted most of what went wrong in the workbooks.",
+            'Generic rules such as "must be a date" and "must be a number" would have accepted most of what went wrong in the workbooks.',
           cause:
             "The errors were plausible values: a real date in the wrong order, a payment reference with no payment date, the same invoice logged twice on one account.",
           solution:
-            "Rules taken from the workbooks themselves. Dates must be real, not in the future and not before 2000. Bill-out cannot precede receipt, payment cannot precede bill-out, and a payment needs both its mode and its reference. The applicable month must fall within the billing period. Invoice numbers and billing periods cannot repeat on one account. Account, meter and phone identifiers are normalised before they are compared, so formatting differences do not hide a duplicate.",
+            "Rules taken from the workbooks themselves. Dates must be real, not in the future and not before 2000. Bill-out cannot precede receipt, payment cannot precede bill-out, and a payment needs both its mode and its reference. The applicable month must fall within the billing period. Invoice numbers and billing periods cannot repeat on one account. Account, meter and phone identifiers are normalized before they are compared, so formatting differences do not hide a duplicate.",
           tradeOff:
             "Stricter forms, and occasionally a real-world exception the rules did not anticipate has to be handled deliberately rather than typed in.",
           result:
@@ -191,7 +190,7 @@ export const projects: Project[] = [
           solution:
             "Two separate checks. Every route names its page and the ability it needs, and a user's grants start from their roles but can be adjusted per person. Province is a property of the user, applied as a scope on the queries themselves, so a provincial user's bill list, dashboard and reports never contain another province's rows. Actions on a single bill check the province again.",
           tradeOff:
-            "Per-user adjustments make \"what can this person do\" something to look up rather than infer from the role name. The access grid on the user's page is the answer.",
+            'Per-user adjustments make "what can this person do" something to look up rather than infer from the role name. The access grid on the user\'s page is the answer.',
           result:
             "An office can adjust access without a developer, and a provincial encoder cannot see or record anything outside their province.",
         },
@@ -200,11 +199,10 @@ export const projects: Project[] = [
         "Every route is guarded by the page it belongs to and the ability it needs; hiding a button is not the control",
         "Province scoping is applied in the query, and single-bill actions such as voiding a payment check the province again",
         "Recording a payment only touches bills that are visible to the user and awaiting payment. Anything else in the request is skipped and reported",
-        "Form requests validate every write, and identifiers are normalised before duplicate checks",
+        "Form requests validate every write, and identifiers are normalized before duplicate checks",
         "Offices, categories, providers and service accounts in use cannot be deleted, only deactivated, so history is never orphaned",
         "A paid bill cannot be deleted until its payment is voided",
         "Imports run inside a transaction, and each import records who ran it and what it changed",
-        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
         "The regional office and five provinces record fixed expenses in one system instead of six workbooks.",
@@ -271,12 +269,11 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to React pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behaviour lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
+          "A Laravel application with Inertia instead of a separate API. Controllers return typed props straight to React pages, so there is no second set of endpoints to keep in sync and no client-side router to maintain. Ticket behavior lives in service classes rather than controllers, and authentication reaches sideways into the HRIS database rather than keeping its own users.",
         layers: [
           {
             label: "Browser",
-            detail:
-              "React components in TypeScript, Tailwind and Radix primitives",
+            detail: "React components in TypeScript, Tailwind and Radix primitives",
           },
           {
             label: "Inertia",
@@ -329,7 +326,7 @@ export const projects: Project[] = [
         {
           title: "Public tracking link",
           detail:
-            "Each ticket carries an unguessable token. The page behind it shows status, dates and a generalised timeline, and nothing else.",
+            "Each ticket carries an unguessable token. The page behind it shows status, dates and a generalized timeline, and nothing else.",
         },
         {
           title: "Activity log on every change",
@@ -393,9 +390,9 @@ export const projects: Project[] = [
           solution:
             "One counter row per year. A unique index on the year means two requests racing to create that row is harmless: one wins, the other just reads it. The row is then locked inside a transaction before the number goes up, so the second request waits for the first and gets the next number.",
           tradeOff:
-            "Ticket creation serialises on one row per year. For this volume that is nothing, but it means the lock must not be held while doing unrelated work, so the numbering runs in its own short transaction rather than inside a longer one.",
+            "Ticket creation serializes on one row per year. For this volume that is nothing, but it means the lock must not be held while doing unrelated work, so the numbering runs in its own short transaction rather than inside a longer one.",
           result:
-            "Numbers are unique and gapless within a year, and the constraint is enforced by the database rather than by hoping.",
+            "Numbers are unique and gapless within a year, and the constraint is enforced by the database, not by application code.",
         },
         {
           title: "Status rules were spreading across controllers",
@@ -406,7 +403,7 @@ export const projects: Project[] = [
           solution:
             "One service holds a map of which status may follow which, and every path goes through it. It rejects an illegal move before anything is written, sets the timestamps belonging to the target status, and writes the activity row in the same transaction as the change. Notifications fire after the transaction commits, not inside it.",
           tradeOff:
-            "New statuses mean editing one central map, and a genuinely odd one-off transition has to be expressed in its terms rather than hacked into a controller. That is the trade, and it is worth it.",
+            "New statuses mean editing one central map, and a genuinely odd one-off transition has to be expressed in its terms rather than hacked into a controller.",
           result:
             "Illegal transitions are impossible from any screen. Reopening a resolved ticket clears its resolved and closed dates, so the reports do not count work that was undone.",
         },
@@ -419,7 +416,7 @@ export const projects: Project[] = [
           solution:
             "Each ticket gets a long random token and a public page addressed by it. That page builds its response from an explicit list of fields: number, subject, status, priority, office, category, dates, and a timeline where each entry is reduced to a generic label.",
           tradeOff:
-            "Anyone with the link sees that much, so the question is what goes in the response, not who is asking. Staff names, internal notes, comments and the resolution text are left out on purpose. It makes the public page less useful than the real one, which is the point.",
+            "Anyone with the link sees that much, so the question is what goes in the response, not who is asking. Staff names, internal notes, comments and the resolution text are left out on purpose. The public page is deliberately less useful than the internal one.",
           result:
             "The reporter can answer their own question, and the page cannot leak who is working on what or what was said internally.",
         },
@@ -433,9 +430,8 @@ export const projects: Project[] = [
         "The ticket list is scoped in the query: a requestor sees their own tickets, not a filtered view of everyone's",
         "Attachment downloads check that the attachment belongs to the ticket in the URL before checking anything else, which closes the id-swap",
         "Uploads are stored outside the web root under a generated filename; the original name is kept only as a display label",
-        "The public tracking page returns a fixed list of fields and a generalised timeline. Staff names, comments and resolution text are never in the payload",
+        "The public tracking page returns a fixed list of fields and a generalized timeline. Staff names, comments and resolution text are never in the payload",
         "The first administrator is seeded from environment config, and that mechanism promotes but never demotes",
-        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
         "Requests to IT are recorded, assigned and closed in one place, with a number the reporter can quote.",
@@ -450,7 +446,7 @@ export const projects: Project[] = [
     slug: "prams",
     name: "PRAMS",
     tagline:
-      "HRIS for DOLE CALABARZON. Leave, overtime, CTO and office orders route through one approval engine, and the forms that come out the other end are the official government ones.",
+      "HRIS for DOLE CALABARZON. Leave, overtime, CTO and office orders follow approval routes that HR sets up without a developer, and PRAMS is also the login for the region's other internal systems.",
     type: "HRIS / workflow platform",
     role: "Full Stack Developer",
     period: "2025 - Present",
@@ -470,11 +466,11 @@ export const projects: Project[] = [
     metrics: [
       "~500 employees",
       "6 field offices",
-      "4 document types",
-      "PDS generation",
+      "HR-set approval routes",
+      "single sign-on",
     ],
     keyChallenge:
-      "Four document types on one approval engine, and every one of them ends in a government form that has to still be correct when it is reprinted two years later.",
+      "Every new Regional Director or Assistant Regional Director decides which requests should pass through their account. HR needed to change the approval flow each time, on their own, without breaking requests already halfway through.",
     featured: true,
     confidential: true,
     screenshots: [
@@ -502,30 +498,34 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "PRAMS is what employees across the regional office and its provincial field offices use to file leave, compensatory time off, overtime and office orders, and what HR uses to keep employee records, work schedules and leave credits. It also produces the paperwork: approved applications print as the official forms, and an employee can generate their own Personal Data Sheet from the profile they maintain.",
+        "PRAMS is where employees of the regional office and its field offices file leave, compensatory time off, overtime and office orders, and where HR keeps credits, work schedules and approval routes. Approved requests print as the official government forms. It is also the login for the region's other internal systems: they send people to PRAMS to sign in instead of keeping their own passwords.",
       users:
-        "Roughly 500 employees across the regional office and six field offices: staff filing requests and maintaining their own profile, supervisors and office heads approving, and HR staff who manage records, credits, schedules and reports.",
+        "Roughly 500 employees across the regional office and six field offices: staff filing requests, unit heads, office heads and directors approving, HR staff managing credits, schedules and routes, and the other internal systems that sign their users in through PRAMS.",
+      teamNote:
+        "PRAMS is built by a small team. This case study covers my part: the approval workflows and the route engine behind them, delegation, single sign-on, the printed forms, leave and CTO credits, access control, employee units and the org chart, and the chatbot. The employee profile, the Personal Data Sheet export and the employee import are mainly a teammate's work; on the PDS I added the 2026 revision's continuation sheets.",
       problem: [
         "Requests moved between offices on paper. Nobody could say where a form was or who was holding it.",
         "Leave and CTO credits lived in spreadsheets, so the number an employee believed and the number HR computed did not always agree.",
-        "Approval authority moves constantly. People go on leave, posts sit vacant, officers are designated in an acting capacity. On paper you write a name on a line. In software that has to be modelled.",
-        "The Personal Data Sheet was filled in by hand, every time it was needed, from information the office already held.",
+        "The approval flow changed every time a new Regional Director or Assistant Regional Director came in: some want certain requests to go through them, others do not. That flow was written into the code, so each change meant waiting for a developer.",
+        "Approval authority moves constantly. People go on leave, posts sit vacant, and officers are designated in an acting capacity.",
+        "Each new internal system came with its own accounts, so the same employee had several passwords and HR had several lists to keep up to date.",
         "There was no record of who approved what, or when.",
       ],
       responsibilities: [
-        "Full stack development on the Slim and MySQL application",
-        "Database design for applications, approval routes, credits and audit records",
-        "The approval workflow engine, delegation and signatory resolution",
-        "Role-based access control and the middleware stack behind it",
-        "Official form generation: PDS, leave, overtime, CTO and office order documents",
-        "Bulk Excel import and export for employee records and credits",
-        "In-app notifications and live approval queues",
+        "Full stack development on the Slim and MySQL application, as part of a small team",
+        "The approval route engine and the screen HR uses to build routes",
+        "Leave, overtime, CTO and office order workflows, including delegation and signatory snapshots",
+        "Single sign-on for connected systems, and the page that manages them",
+        "Page-level access control and the Roles & Permissions screen",
+        "Official form output for leave, overtime, CTO and office orders",
+        "Leave and COC credit ledgers, with bulk credit import",
+        "Employee units, unit heads and the org chart",
+        "In-app notifications, live approval queues, chat and the knowledge-base chatbot",
         "Deployment, production support and bug fixes",
-        "A RAG-based AI assistant on the Gemini API that answers employee questions from the HRIS's own data",
       ],
       architecture: {
         summary:
-          "A Slim 4 application behind a PSR-15 middleware stack, serving a JSON API to a front end of about ninety AMD modules. Slim gives you routing and PSR-7 and very little else, so the layering is built rather than inherited: route files per module, middleware for the cross-cutting rules, DTOs and validators at the boundary, services for the business logic, and models over PDO.",
+          "A Slim 4 application behind a PSR-15 middleware stack, serving a JSON API to a front end of about ninety AMD modules. Route files per module, middleware for the rules every request shares, validation at the boundary, services for the business logic, and models over PDO. Every form's approvals go through one route engine, and other systems sign in through PRAMS's single sign-on endpoints.",
         layers: [
           {
             label: "Browser",
@@ -535,7 +535,7 @@ export const projects: Project[] = [
           {
             label: "Middleware",
             detail:
-              "Session, active-user, CSRF, role, rate limit, security headers, maintenance mode",
+              "Session, active user, CSRF, role, page access, rate limit, security headers, maintenance mode",
           },
           {
             label: "Routes",
@@ -550,7 +550,7 @@ export const projects: Project[] = [
           {
             label: "Services",
             detail:
-              "Workflow, delegation, overtime computation, credit ledgers, document generation",
+              "Route engine, delegation, credit ledgers, overtime computation, form output, single sign-on",
           },
           {
             label: "Models over PDO",
@@ -559,33 +559,55 @@ export const projects: Project[] = [
           },
           {
             label: "MySQL",
-            detail: "Applications, approval routes, credits, audit and login logs",
+            detail:
+              "Requests, routes and their versions, credits, delegations, audit and login logs",
           },
         ],
         integrations: [
-          "PhpSpreadsheet for the official Excel form templates and for bulk import and export",
+          "Single sign-on for the region's other systems: browser sign-in through PRAMS, then server-to-server calls for the user's details",
+          "PhpSpreadsheet for the official Excel form templates and for bulk credit import and export",
           "TCPDF, PhpWord, wkhtmltopdf and headless LibreOffice for the printable documents",
           "PHPMailer for outbound mail",
           "Server-Sent Events on the approval screens, interval polling for the notification badge",
           "Attendance data used to check overtime against work schedules",
-          "The Gemini API behind the AI assistant, answering from context retrieved out of the HRIS",
+          "The Gemini API behind the chatbot, which only ever receives the question and knowledge-base text",
         ],
       },
       features: [
         {
+          title: "Approval routes HR can edit",
+          detail:
+            "When a new director wants requests to pass through them, or to skip them, HR changes the route on a settings screen: how many steps, and who approves each one (the office head, anyone holding a role, one named person, or the filer's unit head). A step can end the request when it disapproves, or pass the disapproval on as a recommendation.",
+        },
+        {
+          title: "The right route for each filing",
+          detail:
+            "Which route a request follows depends on the filer's role, and for leave and CTO on the request itself: 30 days or more, maternity leave, travel abroad. A few employees can be given a route of their own.",
+        },
+        {
           title: "Multi-level approvals across four document types",
           detail:
-            "Leave, overtime, CTO and office orders each walk an ordered route. Every step records the approver, the decision, the time and any remarks. A rejection returns the request to the filer with the reason attached.",
+            "Leave, overtime, CTO and office orders, plus requests to move CTO dates. Every step records the approver, the decision, the time and any remarks, and each log is labeled with who decided it: head, OIC, unit head, HR or director.",
         },
         {
           title: "Delegated approval authority",
           detail:
-            "An approver hands their authority to someone else for a date range. The engine resolves who may act at the moment the decision is submitted, not when the request was filed.",
+            "An approver hands their approvals to someone else for a date range and for chosen request types. The delegate acts only on the steps the approver would have acted on, and the approver gets the requests back the day the delegation ends.",
         },
         {
-          title: "Personal Data Sheet generation",
+          title: "Single sign-on for other systems",
           detail:
-            "CS Form No. 212 filled from the employee's own profile: the official spreadsheet template populated section by section, passport photo and e-signature placed into their boxes, and repeating sections that overflow onto cloned annex pages when somebody has more children or eligibilities than the form allows for.",
+            "Other internal systems send people to PRAMS to log in, and get back who the person is: office, position, role, units and acting assignments. Each system decides its own access from that, so accounts, transfers and resignations are handled once, in PRAMS.",
+        },
+        {
+          title: "Connected Systems page",
+          detail:
+            "The super admin registers a system, rotates its secret, names its admins, records acting designations, and previews exactly what a system will receive for any employee.",
+        },
+        {
+          title: "Roles and page access",
+          detail:
+            "Each role comes with a default set of pages, and one account can be given or denied a page on top of that. The server checks page access on every route, not only the menu.",
         },
         {
           title: "Official form output",
@@ -600,7 +622,7 @@ export const projects: Project[] = [
         {
           title: "Credit ledgers",
           detail:
-            "Leave, CTO and COC balances are computed from credit and debit rows rather than a stored number, so correcting a record recomputes the balance instead of leaving it wrong.",
+            "Leave, CTO and COC balances are computed from credit and debit rows rather than a stored number, so correcting a record recomputes the balance instead of leaving it wrong. HR can credit one employee or a whole roster from a spreadsheet.",
         },
         {
           title: "Work schedules and overtime rules",
@@ -608,32 +630,65 @@ export const projects: Project[] = [
             "An employee's schedule decides which hours count as overtime, how a half day is deducted, and how holidays and special working days are treated.",
         },
         {
-          title: "Three kinds of log",
+          title: "Units and org chart",
           detail:
-            "Approval history, an audit log of record changes, and a login log, kept separate because they answer different questions.",
-        },
-        {
-          title: "Bulk import and export",
-          detail:
-            "Employee records and credits move in and out as spreadsheets, validated row by row so a bad file reports every problem at once instead of stopping at the first.",
+            "Employees belong to units with a unit head and an alternate, who can be a step in a route. The org chart shows each office's head or OIC on any date and exports to PNG or PDF.",
         },
         {
           title: "Live approval queues and notifications",
           detail:
-            "The approval screen updates itself while you are looking at it. The notification badge polls. The two use different mechanisms on purpose, which is the trade-off below.",
+            "The approval screen updates itself while you are looking at it. The notification badge polls. The two use different mechanisms on purpose, which is one of the trade-offs below.",
         },
         {
-          title: "AI assistant",
+          title: "Chatbot",
           detail:
-            "Employees ask questions in plain language about their records and HR processes. Relevant data is retrieved from the HRIS first and passed to Gemini, so answers come from the system's own records rather than the model's general knowledge.",
+            "Employees ask how to file, how to approve and what the leave rules are. Answers come from an HR-maintained knowledge base through the Gemini API. Questions about their own balances are answered on the server from their records and never sent to the model, and anything the knowledge base cannot answer goes to HR's chat.",
         },
         {
           title: "Chat, calendar and reports",
           detail:
-            "In-app messaging, a calendar of filed requests, holidays and suspensions, and workforce reports exported for the ones that end up on paper.",
+            "In-app messaging with HR, a calendar of filed requests, holidays and suspensions, and HR analytics exported for the reports that end up on paper.",
         },
       ],
       challenges: [
+        {
+          title: "Approval paths were written into the code",
+          challenge:
+            "The approval flow changes whenever the Regional Director or Assistant Regional Director changes. Each one decides which requests go through their account and which stop at the office head or HR. On top of that, who approves depends on the filer's role, the leave type, the number of days and travel abroad. All of it was in hardcoded role lists, repeated in several controllers, the approval table query and the browser. Editing the signatory settings changed who signed the printed form, but not where the request actually went.",
+          cause:
+            'The flows grew one director and one policy at a time, and each change was added where it was needed at that moment. There was no single place that answered "who acts on this next".',
+          solution:
+            "A route engine. A route is an ordered list of steps, and each step says who approves it: the office head, anyone holding a role, one named person, or the filer's unit head. HR maps filer roles, and for leave and CTO the conditions of the request, to a route. The approval queue, the buttons on screen and the API all ask the engine the same question, so they cannot disagree.",
+          tradeOff:
+            '"Who approves this" is now something to look up in the settings, not something you can read in the code, and a wrong route can stall requests. To limit that, filing is blocked when the filer would be the only possible approver of a step, with a message to ask HR to fix the route.',
+          result:
+            "When a new director comes in, HR sets up the flow they want from a settings screen, without a code change or a deployment. Moving one role to a different flow is two clicks, and so is moving it back.",
+        },
+        {
+          title: "Editing a route while requests are on it",
+          challenge:
+            "Routes change while requests are waiting on them. If a pending request simply followed the newest version, it could skip a step or land on one that no longer exists.",
+          cause:
+            "A request only stored its status, not which version of the route it was following or which step it had reached.",
+          solution:
+            "Each request keeps the route version it was filed under and the step it is waiting at. Saving a route creates a new version. HR can choose to move pending requests onto it: each one goes to the matching step in the new version, and requests waiting at a step that was removed finish on the old version.",
+          tradeOff:
+            "For a while two versions of the same route are live at once, and the screen has to say how many requests moved and how many stayed.",
+          result:
+            "A route edit never sends a request backwards, skips an approver, or leaves it waiting at a step that is gone.",
+        },
+        {
+          title: "One login for several systems",
+          challenge:
+            "Other internal systems needed staff logins. Separate account lists drift: someone transfers or resigns and one system still lets them in.",
+          cause: "Identity was being copied into each system instead of asked for.",
+          solution:
+            "PRAMS became the login. A connected system sends the user to PRAMS, which checks that the return address exactly matches the one registered for that system, signs the user in, and sends them back with a one-time code. The system trades that code for the user's details in a server-to-server call using its own secret. Codes are random, stored hashed, used once and expire quickly. The first version also worked out each system's permissions inside PRAMS. That grew fast, so a day later it was cut back: PRAMS now only says who the person is, and each system decides access itself.",
+          tradeOff:
+            "Every connected system has to write its own access rules, and if PRAMS is down nobody can log in to them. In exchange PRAMS does not have to know how every other system works.",
+          result:
+            "Staff keep one password. Transfers and resignations take effect in the connected systems at the next sign-in, and adding a system is a few fields on the Connected Systems page.",
+        },
         {
           title: "A form reprinted a year later showed the wrong signatory",
           challenge:
@@ -641,64 +696,37 @@ export const projects: Project[] = [
           cause:
             "Treating 'who signs this' as a lookup against current data, when it is really a fact about a moment that has already passed.",
           solution:
-            "A snapshot table. At the moment a decision is recorded, the printed name and designation for each signatory slot are written alongside the application, keyed by document type, id and slot. The print path reads the snapshot. Where no snapshot exists it falls back to the live resolver, so forms approved before the table existed still print.",
+            "A snapshot table. At the moment a decision is recorded, the printed name and designation for each signatory slot are written alongside the application. The print path reads the snapshot. Where no snapshot exists it falls back to the live lookup, so forms approved before the table existed still print.",
           tradeOff:
-            "The same information now lives in two places, and a genuine correction to someone's designation will not propagate to forms already approved. That is the intended behaviour for a signed document, but it does mean a typo caught late has to be fixed as a deliberate act rather than by editing the employee record.",
+            "The same information now lives in two places, and a genuine correction to someone's designation will not reach forms already approved. That is right for a signed document, but it means a typo caught late has to be fixed on purpose rather than by editing the employee record.",
           result:
             "A reprint matches what was signed. The fallback meant the change shipped without a data migration over historical records.",
         },
         {
-          title:
-            "The Personal Data Sheet is a frozen government form that keeps changing",
+          title: "Delegation that follows the calendar, not the request",
           challenge:
-            "The PDS is a fixed government form. The layout, the merged cells and the checkbox positions are set by the CSC, and the filled-in copy has to match the official template exactly. Then a new revision comes out and everything moves.",
+            "The first version copied the delegate's name onto pending requests when the delegation was created. Requests filed afterwards still went to whoever was away, and a head's delegation also blocked steps that were HR's to act on.",
           cause:
-            "Two incompatible pressures: the output must match a document that is not ours to change, and the form does change, on its own schedule, while old revisions stay valid for records already filed.",
+            "Delegation was treated as a one-time data update, when it is really a rule that holds for a period of time and only for the head's own steps.",
           solution:
-            "Each revision is its own service, resolved through a factory keyed by revision year. Nothing is shared by inheritance between revisions. Adding one means copying the latest service, applying the template's changes, and registering it. Every service takes the same input, an employee id, and pulls its data through the one profile service that already aggregates every section.",
+            "Store it as delegator, delegate, request types, start date and end date, and decide it when someone acts. A delegation only applies to a step the head approves, so HR's steps are untouched. Requests filed before the delegation began are handed over too, and the delegate's own requests stay with the head, since nobody may approve their own.",
           tradeOff:
-            "Deliberate duplication. Two revisions means two near-identical files of over a thousand lines each, and a bug in shared logic has to be fixed in both. Factoring out the common parts would couple revisions that are supposed to be frozen, and the next revision would start bending the abstraction. Duplication was the cheaper mistake.",
+            '"Who can approve this right now" stops being a simple query. It has to check the route step, the head and the delegations in force today.',
           result:
-            "A new revision does not touch the old one. Records generated under a previous revision keep generating under it.",
+            "Delegation behaves the way the office does. The head gets everything back the day it ends, and the log shows every decision made on the head's behalf.",
         },
         {
-          title: "Fitting a person into a form that assumes a smaller life",
-          challenge:
-            "The PDS gives you a fixed number of rows for children, eligibilities, work experience and training. People routinely have more than fits.",
-          cause:
-            "It is a paper form. Overflow on paper is an extra sheet, which is a layout problem rather than a data problem.",
-          solution:
-            "Repeating sections write until the template runs out of rows, then clone the section's annex template and continue on a fresh page, for as many pages as the data needs. Children are the exception and stay on the main sheet.",
-          tradeOff:
-            "The cell coordinates are derived from the template's own labels and merged ranges rather than hard-coded by eye, which makes the code harder to read than a list of cell references would be. It also means a revision that moves a label is a change in one place instead of fifty.",
-          result:
-            "Somebody with eleven training records gets a PDS that is correct and printable, without anyone retyping it.",
-        },
-        {
-          title: "Server-Sent Events, kept but put on a short leash",
+          title: "Server-Sent Events only where they are needed",
           challenge:
             "Approvers want the queue to update while they are looking at it. Server-Sent Events do that well. They also hold one PHP worker per open connection, and the application runs on shared hosting with a small fixed worker pool. Staff leave tabs open all day.",
           cause:
-            "The cost of SSE is not per update, it is per open tab per minute. A notification badge that every user has open all day is the worst possible thing to put behind it. An approval queue that somebody is actively working is the best.",
+            "The cost of SSE is not per update, it is per open tab per minute. A notification badge that every user has open all day is the worst thing to put behind it. An approval queue that somebody is actively working is the best.",
           solution:
-            "Split them. The notification badge polls a cheap endpoint, and that interval went from three seconds to twenty once it was clear the badge does not need second-level freshness. Live streaming stayed only on the approval screens, and the client closes the stream the moment it is not earning its keep: on navigating away from the route, on the tab being hidden, on unload. It reopens when the tab is visible again. A single shared instance stops a second stream ever being opened, and a stall detector reconnects a connection that has gone quiet.",
+            "Split them. The notification badge polls a cheap endpoint, and that interval went from three seconds to twenty once it was clear the badge does not need second-level freshness. Streaming stayed only on the approval screens, and the client closes the stream the moment nobody is watching it: on leaving the page, on the tab being hidden, on unload. It reopens when the tab is visible again, one shared instance stops a second stream from opening, and a stall detector reconnects a connection that has gone quiet.",
           tradeOff:
-            "Two mechanisms to understand instead of one, and the badge is up to twenty seconds stale. In exchange a connection only exists while somebody is actually watching a queue, which is the only time it was worth paying for.",
+            "Two mechanisms to understand instead of one, and the badge can be up to twenty seconds behind. In exchange a connection only exists while somebody is actually watching a queue.",
           result:
-            "The worker pool stopped being consumed by idle tabs. The screen that benefits from streaming still streams.",
-        },
-        {
-          title: "Delegation stamped the wrong name on pending requests",
-          challenge:
-            "The first attempt copied the delegate's name onto pending requests when the delegation was created. Requests filed afterwards, and delegations created after filing, still routed to whoever was away.",
-          cause:
-            "Delegation was treated as a one-time data update instead of a rule that is true for a period of time.",
-          solution:
-            "Store it as delegator, delegate, scope, start date and end date. Resolve the effective approver when the approval screen loads and again when the decision is submitted.",
-          tradeOff:
-            "Two lookups per decision instead of reading one column, and 'who can approve this' stops being a simple query.",
-          result:
-            "Delegation behaves the way the office does, and an approval cannot go through on authority that expired while a tab sat open.",
+            "The worker pool stopped being used up by idle tabs. The screen that benefits from streaming still streams.",
         },
         {
           title: "Balances drifted away from their own history",
@@ -707,32 +735,38 @@ export const projects: Project[] = [
           cause:
             "Balance was a number that whichever code path ran happened to update. Cancellation and admin correction missed it.",
           solution:
-            "Made the ledger the source of truth. The balance is the sum of credit and debit rows, cached and invalidated on write, with anything touching several rows running in a transaction.",
+            "Made the ledger the source of truth. The balance is the sum of credit and debit rows, cached and cleared on write, with anything touching several rows running in a transaction.",
           tradeOff:
-            "Reads cost more than reading one column, and the cache has to be invalidated correctly.",
+            "Reads cost more than reading one column, and the cache has to be cleared correctly.",
           result:
             "A corrected record produces a corrected balance, and any balance can be traced to the rows behind it.",
         },
       ],
       security: [
         "Session auth with passwords hashed by password_hash() and checked with password_verify()",
-        "Every route group carries its own middleware: session, active-user check, CSRF, role, and a rate limiter tuned per group",
-        "Permissions checked in middleware and again in the service before a state change. Hiding a button is not the control",
+        "Every route group carries its own middleware: session, active-user check, CSRF, role, page access, and a rate limiter tuned per group",
+        "Page access is checked on the server for every route group, including HR management and settings, so a hidden menu item is not the only barrier",
+        "Permissions are checked in middleware and again in the service before a state change",
+        "Nobody can approve their own request, and filing is blocked when the filer would be the only approver of a step",
+        "Single sign-on only sends a user back to the exact address registered for that system. Login codes are random, single-use, stored hashed and short-lived; system secrets are stored hashed and compared in constant time",
+        "Failed single sign-on token requests are counted per IP and rate-limited",
+        "A connected system can fetch an employee's e-signature only if the super admin allowed it, and every fetch is written to the audit trail",
+        "Profile records can only be changed or deleted by the employee they belong to",
         "Validation at the HTTP boundary, so nothing downstream sees raw input",
         "Every query is a prepared statement with bound parameters. No string-concatenated SQL",
         "A Content-Security-Policy plus nosniff, DENY framing, HSTS, referrer and permissions policy, set once in middleware",
-        "The CSP still allows inline scripts, because the front end predates it. That is written down as known debt rather than presented as done: removing it means moving every inline script to a per-request nonce",
+        "The CSP still allows inline scripts, because the front end predates it. That is written down as known debt: removing it means moving every inline script to a per-request nonce",
         "API responses may carry personal data, so they are sent with no-store rather than left to browser and proxy caches",
+        "The chatbot masks numbers and emails before a question leaves the server, and never sends employee records to the model",
         "HTML is rendered to PDF with JavaScript disabled in the converter",
         "Uploads validated by extension and MIME type, size-limited, renamed on write and stored outside the web root",
         "Audit rows are written in the same transaction as the change they describe",
-        "A maintenance-mode middleware can close the application to users without taking the host down",
-        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
         "Leave, overtime, CTO and office orders are filed and approved in one system instead of on paper.",
+        "A change of Regional Director or Assistant Regional Director no longer needs a developer: HR updates the approval flow from a settings screen.",
+        "Other internal systems sign people in through PRAMS, so staff keep one password and accounts are managed in one place.",
         "Approved applications come out as the official forms, with the signatory who actually approved them.",
-        "Employees generate their own Personal Data Sheet from a profile they maintain, instead of filling the form in by hand.",
         "Every approved document has a history you can query: who acted, when, and with what remarks.",
         "Approvals keep moving when an approver is away.",
         "Used by roughly 500 employees across six field offices.",
@@ -784,7 +818,7 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "TSIOS handles Permit to Operate and Certificate of Electrical Inspection applications. An establishment enrols, files, and is assigned an inspector and an evaluator. Inspection results lead to an order of payment, and payment leads to a certificate. The office side covers assignment, inspection, evaluation, payment, issuance, and the corrections that follow.",
+        "TSIOS handles Permit to Operate and Certificate of Electrical Inspection applications. An establishment enrolls, files, and is assigned an inspector and an evaluator. Inspection results lead to an order of payment, and payment leads to a certificate. The office side covers assignment, inspection, evaluation, payment, issuance, and the corrections that follow.",
       users:
         "Industrial establishments and contractors filing applications, inspectors and evaluators in the regional and provincial offices, cashiering, and the signatory who issues certificates.",
       problem: [
@@ -804,11 +838,11 @@ export const projects: Project[] = [
       ],
       architecture: {
         summary:
-          "A PHP application with no framework behind it. The layering is hand-built: config, controllers grouped by audience, models, and a thin service layer for the parts worth naming. Two faces, a public side where establishments enrol and file and an office side scoped by province and by route permission. An application row carries its stage, and each stage transition writes its own record.",
+          "A PHP application with no framework behind it. The layering is hand-built: config, controllers grouped by audience, models, and a thin service layer for the parts worth naming. Two faces, a public side where establishments enroll and file and an office side scoped by province and by route permission. An application row carries its stage, and each stage transition writes its own record.",
         layers: [
           {
             label: "Establishment portal",
-            detail: "Enrolment, filing, upload, status check",
+            detail: "Enrollment, filing, upload, status check",
           },
           { label: "HTTP layer", detail: "Auth, route permission, provincial scope" },
           {
@@ -832,7 +866,7 @@ export const projects: Project[] = [
       },
       features: [
         {
-          title: "Establishment enrolment",
+          title: "Establishment enrollment",
           detail:
             "Companies register once and file against that record afterwards, so applications from the same establishment stay linked.",
         },
@@ -892,7 +926,7 @@ export const projects: Project[] = [
             "A renewal starts from the establishment's previous transaction rather than from an empty form, so the inspection history stays attached to the same unit.",
         },
         {
-          title: "Unit enrolment",
+          title: "Unit enrollment",
           detail:
             "Establishments register the individual machines and electrical installations being certified, so an application is filed against a known unit rather than free text.",
         },
@@ -952,7 +986,7 @@ export const projects: Project[] = [
         "Establishment accounts are separate from office accounts, with no shared routes",
         "Every office route checks a permission, and queries are scoped to the user's province",
         "Issuance, status modification and revert each require their own permission",
-        "Uploaded documents are validated by type and size and served through an authorised route, not from a public folder",
+        "Uploaded documents are validated by type and size and served through an authorized route, not from a public folder",
         "Corrections are recorded rather than applied silently",
         "Certificates carry a reference that can be checked against the issuance record",
         "Screenshots here show blank account names; no establishment or account data is published",
@@ -969,8 +1003,8 @@ export const projects: Project[] = [
     slug: "no-pending-case",
     name: "No Pending Case System",
     tagline:
-      "Online application for the certification that a company has no pending labour case, from filing through verification to a certificate the applicant can track by reference.",
-    type: "Records digitisation / certification",
+      "Online application for the certification that a company has no pending labor case, from filing through verification to a certificate the applicant can track by reference.",
+    type: "Records digitization / certification",
     role: "Full Stack Developer",
     period: "2024 - Present",
     organization: "DOLE Regional Office No. IV-A (CALABARZON)",
@@ -1008,7 +1042,7 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "Companies need a certification that they have no pending labour case before certain transactions. This system takes the application online, checks it against case records, routes it for approval, and issues a certificate the applicant can verify by reference number. It replaces a counter process with a manual records search.",
+        "Companies need a certification that they have no pending labor case before certain transactions. This system takes the application online, checks it against case records, routes it for approval, and issues a certificate the applicant can verify by reference number. It replaces a counter process with a manual records search.",
       users:
         "Establishments and contractors applying, records staff who verify, and the signing official who approves issuance.",
       problem: [
@@ -1071,7 +1105,7 @@ export const projects: Project[] = [
         },
         {
           title: "Approval before issuance",
-          detail: "A certificate cannot be issued without an authorised approval.",
+          detail: "A certificate cannot be issued without an authorized approval.",
         },
         {
           title: "Reference number tracking",
@@ -1108,9 +1142,9 @@ export const projects: Project[] = [
           challenge:
             "The same company appears as 'ABC Manufacturing Inc.', 'ABC Mfg., Inc' and 'ABC MANUFACTURING INCORPORATED'. Exact matching misses real cases. Loose matching flags everyone.",
           cause:
-            "Records were entered by different people over many years with no normalisation at entry.",
+            "Records were entered by different people over many years with no normalization at entry.",
           solution:
-            "Normalise both sides before comparing: case, spacing, punctuation, common suffixes. Match on the normalised name plus a second identifying field. Anything that only partly matches goes to a review queue.",
+            "Normalize both sides before comparing: case, spacing, punctuation, common suffixes. Match on the normalized name plus a second identifying field. Anything that only partly matches goes to a review queue.",
           tradeOff:
             "Some applications take longer because a person has to look at them. For a document asserting no pending case, that is the right trade.",
           result:
@@ -1134,7 +1168,7 @@ export const projects: Project[] = [
           challenge:
             "Someone handed a printed certificate had no way to tell whether it was genuine.",
           cause:
-            "The certificate was the only artefact and nothing linked it back to the system.",
+            "The certificate was the only artifact and nothing linked it back to the system.",
           solution:
             "Each certificate carries a reference that can be looked up. The lookup confirms issuance, date and status. It does not return case details.",
           tradeOff:
@@ -1149,8 +1183,8 @@ export const projects: Project[] = [
         "Issued certificates are immutable. Corrections supersede",
         "The public verification page returns issuance status only",
         "Issuance and approval are recorded with actor and timestamp",
-        "Input validated and normalised at the boundary, queries parameterised",
-        "Generated documents are served through an authorised route",
+        "Input validated and normalized at the boundary, queries parameterised",
+        "Generated documents are served through an authorized route",
         "Screenshots here show test data with account names covered",
       ],
       outcomes: [
@@ -1166,7 +1200,7 @@ export const projects: Project[] = [
     slug: "biometric-integration",
     name: "TUPAD Biometric Verification",
     tagline:
-      "Fingerprint capture and 1:N matching for an emergency employment programme, bridged from a DigitalPersona reader into a web application through a local C# service.",
+      "Fingerprint capture and 1:N matching for an emergency employment program, bridged from a DigitalPersona reader into a web application through a local C# service.",
     type: "Desktop-to-web integration",
     role: "Integration developer",
     period: "2026",
@@ -1186,20 +1220,20 @@ export const projects: Project[] = [
       "A browser cannot reach a USB fingerprint reader, and the matching SDK is native with no PHP binding. Both constraints push the work off the server and onto the workstation, which is a privacy decision as much as a technical one.",
     featured: true,
     confidential: true,
-    // No screenshots: the enrolment screen shows a live capture and beneficiary
+    // No screenshots: the enrollment screen shows a live capture and beneficiary
     // records. There is no version of that image that is safe to publish.
     screenshots: [],
     caseStudy: {
       overview:
-        "TUPAD is an emergency employment programme. Beneficiaries are validated on site before they are paid, and a person must not be able to enrol twice under two records. This work is the fingerprint side of that check: capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled.",
+        "TUPAD is an emergency employment program. Beneficiaries are validated on site before they are paid, and a person must not be able to enroll twice under two records. This work is the fingerprint side of that check: capturing a print from a DigitalPersona reader in the field and matching it against everyone already enrolled.",
       users:
-        "Field staff running on-site validation, and the programme itself, which depends on each beneficiary appearing exactly once.",
+        "Field staff running on-site validation, and the program itself, which depends on each beneficiary appearing exactly once.",
       teamNote:
-        "The biometric integration is my work. The rest of the TUPAD system (the work programmes, the approval chain across a dozen roles, the payroll documents) was built by others. This case study covers only the part I did.",
+        "The biometric integration is my work. The rest of the TUPAD system (the work programs, the approval chain across a dozen roles, the payroll documents) was built by others. This case study covers only the part I did.",
       problem: [
         "Validation happens in the field, in front of the person. A duplicate has to be caught while they are still standing there, not reconciled afterwards.",
         "Browsers cannot talk to a USB fingerprint reader, and the vendor SDK is a native Windows library with no PHP binding.",
-        "Records already existed from an earlier round of enrolment, saved without recording which finger had been scanned.",
+        "Records already existed from an earlier round of enrollment, saved without recording which finger had been scanned.",
         "Fingerprint data is sensitive, and a decision about where matching runs is a decision about where that data goes.",
       ],
       responsibilities: [
@@ -1238,7 +1272,7 @@ export const projects: Project[] = [
         ],
         integrations: [
           "A second capture path: a WebSDK fingerprint image can be sent to the local service and converted into a template",
-          "Face enrolment alongside fingerprint, with fully enrolled records protected from deletion",
+          "Face enrollment alongside fingerprint, with fully enrolled records protected from deletion",
         ],
       },
       features: [
@@ -1301,22 +1335,22 @@ export const projects: Project[] = [
           solution:
             "The server stores templates and answers one question: which candidates should this print be compared against. The browser fetches that set and hands it to the local service along with the probe, and the service does the comparison with the native matcher, returning the matched record, the score and the threshold.",
           tradeOff:
-            "This is the honest weak point. The candidate templates leave the server and pass through the browser into the local service, and the server cannot independently confirm a match. It is told the answer. A modified client could lie about the result. For on-site validation with staff operating the machine that is an accepted risk, but it is a real one, and a server-side matcher would be the fix if the threat model ever changed.",
+            "This is the weak point. The candidate templates leave the server and pass through the browser into the local service, and the server cannot independently confirm a match. It is told the answer. A modified client could lie about the result. For on-site validation with staff operating the machine that is an accepted risk, but it is a real one, and a server-side matcher would be the fix if the threat model ever changed.",
           result:
-            "Duplicate enrolments are caught in the field, in front of the person, using the matcher the vendor supports.",
+            "Duplicate enrollments are caught in the field, in front of the person, using the matcher the vendor supports.",
         },
         {
           title: "Older records did not say which finger had been scanned",
           challenge:
-            "Matching a right index finger against a left thumb produces a confident non-match. Earlier enrolments were saved without recording the finger at all, so a straight same-finger comparison would silently skip every one of them.",
+            "Matching a right index finger against a left thumb produces a confident non-match. Earlier enrollments were saved without recording the finger at all, so a straight same-finger comparison would silently skip every one of them.",
           cause:
-            "The finger position was added to the enrolment flow after records already existed.",
+            "The finger position was added to the enrollment flow after records already existed.",
           solution:
             "The query narrows to the same finger when one is given, but keeps the rows where the finger was never recorded. Saving a template now also fills in the finger, so the old rows clear out as people are re-enrolled.",
           tradeOff:
             "A larger candidate set means more comparisons and a slightly higher chance of a borderline score against a finger that was never the right one to compare. The alternative was quietly not checking older beneficiaries at all, which is worse.",
           result:
-            "New enrolments get a precise comparison, old ones still get checked, and the untidy rows clear themselves over time rather than needing a migration.",
+            "New enrollments get a precise comparison, old ones still get checked, and the untidy rows clear themselves over time rather than needing a migration.",
         },
         {
           title: "A capture blocks, and people close dialogs",
@@ -1340,10 +1374,9 @@ export const projects: Project[] = [
         "The server does not independently verify a match result. A server-side matcher would be required to close that gap",
         "Fully enrolled records are protected from deletion, so a validated beneficiary cannot be quietly removed and re-added",
         "No biometric data, sample template, capture screen or beneficiary record appears anywhere in this portfolio",
-        "No system is ever fully secure. This is the set of controls in place, not a guarantee",
       ],
       outcomes: [
-        "A duplicate enrolment is caught on site, while the person is still present, rather than surfacing later in a payout list.",
+        "A duplicate enrollment is caught on site, while the person is still present, rather than surfacing later in a payout list.",
         "Field staff work from the browser they already use; the device code lives in one small service on the laptop.",
         "Fingerprint images are never stored by the web application.",
         "Records enrolled before the finger position was captured are still checked rather than silently skipped.",
@@ -1422,7 +1455,7 @@ export const projects: Project[] = [
     slug: "peso",
     name: "PESO Reporting",
     tagline:
-      "Reporting system for Public Employment Service Offices, covering job placement, youth employability, profiling and welfare programme figures per LGU.",
+      "Reporting system for Public Employment Service Offices, covering job placement, youth employability, profiling and welfare program figures per LGU.",
     type: "Reporting system",
     role: "Full Stack Developer",
     period: "2025 - Present",
@@ -1430,7 +1463,7 @@ export const projects: Project[] = [
     status: "In production",
     technologies: ["Slim 4", "PHP", "MySQL", "PhpSpreadsheet", "SSE"],
     keyChallenge:
-      "Dozens of programme forms with different shapes, encoded by LGU staff outside the office, rolling up to one regional figure.",
+      "Dozens of program forms with different shapes, encoded by LGU staff outside the office, rolling up to one regional figure.",
     featured: false,
     confidential: true,
     screenshots: [
@@ -1438,16 +1471,16 @@ export const projects: Project[] = [
         src: "/projects/peso-dashboard.png",
         width: 1877,
         height: 1444,
-        alt: "PESO dashboard with encoded entry counts grouped by programme area",
-        caption: "Encoded entries by programme, filtered by province, PESO and period.",
+        alt: "PESO dashboard with encoded entry counts grouped by program area",
+        caption: "Encoded entries by program, filtered by province, PESO and period.",
       },
       {
         src: "/projects/peso-user-access.png",
         width: 1494,
         height: 1168,
-        alt: "User access dialog with nested programme modules that can be granted individually",
+        alt: "User access dialog with nested program modules that can be granted individually",
         caption:
-          "Access follows the programme structure, down to individual sub-programmes.",
+          "Access follows the program structure, down to individual sub-programs.",
       },
     ],
   },

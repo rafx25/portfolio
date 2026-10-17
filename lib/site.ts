@@ -1,4 +1,3 @@
-// Anything in [SQUARE BRACKETS] still needs filling in.
 const role = "Full Stack Developer";
 const headline = "I build the internal systems a government agency depends on.";
 
@@ -26,6 +25,7 @@ export const site = {
     "REST API design",
     "Role-Based Access Control",
     "Approval workflows",
+    "Single sign-on",
     "Database design",
     "Production deployment",
   ],

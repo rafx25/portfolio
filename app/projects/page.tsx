@@ -7,7 +7,7 @@ import { ProjectCard } from "@/components/projects/project-card";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Internal business systems built and maintained in production: HRIS and approval workflows, a biometric integration, and records digitisation.",
+    "Internal business systems built and maintained in production: HRIS and approval workflows, a biometric integration, and records digitization.",
   alternates: { canonical: "/projects" },
 };
 

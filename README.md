@@ -1,28 +1,24 @@
 # Portfolio
 
-A full stack developer portfolio built with the Next.js App Router. It is a
-static site with one dynamic endpoint: the content is typed data compiled at
-build time, and the only server work at runtime is the contact form.
-
-> **Placeholders.** Personal details are not filled in yet. Anything wrapped in
-> `[SQUARE BRACKETS]` still needs replacing. Start with `lib/site.ts`, then
-> `data/experience.ts` and the `[YYYY]` / `[ORGANIZATION]` fields in
-> `data/projects.ts`.
+The portfolio of Rafael P. Domer, live at
+[rafaeldomer.vercel.app](https://rafaeldomer.vercel.app). Built with the Next.js
+App Router. It is a static site with two dynamic endpoints: the contact form and
+the generated resume PDF. All content is typed data compiled at build time.
 
 ## Tech stack
 
-| Layer      | Choice                                             |
-| ---------- | -------------------------------------------------- |
-| Framework  | Next.js 16 (App Router, React 19, Turbopack)       |
-| Language   | TypeScript,`strict` + `noUncheckedIndexedAccess`   |
-| Styling    | Tailwind CSS v4, design tokens in`app/globals.css` |
-| Icons      | lucide-react, plus two inlined brand marks         |
-| Theme      | next-themes (class strategy, system default)       |
-| Validation | Zod, one schema shared by client and server        |
-| Email      | Resend (optional, the site works without it)       |
-| Testing    | Vitest, Testing Library, jsdom                     |
-| Analytics  | Vercel Analytics and Speed Insights                |
-| Hosting    | Vercel                                             |
+| Layer      | Choice                                              |
+| ---------- | --------------------------------------------------- |
+| Framework  | Next.js 16 (App Router, React 19, Turbopack)        |
+| Language   | TypeScript, `strict` + `noUncheckedIndexedAccess`   |
+| Styling    | Tailwind CSS v4, design tokens in `app/globals.css` |
+| Icons      | lucide-react, plus two inlined brand marks          |
+| Theme      | next-themes (class strategy, system default)        |
+| Validation | Zod, one schema shared by client and server         |
+| Email      | Resend (optional, the site works without it)        |
+| Testing    | Vitest, Testing Library, jsdom                      |
+| Analytics  | Vercel Analytics and Speed Insights                 |
+| Hosting    | Vercel                                              |
 
 ## Features
 
@@ -37,7 +33,7 @@ build time, and the only server work at runtime is the contact form.
 - `sitemap.xml`, `robots.txt`, canonical URLs and per-page metadata
 - Security headers set in `next.config.ts`
 - Accessible by construction: semantic landmarks, visible focus, skip link,
-  labelled controls, `prefers-reduced-motion` respected
+  labeled controls, `prefers-reduced-motion` respected
 
 ## Architecture
 
@@ -47,7 +43,9 @@ app/                    Routes. Server components unless marked "use client".
   about/                Long-form about page
   projects/             Index, and [slug] case studies (generateStaticParams)
   colophon/             Build decisions for this site
-  api/contact/          The only runtime endpoint
+  resume/               Printable resume page
+  resume.pdf/           The resume as a generated PDF
+  api/contact/          Contact form endpoint
   opengraph-image.tsx   OG card, generated at build time
   sitemap.ts robots.ts  SEO route handlers
   error.tsx not-found.tsx
@@ -69,10 +67,11 @@ lib/
   validation.ts         Zod schema shared by the form and the API route
   rate-limit.ts         Fixed-window limiter
   mail.ts               Resend delivery, configuration read at call time
+  resume-content.ts     Resume text, shared by the page and the PDF
+  resume-pdf.tsx        PDF layout (react-pdf)
   utils.ts              cn() and small helpers
 
 tests/                  Vitest: validation, rate limiting, form, content model
-docs/                   Local learning notes (git-ignored on purpose)
 ```
 
 Three decisions worth stating up front, with the reasoning in
@@ -114,17 +113,17 @@ returns a clear "not configured" response and the UI points at the email link.
 
 ## Scripts
 
-| Script               | What it does                                   |
-| -------------------- | ---------------------------------------------- |
-| `npm run dev`        | Development server                             |
-| `npm run build`      | Production build                               |
-| `npm start`          | Serve the production build                     |
-| `npm run lint`       | ESLint                                         |
-| `npm run typecheck`  | `tsc --noEmit`                                 |
-| `npm run test`       | Vitest, once                                   |
-| `npm run test:watch` | Vitest, watching                               |
-| `npm run format`     | Prettier                                       |
-| `npm run verify`     | lint, typecheck, test, build (what CI runs)    |
+| Script               | What it does                                |
+| -------------------- | ------------------------------------------- |
+| `npm run dev`        | Development server                          |
+| `npm run build`      | Production build                            |
+| `npm start`          | Serve the production build                  |
+| `npm run lint`       | ESLint                                      |
+| `npm run typecheck`  | `tsc --noEmit`                              |
+| `npm run test`       | Vitest, once                                |
+| `npm run test:watch` | Vitest, watching                            |
+| `npm run format`     | Prettier                                    |
+| `npm run verify`     | lint, typecheck, test, build (what CI runs) |
 
 ## Testing
 
@@ -148,9 +147,6 @@ Push to GitHub, import the repository at [vercel.com/new](https://vercel.com/new
 set `NEXT_PUBLIC_SITE_URL` (and the Resend variables if you want the form live),
 and deploy. Every later push to `main` redeploys automatically.
 
-The step-by-step version, written for a first deployment, is in
-`docs/13-vercel-deployment.md`.
-
 ## Security notes
 
 - Security headers (`X-Content-Type-Options`, `X-Frame-Options`,
@@ -164,8 +160,7 @@ The step-by-step version, written for a first deployment, is in
 - No secrets in the repository: `.env*` is git-ignored, `.env.example` is not
 - Errors returned to the browser are messages; stack traces stay on the server
 - Every project here is an internal government system. No production source,
-  schema, endpoint or record appears in this repository. The code samples were
-  written for this site rather than copied out of the projects
+  schema, endpoint or record appears in this repository
 - Screenshots are captures from test accounts. Where a real name still appeared
   it was painted over in the PNG before upload, not hidden with CSS
 

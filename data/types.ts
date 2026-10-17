@@ -7,19 +7,30 @@ export type ProficiencyLevel =
 export interface SkillGroup {
   category: string;
   description: string;
-  items: { name: string; level: ProficiencyLevel }[];
+  items: {
+    name: string;
+    level: ProficiencyLevel;
+    /** false keeps an item on the site but off the resume, to keep it short. */
+    resume?: boolean;
+  }[];
 }
 
-export interface ExperienceItem {
-  role: string;
-  organization: string;
+export interface Position {
+  title: string;
   /** Free text, so "2023" on its own is fine. */
   start: string;
   /** null means current. */
   end: string | null;
+  /** Set when the position was held through another company. */
+  employer?: string;
+}
+
+/** One organization, with every position held there, newest first. */
+export interface ExperienceItem {
+  organization: string;
   location?: string;
+  positions: Position[];
   summary: string;
-  /** Lead with a verb: Built, Designed, Implemented, Integrated, Deployed. */
   highlights: string[];
   technologies: string[];
 }
@@ -86,7 +97,7 @@ export interface Project {
   technologies: string[];
   /** The hardest part. Shown on the card. */
   keyChallenge: string;
-  /** Three or four facts, shown as one line on the card. Must be verifiable. */
+  /** Three or four facts, shown as one line on the card. */
   metrics?: string[];
   featured: boolean;
   repoUrl?: string;

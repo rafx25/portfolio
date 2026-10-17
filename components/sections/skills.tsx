@@ -65,7 +65,7 @@ export function Skills() {
                     )}
                   >
                     {item.name}
-                    {/* Colour alone must not carry the level. */}
+                    {/* Color alone must not carry the level. */}
                     <span className="sr-only">, {item.level}</span>
                   </span>
                 </li>

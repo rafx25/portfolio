@@ -76,8 +76,6 @@ describe("project data", () => {
 
     for (const project of caseStudyProjects) {
       for (const note of project.caseStudy.security) {
-        // "No system is ever 'fully secure'" is the one allowed use.
-        if (note.startsWith("No system is ever")) continue;
         expect(note, `${project.slug}: overclaim in security notes`).not.toMatch(
           forbidden,
         );
@@ -104,15 +102,35 @@ describe("skills data", () => {
 });
 
 describe("experience data", () => {
-  it("has at most one current role", () => {
-    const current = experience.filter((item) => item.end === null);
+  it("has at most one current position", () => {
+    const current = experience
+      .flatMap((item) => item.positions)
+      .filter((position) => position.end === null);
     expect(current.length).toBeLessThanOrEqual(1);
   });
 
-  it("keeps organisation and start date unique across roles", () => {
-    // The experience list keys on these two together.
-    const keys = experience.map((item) => `${item.organization}-${item.start}`);
+  it("lists each organization once", () => {
+    // The experience list keys on the organization.
+    const keys = experience.map((item) => item.organization);
     expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it("gives every organization at least one position", () => {
+    for (const item of experience) {
+      expect(
+        item.positions.length,
+        `${item.organization} has no position`,
+      ).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps first-person pronouns out of the highlights", () => {
+    // Resume bullets read as actions, not as a story about "I".
+    for (const item of experience) {
+      for (const highlight of item.highlights) {
+        expect(highlight, item.organization).not.toMatch(/\b(I|my|me)\b/);
+      }
+    }
   });
 
   it("has no repeated technology within a role", () => {

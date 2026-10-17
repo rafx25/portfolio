@@ -41,7 +41,7 @@ export const principles: Principle[] = [
   },
   {
     title: "Secrets never go in the repo",
-    detail: "Environment config only. There is no judgement call in this one.",
+    detail: "Environment config only. There is no judgment call in this one.",
   },
   {
     title: "Test the paths that cost money",
@@ -115,7 +115,7 @@ export const aiNote = {
   eyebrow: "AI-assisted engineering",
   title: "AI in my workflow",
   summary:
-    "I use AI for drafts, refactors, tests and documentation, but not as the decision-maker. Architecture, permissions, data modelling and production changes still get read, reasoned through and verified by me.",
+    "I use AI for drafts, refactors, tests and documentation, but not as the decision-maker. Architecture, permissions, data modeling and production changes still get read, reasoned through and verified by me.",
   checks: [
     "Read every generated line",
     "Test against real cases",

@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
 
 import { site } from "@/lib/site";
-import { education, experience } from "@/data/experience";
-import { skills } from "@/data/skills";
-import { projects } from "@/data/projects";
-import { resumeContactLines } from "@/lib/resume-content";
+import {
+  resumeCaseStudiesLink,
+  resumeContactLines,
+  resumeEducation,
+  resumeExperience,
+  resumeSkillLines,
+  resumeSummary,
+  resumeSystems,
+} from "@/lib/resume-content";
 import { Container } from "@/components/ui/container";
 import { PrintButton } from "./print-button";
 
 export const metadata: Metadata = {
-  title: "Résumé",
-  description: `Résumé of ${site.name}, ${site.role}. Experience, systems delivered, technical skills and education.`,
+  title: "Resume",
+  description: `Resume of ${site.name}, ${site.role}. Experience, systems delivered, technical skills and education.`,
   alternates: { canonical: "/resume" },
 };
-
-const summary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organisations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, multi-level approval workflows, audit logging, legacy system maintenance, document generation and production support. Built a RAG-based AI assistant for the HRIS on the Gemini API. Currently building with Laravel 12, Inertia.js and React.`;
-
-/** Hyphen rather than an em dash: dash variants trip some date parsers. */
-function dateRange(start: string, end: string | null) {
-  return `${start} - ${end ?? "Present"}`;
-}
 
 /**
  * Applicant tracking systems read the PDF as a flat stream of text, so this
@@ -29,7 +27,7 @@ function dateRange(start: string, end: string | null) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-5">
-      <h2 className="border-border break-after-avoid border-b pb-1 text-sm font-bold tracking-wide uppercase">
+      <h2 className="border-border break-after-avoid border-b pb-1 text-sm font-bold uppercase">
         {title}
       </h2>
       <div className="mt-3">{children}</div>
@@ -39,7 +37,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function ResumePage() {
   const { contact, links } = resumeContactLines();
-  const delivered = projects.filter((p) => p.featured || p.screenshots.length > 0);
+  const caseStudies = resumeCaseStudiesLink();
 
   return (
     <div className="resume-page py-10 sm:py-14">
@@ -63,50 +61,41 @@ export default function ResumePage() {
         </header>
 
         <Section title="Professional Summary">
-          <p className="text-sm leading-relaxed">{summary}</p>
+          <p className="text-sm leading-relaxed">{resumeSummary}</p>
         </Section>
 
         <Section title="Core Technical Skills">
           <ul className="space-y-1.5">
-            {skills.map((group) => (
+            {resumeSkillLines().map((group) => (
               <li key={group.category} className="text-sm leading-relaxed">
                 <span className="font-semibold">{group.category}: </span>
-                {group.items
-                  .filter((item) => item.level !== "Currently learning")
-                  .map((item) => item.name)
-                  .join(", ")}
-                {group.items.some((item) => item.level === "Currently learning") ? (
-                  <>
-                    {". Learning: "}
-                    {group.items
-                      .filter((item) => item.level === "Currently learning")
-                      .map((item) => item.name)
-                      .join(", ")}
-                  </>
-                ) : null}
+                {group.value}
               </li>
             ))}
           </ul>
         </Section>
 
         <Section title="Professional Experience">
-          {experience.map((item) => (
-            <div
-              key={`${item.organization}-${item.start}`}
-              className="mt-4 break-inside-avoid first:mt-0"
-            >
-              <h3 className="text-sm font-bold">{item.role}</h3>
-              <p className="text-muted-foreground text-sm">
-                {[item.organization, item.location, dateRange(item.start, item.end)]
-                  .filter(Boolean)
-                  .join(" | ")}
-              </p>
+          {resumeExperience().map((item) => (
+            <div key={item.organization} className="mt-5 first:mt-0">
+              <div className="break-inside-avoid">
+                <h3 className="text-sm font-bold">{item.organization}</h3>
+                <p className="text-muted-foreground text-sm">{item.meta}</p>
+                <ul className="mt-1 text-sm">
+                  {item.positions.map((position) => (
+                    <li key={`${position.title}-${position.dates}`}>
+                      <span className="font-semibold">{position.title}</span>
+                      {` | ${position.dates}`}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               <ul className="mt-1.5 space-y-1">
                 {item.highlights.map((highlight) => (
                   <li
                     key={highlight}
-                    className="pl-4 -indent-4 text-sm leading-relaxed"
+                    className="break-inside-avoid pl-4 -indent-4 text-sm leading-relaxed"
                   >
                     {"• "}
                     {highlight}
@@ -118,28 +107,26 @@ export default function ResumePage() {
         </Section>
 
         <Section title="Delivered Systems">
-          <ul className="space-y-2">
-            {delivered.map((project) => (
+          <ul className="space-y-1">
+            {resumeSystems().map((system) => (
               <li
-                key={project.slug}
+                key={system.name}
                 className="break-inside-avoid pl-4 -indent-4 text-sm leading-relaxed"
               >
                 {"• "}
-                <span className="font-semibold">{project.name}</span>
-                {": "}
-                {project.tagline} Built with {project.technologies.join(", ")}.
+                <span className="font-semibold">{system.name}</span>
+                {` - ${system.detail}`}
               </li>
             ))}
           </ul>
+          {caseStudies ? <p className="mt-2 text-sm">{caseStudies}</p> : null}
         </Section>
 
         <Section title="Education">
-          {education.map((item) => (
+          {resumeEducation().map((item) => (
             <div key={item.qualification} className="text-sm leading-relaxed">
               <p className="font-semibold">{item.qualification}</p>
-              <p className="text-muted-foreground">
-                {item.institution} | {item.start} - {item.end}
-              </p>
+              <p className="text-muted-foreground">{item.meta}</p>
             </div>
           ))}
         </Section>
