@@ -38,6 +38,10 @@ export const skills: SkillGroup[] = [
       { name: "Inertia.js", level: "Production experience" },
       { name: "HTML & CSS", level: "Production experience" },
       { name: "Tailwind CSS", level: "Working knowledge" },
+      {
+        name: "Offline-first (service worker, IndexedDB)",
+        level: "Production experience",
+      },
       { name: "Next.js", level: "Currently learning" },
     ],
   },

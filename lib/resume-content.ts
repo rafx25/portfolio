@@ -8,14 +8,19 @@ import { projects } from "@/data/projects";
 // can never say different things.
 
 /**
- * Dashes outside the standard PDF encoding come out blank when the text is
- * extracted, so anything bound for the PDF gets plain ASCII instead.
+ * Dashes and accented letters outside the standard PDF encoding come out
+ * broken when the text is extracted, so anything bound for the PDF gets plain
+ * ASCII instead ("Biñan" becomes "Binan").
  */
 export function asciiDashes(value: string) {
-  return value.replace(/[‒-―−]/g, "-").replace(/[‘’]/g, "'");
+  return value
+    .replace(/[‒-―−]/g, "-")
+    .replace(/[‘’]/g, "'")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
 }
 
-export const resumeSummary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organizations. Delivered HRIS, regulatory permitting, biometric deduplication, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, configurable multi-level approval workflows, single sign-on, audit logging, legacy system maintenance, document generation and production support. Built a RAG-based AI assistant for the HRIS on the Gemini API. Currently building with Laravel 12, Inertia.js and React.`;
+export const resumeSummary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organizations. Delivered HRIS, regulatory permitting, biometric deduplication, offline-first field registration, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, configurable multi-level approval workflows, single sign-on, audit logging, legacy system maintenance, document generation and production support. Built a RAG-based AI assistant for the HRIS on the Gemini API. Currently building with Laravel 12, Inertia.js and React.`;
 
 /** Hyphen rather than an em dash: dash variants trip some date parsers. */
 export const resumeDateRange = formatDateRange;
