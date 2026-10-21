@@ -1,4 +1,4 @@
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 
 import { site, isPlaceholder } from "@/lib/site";
@@ -39,6 +39,18 @@ export function Contact() {
                   {email}
                 </a>
                 <CopyEmail email={email} />
+              </li>
+            ) : null}
+
+            {site.phone ? (
+              <li className="flex items-center gap-3">
+                <Phone className="text-muted-foreground size-4" aria-hidden />
+                <a
+                  href={`tel:${site.phone}`}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {site.phone}
+                </a>
               </li>
             ) : null}
 
