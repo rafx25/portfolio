@@ -32,7 +32,7 @@ export const site = {
 
   // Shown on the resume page only, and only when set. Left blank on purpose:
   // a phone number on a public page gets scraped.
-  phone: "",
+  phone: "09634784940",
   email: "rafxd.25@gmail.com",
   github: "https://github.com/rafx25",
   linkedin: "https://www.linkedin.com/in/rafaeldomer/",
