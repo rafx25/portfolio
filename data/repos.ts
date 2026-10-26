@@ -12,7 +12,7 @@ export const repos: Repo[] = [
   {
     name: "portfolio",
     description:
-      "This site. Next.js App Router and TypeScript, with Vitest tests and a GitHub Actions pipeline that lints, type-checks, tests and builds every push.",
+      "This site. Next.js, TypeScript and Tailwind, with Vitest tests and GitHub Actions CI.",
     url: "https://github.com/rafx25/portfolio",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Vitest"],
   },

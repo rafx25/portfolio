@@ -1,7 +1,6 @@
 import type { EducationItem, ExperienceItem } from "./types";
 
-// Newest first. Several positions at the same organization share one entry,
-// so the highlights are not split across three near-identical headings.
+// Newest first. Several positions at one organization share one entry.
 export const experience: ExperienceItem[] = [
   {
     organization: "Department of Labor and Employment (DOLE) Regional Office IV-A",
@@ -26,23 +25,16 @@ export const experience: ExperienceItem[] = [
       },
     ],
     summary:
-      "At the regional office since October 2023: deployed through H&K Business Support, with a year in between employed by DOLE directly. Building and maintaining the systems the regional office and its field offices run on, from schema design through to production support.",
+      "Deployed through H&K Business Support, with one year (Nov 2024 to Dec 2025) employed by DOLE directly. I build and maintain the regional office's internal systems, from database design to production support.",
     highlights: [
-      "Main developer on the DOLE Region IV-A HRIS (PRAMS), built with a small team and used by roughly 500 employees across six field offices for leave, COC, CTO and overtime requests, with multi-level approvals and full audit logging.",
-      "Built configurable approval routing in PRAMS, TSIOS and the No Pending Case system: when a new Regional Director or Assistant Regional Director wants requests to pass through them or not, the route changes from a settings screen with no code change.",
-      "Built single sign-on so the region's other internal systems log staff in through PRAMS (one-time codes, server-to-server token exchange, rate-limited endpoints), with an admin page to register systems and rotate their secrets.",
-      "Designed approval delegation: an approver on leave hands their approvals to a deputy for a date range, only on their own steps, and the log records every decision made on their behalf.",
-      "Built page-level access control and a Roles & Permissions screen; every route checks page access on the server before a controller runs.",
-      "Built in-app notifications and messaging. Moved the notification badge from Server-Sent Events to interval polling when the hosting could not hold that many open connections, and kept streaming on the approval screens.",
-      "Built a retrieval-augmented (RAG) AI assistant into the HRIS on the Gemini API, so employees can ask about their records and HR processes and get answers grounded in the system's own data.",
-      "Built the No Pending Case system and, with a small team, three more regulatory systems (Technical Safety Inspection, Alien Employment Permit and D.O. 174 Job Contractor Registration), from application intake to certificate issuance. Applicants file and track online instead of calling or visiting the regional office.",
-      "Integrated HID DigitalPersona DP4500 readers with the PHP application through a local .NET service, running 1:N deduplication against the TUPAD registry to catch duplicate enrollments before payouts. Packaged the service with an installer so field offices set it up without a developer on site.",
-      "Built offline-first registration for TUPAD sites without internet (service worker, IndexedDB, reserved ID numbers): staff register, fingerprint and print beneficiary IDs on the spot, then sync through the normal review.",
-      "Built the PESO Online Report System so employment service offices across Region IV-A submit monthly reports through one portal instead of emailing spreadsheets, ending the manual re-keying at the regional office.",
-      "Built the Client Satisfaction Measurement System to capture and score walk-in feedback for ARTA reporting, replacing paper surveys and manual tallying.",
-      "Built the Request Processing Desk, an IT ticketing system on Laravel and React: staff sign in through PRAMS single sign-on, and reporters can track a ticket without an account.",
-      "Building VCS on Laravel, Inertia and React to replace the region's six fixed-expense workbooks: bills tracked from receipt to payment, page-level access with province scoping, and an importer that repairs and reports the workbooks' typing errors.",
-      "Owned production support: reproduced reported bugs, wrote the corrective SQL, then fixed the root cause so the same correction did not come back the following month.",
+      "Main developer on PRAMS, the regional HRIS used by about 500 employees across six field offices for leave, CTO, overtime and office orders, with multi-level approvals and audit logs.",
+      "Built approval routing that HR configures from a settings screen, so a new Regional Director's preferred flow no longer needs a code change. Reused the same design in TSIOS and the No Pending Case system.",
+      "Built single sign-on in PRAMS (one-time codes, server-to-server token exchange) so the region's other systems log staff in with one account.",
+      "Added a RAG chatbot to PRAMS using the Gemini API, answering employee questions from HR's knowledge base.",
+      "Built TSIOS (Permit to Operate / electrical inspection certificates) and the No Pending Case system with a small team, from online application to e-signed certificate.",
+      "Integrated DigitalPersona fingerprint readers with the TUPAD web app through a local C# service for 1:N duplicate checks, plus an offline registration page for sites without internet.",
+      "Built the PESO reporting portal and the Client Satisfaction Measurement system, replacing emailed spreadsheets and paper surveys.",
+      "Building two Laravel + React systems: an IT ticketing desk with PRAMS login, and VCS, which replaces six Excel workbooks for tracking office bills.",
     ],
     technologies: [
       "PHP",
@@ -65,11 +57,10 @@ export const experience: ExperienceItem[] = [
     positions: [
       { title: "Application Specialist", start: "July 2021", end: "March 2023" },
     ],
-    summary:
-      "Maintained and extended a corporate HRIS on an older Java stack, in a private-sector manufacturing setting.",
+    summary: "Maintained the company's HRIS, built on JSP.",
     highlights: [
-      "Maintained and extended the CORE HRIS: bug fixes, feature work, and keeping employee data clean enough for payroll-adjacent processes to rely on.",
-      "Turned recurring user complaints into permanent code fixes instead of repeating the same manual correction each cycle.",
+      "Fixed bugs and added features to the CORE HRIS, and kept employee data clean for payroll.",
+      "Fixed the root causes of recurring user issues instead of correcting the data by hand each cycle.",
     ],
     technologies: ["JSP", "XML", "JavaScript", "MySQL"],
   },
@@ -82,12 +73,12 @@ export const experience: ExperienceItem[] = [
       { title: "Data Specialist", start: "May 2015", end: "March 2020" },
     ],
     summary:
-      "Six years at one testing laboratory. Data entry first, then quality control, with a developer role alongside both from 2019 that produced the system the lab moved onto.",
+      "Started in data entry, moved to quality control, and from 2019 also worked as the lab's programmer.",
     highlights: [
-      "Co-developed the AlphaLab Record Management System with one other developer, covering test request intake, result entry, client records and report release. It replaced the Excel tracking the lab had run on for four years.",
-      "Added role-based access so lab analysts, encoders and administrators each saw only their part of the workflow, plus dashboards that replaced manually compiled Excel summaries.",
-      "As Quality System Supervisor, checked every test report against the lab's release requirements before it reached the client, and fixed recurring report defects in the system rather than catching them again each month.",
-      "Ran desktop IT for the site (computers, printers, network faults, software installs) and covered data entry during absences so report turnaround did not stall.",
+      "Built the AlphaLab Record Management System with one other developer: test requests, results, client records and report release. It replaced the Excel files the lab had used for four years.",
+      "Added role-based access for analysts, encoders and admins, and dashboards that replaced manually compiled Excel summaries.",
+      "As Quality System Supervisor, checked every test report before release and fixed recurring report errors in the system.",
+      "Handled desktop and network support for the site.",
     ],
     technologies: ["PHP", "MySQL", "JavaScript", "Bootstrap", "Excel"],
   },

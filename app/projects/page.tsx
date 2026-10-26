@@ -20,12 +20,8 @@ export default function ProjectsPage() {
             Projects
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Every system, in one list
+            All projects
           </h1>
-          <p className="text-muted-foreground mt-4 text-base leading-relaxed">
-            The ones with case studies are worth reading first. The rest are listed so
-            the picture is complete.
-          </p>
         </header>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-2">

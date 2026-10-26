@@ -7,10 +7,7 @@ export function ScreenshotGallery({ screenshots }: { screenshots: Screenshot[] }
 
   return (
     <div className="space-y-5">
-      <p className="text-muted-foreground text-xs">
-        Captures from test accounts. Anything that identified a person was covered
-        before these were uploaded. Select one to open it at full size.
-      </p>
+      <p className="text-muted-foreground text-xs">Click a screenshot to enlarge.</p>
 
       <div className="grid gap-5 sm:grid-cols-2">
         {screenshots.map((shot) => (

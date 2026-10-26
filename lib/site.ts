@@ -1,5 +1,5 @@
 const role = "Full Stack Developer";
-const headline = "I build the internal systems a government agency depends on.";
+const headline = "I build internal web systems for DOLE Region IV-A.";
 
 export const site = {
   name: "Rafael P. Domer",
@@ -14,10 +14,8 @@ export const site = {
   // The headline is the OG card; the tagline is the meta description.
   headline,
   tagline: `${role}. ${headline}`,
-  summary:
-    "Approval workflows, role-based access control, REST APIs and the database design beneath them. Most of it runs on PHP and MySQL, with Slim on the recent systems and plain PHP on the older ones. The newest are built with Laravel, React and Inertia, and the HRIS now has a RAG-based AI assistant on the Gemini API.",
   intro:
-    "I build the internal systems a government agency depends on: approval workflows for leave and overtime, permit and certificate applications, biometric verification, and the official forms these processes produce. Around 500 employees across six field offices use them daily.",
+    "I build and maintain the internal systems at DOLE Region IV-A: the HRIS used by about 500 employees, permit and certificate applications, TUPAD biometrics, and reporting for the provinces. Mostly PHP and MySQL, and lately Laravel with React.",
 
   // One list each, shared by the hero, the OG card, JSON-LD and meta keywords.
   stack: ["PHP", "Slim", "Laravel", "Inertia", "React", "MySQL", "JavaScript", "C#"],
@@ -31,7 +29,7 @@ export const site = {
   ],
 
   // Shown on the resume and the contact section when set.
-  phone: "09634784940",
+  phone: "+63 963 478 4940",
   email: "rafxd.25@gmail.com",
   github: "https://github.com/rafx25",
   linkedin: "https://www.linkedin.com/in/rafaeldomer/",

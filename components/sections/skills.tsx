@@ -1,4 +1,4 @@
-import { skills } from "@/data/skills";
+import { proficiencyOrder, skills } from "@/data/skills";
 import type { ProficiencyLevel } from "@/data/types";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/ui/section";
@@ -9,32 +9,12 @@ const levelStyles: Record<ProficiencyLevel, string> = {
   "Currently learning": "border-dashed border-border text-muted-foreground",
 };
 
-const legend: { level: ProficiencyLevel; meaning: string }[] = [
-  {
-    level: "Production experience",
-    meaning: "Shipped it, still maintain it, real users on it",
-  },
-  {
-    level: "Working knowledge",
-    meaning: "Have used it and can work in it",
-  },
-  {
-    level: "Currently learning",
-    meaning: "Studying it. Not claiming more than that",
-  },
-];
-
 export function Skills() {
   return (
-    <Section
-      id="stack"
-      eyebrow="Stack"
-      title="What I work with"
-      description="No percentage bars. Each one says how far I have actually taken it."
-    >
-      <ul className="border-border bg-surface mb-10 grid gap-3 rounded-lg border p-5 sm:grid-cols-3">
-        {legend.map(({ level, meaning }) => (
-          <li key={level} className="text-sm">
+    <Section id="stack" eyebrow="Stack" title="Skills">
+      <ul className="mb-10 flex flex-wrap justify-center gap-3">
+        {proficiencyOrder.map((level) => (
+          <li key={level}>
             <span
               className={cn(
                 "inline-flex rounded border px-2 py-0.5 font-mono text-[0.7rem]",
@@ -43,9 +23,6 @@ export function Skills() {
             >
               {level}
             </span>
-            <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
-              {meaning}
-            </p>
           </li>
         ))}
       </ul>
@@ -54,7 +31,6 @@ export function Skills() {
         {skills.map((group) => (
           <section key={group.category} className="reveal">
             <h3 className="text-base font-semibold tracking-tight">{group.category}</h3>
-            <p className="text-muted-foreground mt-1 text-sm">{group.description}</p>
             <ul className="mt-4 flex flex-wrap gap-1.5">
               {group.items.map((item) => (
                 <li key={item.name}>

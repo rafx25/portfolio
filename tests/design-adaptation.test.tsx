@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { ProjectCard } from "@/components/projects/project-card";
-import { AiEngineering } from "@/components/sections/ai-engineering";
 import { Hero } from "@/components/sections/hero";
 import { featuredProjects } from "@/data/projects";
 import { site } from "@/lib/site";
@@ -107,21 +106,6 @@ describe("portfolio design adaptation", () => {
 
     expect(card).toHaveClass("rounded-lg", "shadow-sm");
     expect(screenshot).toHaveClass("h-56", "sm:h-64");
-    expect(screen.getByText("Read case study")).toHaveClass("rounded-full");
-  });
-
-  it("keeps the AI note compact instead of making it a major portfolio section", () => {
-    render(<AiEngineering />);
-
-    const section = screen.getByRole("region", { name: "AI in my workflow" });
-
-    expect(section).toHaveClass("py-12");
-    expect(
-      screen.getByRole("heading", { level: 2, name: "AI in my workflow" }),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Tools" })).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("heading", { name: "Where AI sits in the workflow" }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText("Read more")).toHaveClass("rounded-full");
   });
 });

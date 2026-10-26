@@ -71,20 +71,12 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.tagline}
         </p>
 
-        <dl className="mt-5 space-y-3 text-sm">
-          <div className="flex gap-3">
-            <dt className="text-muted-foreground w-28 shrink-0 font-mono text-xs uppercase">
-              Role
-            </dt>
-            <dd>{project.role}</dd>
-          </div>
-          <div className="flex gap-3">
-            <dt className="text-muted-foreground w-28 shrink-0 font-mono text-xs uppercase">
-              Hard part
-            </dt>
-            <dd className="text-muted-foreground">{project.keyChallenge}</dd>
-          </div>
-        </dl>
+        <p className="mt-5 text-sm">
+          <span className="text-muted-foreground font-mono text-xs uppercase">
+            Role{" "}
+          </span>
+          {project.role}
+        </p>
 
         <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Technologies used">
           {project.technologies.map((tech) => (
@@ -106,7 +98,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
           {hasCaseStudy ? (
             <span className="border-border-strong text-accent bg-background/60 group-hover:border-accent/50 group-hover:bg-accent-subtle flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors">
-              Read case study
+              Read more
               <ArrowUpRight
                 className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 aria-hidden

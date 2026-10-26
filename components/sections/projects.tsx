@@ -9,9 +9,9 @@ export function Projects() {
   return (
     <Section
       id="projects"
-      eyebrow="Selected work"
-      title="Systems that are still running"
-      description="These run inside a government office, so the source is not mine to publish. What I can show is the engineering: the problem, the architecture, the decisions, and what each decision cost."
+      eyebrow="Projects"
+      title="Selected work"
+      description="Internal systems I built at DOLE Region IV-A. The code is government property, so each project has a short write-up and screenshots instead."
     >
       <div className="grid gap-5 lg:grid-cols-2">
         {featuredProjects.map((project) => (
@@ -24,11 +24,6 @@ export function Projects() {
           <h3 className="text-center text-base font-semibold tracking-tight">
             Other systems
           </h3>
-          <p className="text-muted-foreground mx-auto mt-2 max-w-2xl text-center text-sm">
-            Built or maintained alongside the work above. No case study for these, just
-            what they do and one screen each.
-          </p>
-
           <ul className="mt-6 grid gap-5 sm:grid-cols-2">
             {additionalProjects.map((project) => {
               const shot = project.screenshots[0];

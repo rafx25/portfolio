@@ -2,20 +2,18 @@ import type { Metadata } from "next";
 
 import { site } from "@/lib/site";
 import {
-  resumeCaseStudiesLink,
   resumeContactLines,
   resumeEducation,
   resumeExperience,
   resumeSkillLines,
   resumeSummary,
-  resumeSystems,
 } from "@/lib/resume-content";
 import { Container } from "@/components/ui/container";
 import { PrintButton } from "./print-button";
 
 export const metadata: Metadata = {
   title: "Resume",
-  description: `Resume of ${site.name}, ${site.role}. Experience, systems delivered, technical skills and education.`,
+  description: `Resume of ${site.name}, ${site.role}. Experience, skills and education.`,
   alternates: { canonical: "/resume" },
 };
 
@@ -37,19 +35,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function ResumePage() {
   const { contact, links } = resumeContactLines();
-  const caseStudies = resumeCaseStudiesLink();
 
   return (
     <div className="resume-page py-10 sm:py-14">
       <Container className="max-w-3xl">
         <div className="print:hidden">
-          <p className="text-muted-foreground text-sm">
-            Single column and readable by applicant tracking systems. The download is a
-            generated PDF, not a screenshot, so the text stays selectable.
-          </p>
-          <div className="mt-4">
-            <PrintButton />
-          </div>
+          <PrintButton />
           <hr className="border-border mt-8" />
         </div>
 
@@ -60,11 +51,11 @@ export default function ResumePage() {
           {links ? <p className="text-muted-foreground text-sm">{links}</p> : null}
         </header>
 
-        <Section title="Professional Summary">
+        <Section title="Summary">
           <p className="text-sm leading-relaxed">{resumeSummary}</p>
         </Section>
 
-        <Section title="Core Technical Skills">
+        <Section title="Technical Skills">
           <ul className="space-y-1.5">
             {resumeSkillLines().map((group) => (
               <li key={group.category} className="text-sm leading-relaxed">
@@ -75,7 +66,7 @@ export default function ResumePage() {
           </ul>
         </Section>
 
-        <Section title="Professional Experience">
+        <Section title="Experience">
           {resumeExperience().map((item) => (
             <div key={item.organization} className="mt-5 first:mt-0">
               <div className="break-inside-avoid">
@@ -104,22 +95,6 @@ export default function ResumePage() {
               </ul>
             </div>
           ))}
-        </Section>
-
-        <Section title="Delivered Systems">
-          <ul className="space-y-1">
-            {resumeSystems().map((system) => (
-              <li
-                key={system.name}
-                className="break-inside-avoid pl-4 -indent-4 text-sm leading-relaxed"
-              >
-                {"• "}
-                <span className="font-semibold">{system.name}</span>
-                {` - ${system.detail}`}
-              </li>
-            ))}
-          </ul>
-          {caseStudies ? <p className="mt-2 text-sm">{caseStudies}</p> : null}
         </Section>
 
         <Section title="Education">
