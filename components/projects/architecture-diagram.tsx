@@ -46,7 +46,7 @@ export function ArchitectureDiagram({
       <div className="space-y-6">
         <div>
           <h4 className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            In short
+            Summary
           </h4>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
             {architecture.summary}

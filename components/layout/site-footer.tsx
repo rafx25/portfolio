@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { site, isPlaceholder } from "@/lib/site";
@@ -38,12 +37,6 @@ export function SiteFooter() {
               <Icon className="size-4" aria-hidden />
             </a>
           ))}
-          <Link
-            href="/colophon"
-            className="text-muted-foreground ml-2 text-xs underline-offset-4 hover:underline"
-          >
-            Colophon
-          </Link>
         </div>
       </Container>
     </footer>

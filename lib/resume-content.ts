@@ -2,7 +2,6 @@ import { site } from "@/lib/site";
 import { experienceSpan, formatDateRange, positionLabel } from "@/lib/utils";
 import { education, experience } from "@/data/experience";
 import { skills } from "@/data/skills";
-import { projects } from "@/data/projects";
 
 // One source for both the printable page and the generated PDF, so the two
 // can never say different things.
@@ -20,7 +19,7 @@ export function asciiDashes(value: string) {
     .replace(/[̀-ͯ]/g, "");
 }
 
-export const resumeSummary = `Full stack developer with 6+ years building and maintaining workflow-driven web applications for government agencies and private-sector organizations. Delivered HRIS, regulatory permitting, biometric deduplication, offline-first field registration, reporting and laboratory management systems in PHP, MySQL, JavaScript and Slim Framework. Experienced in role-based access control, configurable multi-level approval workflows, single sign-on, audit logging, legacy system maintenance, document generation and production support. Built a RAG-based AI assistant for the HRIS on the Gemini API. Currently building with Laravel 12, Inertia.js and React.`;
+export const resumeSummary = `Full stack developer with 6+ years building internal web systems in PHP, MySQL and JavaScript. Main developer of the DOLE Region IV-A HRIS (about 500 users), and builder of the regional office's permit, certificate, biometric and reporting systems. Recent work in Laravel, React and TypeScript.`;
 
 /** Hyphen rather than an em dash: dash variants trip some date parsers. */
 export const resumeDateRange = formatDateRange;
@@ -51,14 +50,12 @@ export function resumeContactLines() {
 
 export function resumeSkillLines() {
   return skills.map((group) => {
-    const listed = group.items.filter((item) => item.resume !== false);
-
-    const shipped = listed
+    const shipped = group.items
       .filter((item) => item.level !== "Currently learning")
       .map((item) => item.name)
       .join(", ");
 
-    const learning = listed
+    const learning = group.items
       .filter((item) => item.level === "Currently learning")
       .map((item) => item.name)
       .join(", ");
@@ -87,31 +84,6 @@ export function resumeExperience() {
       highlights: item.highlights.map(asciiDashes),
     };
   });
-}
-
-/**
- * One line per system. The experience bullets already describe the work, so
- * this is the index a reader skims, with the case studies for the detail.
- */
-export function resumeSystems() {
-  return projects
-    .filter((p) => p.featured || p.screenshots.length > 0)
-    .map((p) => {
-      const status = p.status === "UAT" ? "in UAT" : p.status.toLowerCase();
-
-      return {
-        name: p.name,
-        detail: asciiDashes(
-          `${p.type} (${status}). ${p.technologies.slice(0, 4).join(", ")}.`,
-        ),
-      };
-    });
-}
-
-/** Where the full case studies live, or null when there is no public site. */
-export function resumeCaseStudiesLink() {
-  const url = publicSiteUrl();
-  return url ? `Case studies: ${bareUrl(url)}/projects` : null;
 }
 
 export function resumeEducation() {

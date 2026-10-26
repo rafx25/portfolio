@@ -7,13 +7,10 @@ import { Container } from "@/components/ui/container";
 import { buttonStyles } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Experience } from "@/components/sections/experience";
-import { Principles } from "@/components/sections/principles";
-import { AiEngineering } from "@/components/sections/ai-engineering";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "How I work: maintaining production systems, turning business processes into software, and using AI tools with a review step that does not get skipped.",
+  description: `About ${site.name}, full stack developer at DOLE Region IV-A.`,
   alternates: { canonical: "/about" },
 };
 
@@ -40,46 +37,27 @@ export default function AboutPage() {
           </div>
         </header>
 
-        <div className="text-muted-foreground mt-10 grid max-w-4xl gap-x-12 gap-y-6 text-sm leading-relaxed lg:grid-cols-2">
+        <div className="text-muted-foreground mt-10 max-w-2xl space-y-5 text-sm leading-relaxed">
           <p>
-            I came into development through IT work, and that shaped how I build. I saw
-            the processes before I saw any code. Forms moving between desks. The same
-            record kept in three places. The one person everyone has to wait for. So
-            when I start something now I ask what the process actually is first,
-            including the exceptions nobody documented. The framework comes after.
+            I got into development through IT support and data work. My first job was as
+            a data encoder at a testing laboratory in Calamba. After a few years I moved
+            into quality control, and in 2019 I started building the lab&rsquo;s records
+            system with another developer, which replaced the Excel files we had been
+            using.
           </p>
           <p>
-            Nearly all of it has been internal: personnel administration, permits and
-            inspections, certificate issuance, reporting for field offices. Unglamorous
-            software, and it does not forgive mistakes. Staff use it every day, the data
-            has to be right, and you cannot take it down while you rework it.
+            After that I spent almost two years at Gruppo EMS maintaining their HRIS,
+            then joined DOLE Region IV-A in 2023. There I build and support the
+            office&rsquo;s internal systems: PRAMS (our HRIS), permit and certificate
+            applications, TUPAD biometrics, and reporting for the provinces. Most of it
+            is PHP and MySQL on Slim or plain PHP. The newer systems are Laravel with
+            React.
           </p>
           <p>
-            That made me careful in specific ways. Read the surrounding code before
-            changing it. Keep business rules out of controllers so they can be tested
-            and reused. Check permissions on the server, every time. Log what the office
-            would be asked to prove later. And make the failure modes dull: a bad
-            fingerprint scan rejected while the person is still standing there beats a
-            broken enrollment found three weeks on.
+            Right now I&rsquo;m getting better at TypeScript and modern JavaScript
+            tooling. This site is one of the ways I&rsquo;m practicing that.
           </p>
-          <p>
-            Some of it has been unbuilding. Notifications in PRAMS started as
-            Server-Sent Events and had to become polling, because the hosting could not
-            hold that many open connections. The PRAMS case study explains how that was
-            split.
-          </p>
-          <p>
-            What I ship in is PHP on MySQL. Slim on most of it, plain PHP on the older
-            systems, and Laravel with React on the newest two, the Request Processing
-            Desk and VCS. C# when a desktop device is in the loop. I am working through
-            the modern JavaScript side properly now, and this site is part of that:
-            typed end to end, tested, deployed through CI instead of by hand.
-          </p>
-          <p>
-            On AI. I use it daily and I am specific about how. Boilerplate, unfamiliar
-            APIs, first drafts of tests. It does not decide the data model, and nothing
-            it writes goes in until I have read it and can say why it works.
-          </p>
+          <p>I&rsquo;m open to full stack and backend roles.</p>
         </div>
 
         <div className="mt-10 flex flex-wrap gap-3">
@@ -94,8 +72,6 @@ export default function AboutPage() {
       </Container>
 
       <Experience />
-      <Principles />
-      <AiEngineering />
     </div>
   );
 }

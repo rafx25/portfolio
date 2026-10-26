@@ -5,12 +5,7 @@ import { Badge } from "@/components/ui/badge";
 
 export function Experience() {
   return (
-    <Section
-      id="experience"
-      eyebrow="Experience"
-      title="How I got here"
-      description="Data entry to full stack, mostly spent replacing manual work with systems people depend on."
-    >
+    <Section id="experience" eyebrow="Experience" title="Work history">
       <ol className="space-y-12">
         {experience.map((item) => {
           const span = experienceSpan(item);

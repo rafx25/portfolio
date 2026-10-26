@@ -42,44 +42,18 @@ describe("project data", () => {
     expect(getProject("does-not-exist")).toBeUndefined();
   });
 
-  it("describes each case study's problem, challenges and security", () => {
+  it("keeps each case study short", () => {
     for (const project of caseStudyProjects) {
       const study = project.caseStudy;
-      expect(
-        study.problem.length,
-        `${project.slug}: no problem statement`,
-      ).toBeGreaterThan(0);
-      expect(study.challenges.length, `${project.slug}: no challenges`).toBeGreaterThan(
-        0,
+      expect(study.problem.length, `${project.slug}: problem`).toBeGreaterThan(0);
+      expect(study.problem.length, `${project.slug}: problem`).toBeLessThanOrEqual(3);
+      expect(study.built.length, `${project.slug}: built`).toBeLessThanOrEqual(6);
+      expect(study.decisions.length, `${project.slug}: decisions`).toBeGreaterThan(0);
+      expect(study.decisions.length, `${project.slug}: decisions`).toBeLessThanOrEqual(
+        3,
       );
-      expect(
-        study.security.length,
-        `${project.slug}: no security notes`,
-      ).toBeGreaterThan(0);
+      expect(study.outcomes.length, `${project.slug}: outcomes`).toBeLessThanOrEqual(3);
       expect(study.architecture.layers.length).toBeGreaterThan(1);
-    }
-  });
-
-  it("states a trade-off for every challenge", () => {
-    for (const project of caseStudyProjects) {
-      for (const challenge of project.caseStudy.challenges) {
-        expect(
-          challenge.tradeOff.trim().length,
-          `${project.slug} / ${challenge.title} has no trade-off`,
-        ).toBeGreaterThan(0);
-      }
-    }
-  });
-
-  it("never claims a system is fully secure", () => {
-    const forbidden = /100% secure|fully secure|completely secure|unhackable/i;
-
-    for (const project of caseStudyProjects) {
-      for (const note of project.caseStudy.security) {
-        expect(note, `${project.slug}: overclaim in security notes`).not.toMatch(
-          forbidden,
-        );
-      }
     }
   });
 });

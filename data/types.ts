@@ -6,13 +6,7 @@ export type ProficiencyLevel =
 
 export interface SkillGroup {
   category: string;
-  description: string;
-  items: {
-    name: string;
-    level: ProficiencyLevel;
-    /** false keeps an item on the site but off the resume, to keep it short. */
-    resume?: boolean;
-  }[];
+  items: { name: string; level: ProficiencyLevel }[];
 }
 
 export interface Position {
@@ -54,15 +48,6 @@ export interface ProjectArchitecture {
   integrations?: string[];
 }
 
-export interface TechnicalChallenge {
-  title: string;
-  challenge: string;
-  cause: string;
-  solution: string;
-  tradeOff: string;
-  result: string;
-}
-
 export interface Screenshot {
   src: string;
   alt: string;
@@ -74,14 +59,12 @@ export interface Screenshot {
 
 export interface CaseStudy {
   overview: string;
-  users: string;
   problem: string[];
-  responsibilities: string[];
+  built: string[];
   teamNote?: string;
   architecture: ProjectArchitecture;
-  features: { title: string; detail: string }[];
-  challenges: TechnicalChallenge[];
-  security: string[];
+  /** Two or three design decisions, in plain prose. */
+  decisions: { title: string; detail: string }[];
   outcomes: string[];
 }
 
@@ -95,8 +78,6 @@ export interface Project {
   organization: string;
   status: "In production" | "Delivered" | "Maintained" | "UAT" | "In development";
   technologies: string[];
-  /** The hardest part. Shown on the card. */
-  keyChallenge: string;
   /** Three or four facts, shown as one line on the card. */
   metrics?: string[];
   featured: boolean;

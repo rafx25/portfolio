@@ -24,7 +24,7 @@ export function Contact() {
       id="contact"
       eyebrow="Contact"
       title="Get in touch"
-      description="Hiring for a full stack, backend or Laravel role, or want to talk through any of the work above? Send a message here, or email me directly."
+      description="Open to full stack and backend roles. Send a message or email me directly."
     >
       <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
         <div className="reveal space-y-6 text-sm">
@@ -46,7 +46,7 @@ export function Contact() {
               <li className="flex items-center gap-3">
                 <Phone className="text-muted-foreground size-4" aria-hidden />
                 <a
-                  href={`tel:${site.phone}`}
+                  href={`tel:${site.phone.replace(/\s/g, "")}`}
                   className="underline-offset-4 hover:underline"
                 >
                   {site.phone}

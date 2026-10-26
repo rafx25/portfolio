@@ -6,28 +6,18 @@ import { Section } from "@/components/ui/section";
 
 export function About() {
   return (
-    <Section
-      id="about"
-      eyebrow="About"
-      title="Where the work comes from"
-      description="Turning paper processes into systems people use every day."
-    >
+    <Section id="about" eyebrow="About" title="About me">
       <div className="reveal text-muted-foreground mx-auto max-w-3xl space-y-4 text-center">
         <p className="text-base leading-7 sm:text-lg">
-          I started at a testing laboratory doing data entry. For four years I kept the
-          lab&rsquo;s spreadsheets in order, then helped build the system that replaced
-          them. I have been building versions of that ever since.
+          I started as a data encoder at a testing laboratory in 2015. A few years in, I
+          helped build the records system that replaced our Excel files, and I&rsquo;ve
+          been doing development ever since.
         </p>
         <p className="text-sm leading-7 sm:text-base">
-          Now it is internal systems for a government office: leave and overtime
-          approvals, permit applications, certificates, biometric checks. The limits are
-          real ones. Personal data, approvals that pass through several people, and
-          staff who cannot wait for the system to come back up.
-        </p>
-        <p className="text-sm leading-7 sm:text-base">
-          Most of the code I touch was written by someone else first, so I read it
-          before I change it. PHP and MySQL day to day, Slim on most of the systems,
-          Laravel with React and Inertia on the newest.
+          Since 2023 I&rsquo;ve been at DOLE Region IV-A, building and maintaining the
+          office&rsquo;s internal systems: the HRIS, permit and certificate
+          applications, biometrics for TUPAD, and reporting for the provinces. I work
+          mostly in PHP and MySQL (Slim, plain PHP), and lately Laravel with React.
         </p>
       </div>
 
@@ -52,7 +42,7 @@ export function About() {
           href="/about"
           className="text-accent inline-flex items-center gap-1.5 text-sm font-medium underline-offset-4 hover:underline"
         >
-          More about how I work
+          More about me
           <ArrowRight className="size-4" aria-hidden />
         </Link>
       </p>

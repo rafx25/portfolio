@@ -1,13 +1,8 @@
 import type { SkillGroup } from "./types";
 
-// Three levels, deliberately no percentages:
-//   Production experience - shipped and maintained with real users
-//   Working knowledge     - used it, productive with it
-//   Currently learning    - studying it, nothing more
 export const skills: SkillGroup[] = [
   {
     category: "Languages",
-    description: "What I write day to day.",
     items: [
       { name: "PHP", level: "Production experience" },
       { name: "JavaScript", level: "Production experience" },
@@ -18,112 +13,59 @@ export const skills: SkillGroup[] = [
   },
   {
     category: "Backend",
-    description: "Where most of my production work lives.",
     items: [
       { name: "Slim Framework", level: "Production experience" },
-      { name: "Native PHP (no framework)", level: "Production experience" },
-      { name: "PhpSpreadsheet / TCPDF / PhpWord", level: "Production experience" },
       { name: "Laravel", level: "Production experience" },
-      { name: "REST API design", level: "Production experience" },
-      { name: "Node.js", level: "Working knowledge" },
-      { name: "Express.js", level: "Working knowledge" },
-      { name: ".NET (local service integration)", level: "Working knowledge" },
+      { name: "Plain PHP", level: "Production experience" },
+      { name: "REST APIs", level: "Production experience" },
+      { name: "PhpSpreadsheet / TCPDF / PhpWord", level: "Production experience" },
+      { name: "Node.js / Express", level: "Working knowledge" },
+      { name: ".NET", level: "Working knowledge" },
     ],
   },
   {
     category: "Frontend",
-    description: "The interfaces on top of those systems.",
     items: [
       { name: "React", level: "Production experience" },
       { name: "Inertia.js", level: "Production experience" },
       { name: "HTML & CSS", level: "Production experience" },
+      { name: "Service workers / IndexedDB", level: "Production experience" },
       { name: "Tailwind CSS", level: "Working knowledge" },
-      {
-        name: "Offline-first (service worker, IndexedDB)",
-        level: "Production experience",
-      },
       { name: "Next.js", level: "Currently learning" },
     ],
   },
   {
     category: "Databases",
-    description: "Schema design, queries and the parts that bite in production.",
     items: [
       { name: "MySQL / MariaDB", level: "Production experience" },
-      { name: "Schema design & normalization", level: "Production experience" },
-      { name: "Indexing & query tuning", level: "Working knowledge" },
+      { name: "Schema design", level: "Production experience" },
+      { name: "Query tuning", level: "Working knowledge" },
       { name: "MongoDB", level: "Working knowledge" },
       { name: "PostgreSQL", level: "Currently learning" },
     ],
   },
   {
-    category: "Architecture & engineering",
-    description: "Patterns I have actually had to get right in a live system.",
+    category: "Systems work",
     items: [
-      { name: "Multi-level approval workflows", level: "Production experience" },
-      { name: "Configurable approval routing", level: "Production experience" },
-      { name: "Role-Based Access Control", level: "Production experience" },
-      { name: "Authentication & authorization", level: "Production experience" },
-      {
-        name: "Single sign-on (authorization code flow)",
-        level: "Production experience",
-      },
+      { name: "Approval workflows", level: "Production experience" },
+      { name: "Role-based access control", level: "Production experience" },
+      { name: "Single sign-on", level: "Production experience" },
       { name: "Audit logging", level: "Production experience" },
-      { name: "Service-layer separation", level: "Production experience" },
-      {
-        name: "Soft deletes & data retention",
-        level: "Production experience",
-        resume: false,
-      },
-      {
-        name: "Real-time notifications (SSE, polling)",
-        level: "Production experience",
-      },
-      {
-        name: "File upload handling & validation",
-        level: "Production experience",
-        resume: false,
-      },
-      { name: "Excel import / export pipelines", level: "Production experience" },
-      {
-        name: "Government form generation (PhpSpreadsheet, TCPDF)",
-        level: "Production experience",
-        resume: false,
-      },
-      { name: "PSR-7 / PSR-15 middleware", level: "Production experience" },
+      { name: "Excel import / export", level: "Production experience" },
+      { name: "SSE / polling notifications", level: "Production experience" },
+      { name: "RAG / Gemini API", level: "Working knowledge" },
     ],
   },
   {
-    category: "Security testing",
-    description: "Looking for vulnerabilities in web applications.",
-    items: [
-      { name: "Web application penetration testing", level: "Working knowledge" },
-      { name: "ZAP (Zed Attack Proxy)", level: "Working knowledge" },
-      { name: "Kali Linux", level: "Working knowledge" },
-      { name: "Oracle VirtualBox", level: "Working knowledge", resume: false },
-    ],
-  },
-  {
-    category: "Tooling & operations",
-    description: "Getting it out the door and keeping it running.",
+    category: "Tools",
     items: [
       { name: "Git & GitHub", level: "Production experience" },
-      { name: "Production deployment & maintenance", level: "Production experience" },
-      { name: "Debugging live issues", level: "Production experience", resume: false },
-      {
-        name: "Environment configuration & secrets",
-        level: "Production experience",
-        resume: false,
-      },
-      { name: "Shared hosting (cPanel / Hostinger)", level: "Production experience" },
+      { name: "cPanel / Hostinger", level: "Production experience" },
       { name: "Vercel", level: "Working knowledge" },
-      { name: "GitHub Actions / CI", level: "Working knowledge" },
-      {
-        name: "AI-assisted development (Claude Code, OpenAI Codex, ChatGPT)",
-        level: "Production experience",
-      },
-      { name: "Vitest / automated testing", level: "Currently learning" },
-      { name: "RAG / LLM integration (Gemini API)", level: "Working knowledge" },
+      { name: "GitHub Actions", level: "Working knowledge" },
+      { name: "ZAP / Kali Linux (web app testing)", level: "Working knowledge" },
+      { name: "Claude Code / Codex", level: "Working knowledge" },
+      { name: "Vitest / PHPUnit / Pest", level: "Currently learning" },
     ],
   },
 ];

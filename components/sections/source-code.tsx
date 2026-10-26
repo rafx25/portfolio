@@ -11,28 +11,14 @@ export function SourceCode() {
   const githubReady = !isPlaceholder(site.github);
 
   return (
-    <Section
-      id="source"
-      eyebrow="Source code"
-      title="What I can show you"
-      description="These systems run inside a government office and hold personnel and case records. The source and the schemas are not mine to publish."
-    >
+    <Section id="source" eyebrow="Source code" title="Code">
       <div className="reveal grid gap-8 lg:grid-cols-[1.2fr_1fr]">
         <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
           <p>
-            What I can share is the engineering. The case studies cover the
-            architecture, the decisions and what each one cost. Nothing in them is
-            copied out of the projects, and the schemas and endpoints are generalized.
+            The government systems above aren&rsquo;t mine to publish. I&rsquo;m happy
+            to walk through any of them on a call, or do a take-home exercise.
           </p>
-          <p>
-            Screenshots are from test accounts, and anything that identified a person
-            was covered before it went up. Happy to walk through any of the designs on a
-            call, or do a take-home exercise instead.
-          </p>
-          <p className="text-foreground">
-            This portfolio is open source, so the architecture, tests and CI pipeline
-            are all readable.
-          </p>
+          <p>This site&rsquo;s source is public on GitHub.</p>
         </div>
 
         <div>

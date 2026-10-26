@@ -2,13 +2,11 @@ import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/rendere
 
 import { site } from "@/lib/site";
 import {
-  resumeCaseStudiesLink,
   resumeContactLines,
   resumeEducation,
   resumeExperience,
   resumeSkillLines,
   resumeSummary,
-  resumeSystems,
 } from "@/lib/resume-content";
 
 // Helvetica is one of the fonts built into the PDF spec, so the text stays
@@ -61,7 +59,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function ResumeDocument() {
   const { contact, links } = resumeContactLines();
-  const caseStudies = resumeCaseStudiesLink();
 
   return (
     <Document
@@ -79,11 +76,11 @@ export function ResumeDocument() {
           {links ? <Text style={styles.contact}>{links}</Text> : null}
         </View>
 
-        <Section title="Professional Summary">
+        <Section title="Summary">
           <Text style={styles.body}>{resumeSummary}</Text>
         </Section>
 
-        <Section title="Core Technical Skills">
+        <Section title="Technical Skills">
           {resumeSkillLines().map((group) => (
             <Text key={group.category} style={styles.skillRow}>
               <Text style={styles.label}>{group.category}: </Text>
@@ -92,7 +89,7 @@ export function ResumeDocument() {
           ))}
         </Section>
 
-        <Section title="Professional Experience">
+        <Section title="Experience">
           {resumeExperience().map((item) => (
             // An organization with many positions is longer than the space left
             // on a page, so the entry may break between bullets. The heading
@@ -121,19 +118,6 @@ export function ResumeDocument() {
               ))}
             </View>
           ))}
-        </Section>
-
-        <Section title="Delivered Systems">
-          {resumeSystems().map((system) => (
-            <View key={system.name} style={styles.bulletRow} wrap={false}>
-              <Text style={styles.bulletMark}>{BULLET}</Text>
-              <Text style={styles.bulletText}>
-                <Text style={styles.label}>{system.name}</Text>
-                {` - ${system.detail}`}
-              </Text>
-            </View>
-          ))}
-          {caseStudies ? <Text style={styles.skillRow}>{caseStudies}</Text> : null}
         </Section>
 
         <Section title="Education">

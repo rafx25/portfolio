@@ -8,7 +8,6 @@ import { site } from "@/lib/site";
 import { Container } from "@/components/ui/container";
 import { Badge } from "@/components/ui/badge";
 import { ArchitectureDiagram } from "@/components/projects/architecture-diagram";
-import { ChallengeCard } from "@/components/projects/challenge-card";
 import { ScreenshotGallery } from "@/components/projects/screenshot-gallery";
 import { ProjectJsonLd } from "@/components/seo/json-ld";
 
@@ -138,10 +137,8 @@ export default async function ProjectCaseStudyPage({
             <p className="border-border bg-surface-muted text-muted-foreground mt-6 flex gap-3 rounded-lg border p-4 text-xs leading-relaxed">
               <ShieldAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
               <span>
-                This is an internal system. No production source code, schema, endpoint
-                or record appears here. Screenshots come from test accounts, with
-                anything that identified a person covered. Architecture and entity names
-                are generalized for this portfolio.
+                Internal government system, so no source code is shared. Screenshots use
+                test accounts.
               </span>
             </p>
           ) : null}
@@ -149,57 +146,27 @@ export default async function ProjectCaseStudyPage({
       </Container>
 
       <Container>
-        <div className="reveal border-border grid gap-6 border-t py-12 sm:py-14 lg:grid-cols-2">
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            {study.overview}
-          </p>
-          <div>
-            <h2 className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Who uses it
-            </h2>
-            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-              {study.users}
-            </p>
-          </div>
-        </div>
+        <p className="reveal border-border text-muted-foreground max-w-3xl border-t py-12 text-base leading-relaxed sm:py-14">
+          {study.overview}
+        </p>
 
         <CaseSection id="problem" title="The problem">
           <BulletList items={study.problem} />
         </CaseSection>
 
         <CaseSection id="built" title="What I built">
-          <BulletList items={study.responsibilities} />
+          <BulletList items={study.built} />
 
           {study.teamNote ? (
             <p className="reveal border-border text-muted-foreground mt-6 border-l-2 pl-4 text-sm leading-relaxed">
               {study.teamNote}
             </p>
           ) : null}
-
-          <dl className="reveal mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-            {study.features.map((feature) => (
-              <div key={feature.title}>
-                <dt className="text-sm font-semibold">{feature.title}</dt>
-                <dd className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                  {feature.detail}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </CaseSection>
 
         <CaseSection id="how" title="How it's built">
           <div className="reveal">
             <ArchitectureDiagram architecture={study.architecture} />
-          </div>
-
-          <div className="reveal mt-10">
-            <h3 className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Security
-            </h3>
-            <div className="mt-4">
-              <BulletList items={study.security} />
-            </div>
           </div>
         </CaseSection>
 
@@ -211,15 +178,20 @@ export default async function ProjectCaseStudyPage({
           </CaseSection>
         ) : null}
 
-        <CaseSection id="decisions" title="Decisions worth explaining">
-          <div className="space-y-5">
-            {study.challenges.map((challenge) => (
-              <ChallengeCard key={challenge.title} challenge={challenge} />
+        <CaseSection id="decisions" title="Key decisions">
+          <dl className="reveal space-y-6">
+            {study.decisions.map((decision) => (
+              <div key={decision.title}>
+                <dt className="text-sm font-semibold">{decision.title}</dt>
+                <dd className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                  {decision.detail}
+                </dd>
+              </div>
             ))}
-          </div>
+          </dl>
         </CaseSection>
 
-        <CaseSection id="landed" title="Where it landed">
+        <CaseSection id="results" title="Results">
           <BulletList items={study.outcomes} />
         </CaseSection>
 
