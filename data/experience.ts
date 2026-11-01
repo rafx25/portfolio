@@ -34,6 +34,7 @@ export const experience: ExperienceItem[] = [
       "Built TSIOS (Permit to Operate and electrical inspection certificates) and the No Pending Case system with a small team, from online application to e-signed certificate.",
       "Integrated DigitalPersona fingerprint readers with the TUPAD emergency employment program's web app through a local C# service for 1:N duplicate checks, and built an offline registration page for sites without internet.",
       "Built the Public Employment Service Office (PESO) reporting portal and the Client Satisfaction Measurement system, replacing emailed spreadsheets and paper surveys.",
+      "Built the PRAMS Daily Time Record (DTR) module, now in user acceptance testing: ZKTeco biometric push integration, supervisor and HR validation, and leave deductions using the CSC conversion table.",
       "Building two Laravel and React applications: an IT help desk ticketing system with PRAMS single sign-on, and VCS, which replaces six Excel workbooks for tracking office bills.",
     ],
     technologies: [
