@@ -93,6 +93,10 @@ export default function ResumePage() {
                   </li>
                 ))}
               </ul>
+              <p className="mt-1.5 text-sm leading-relaxed">
+                <span className="font-semibold">Technologies: </span>
+                {item.technologies}
+              </p>
             </div>
           ))}
         </Section>
