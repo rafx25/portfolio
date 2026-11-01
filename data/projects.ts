@@ -329,6 +329,108 @@ export const projects: Project[] = [
       ],
     },
   },
+  {
+    slug: "prams-dtr",
+    name: "PRAMS DTR",
+    tagline:
+      "The Daily Time Record module of PRAMS. Biometric punches become each employee's DTR, which the supervisor verifies and HR validates, and late, undertime and absence charges post to the leave ledger.",
+    type: "Attendance and timekeeping module",
+    role: "Full Stack Developer",
+    period: "2026",
+    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
+    status: "UAT",
+    technologies: [
+      "Slim 4",
+      "PHP",
+      "MySQL",
+      "JavaScript",
+      "ZKTeco ADMS",
+      "PhpSpreadsheet",
+      "TCPDF",
+      "Cron jobs",
+    ],
+    metrics: [
+      "biometric push",
+      "HR validation per date",
+      "CSC leave conversion",
+      "4 scheduled jobs",
+    ],
+    featured: true,
+    confidential: true,
+    screenshots: [],
+    caseStudy: {
+      overview:
+        "The DTR module turns biometric punches into each employee's Daily Time Record. The employee checks and submits it, the supervisor verifies it, and HR validates each date, assesses tardiness, undertime and absences, and posts the charges to the leave ledger. It is in user acceptance testing with HR.",
+      teamNote:
+        "The DTR module is my work. It builds on PRAMS's leave ledger, approval routes and notifications.",
+      problem: [
+        "Every employee submits a DTR each month, and JO/COS staff twice a month. HR checks every date against the biometric logs, leaves, CTO and holidays.",
+        "Tardiness and undertime have to be converted to leave days with the CSC table and recorded on each employee's leave card.",
+        "Punches sit on the biometric devices in each office.",
+      ],
+      built: [
+        "A ZKTeco push endpoint that receives punches straight from the devices, with HR approval for new devices, plus an import for the devices' Excel reports",
+        "Daily time in, time out, tardiness and undertime per work schedule, including flexi-time and the Compressed Workweek",
+        "The employee's DTR workspace with auto-saved drafts, correction requests with supporting documents, and supervisor review",
+        "HR validation per date, leave assessment, and posting to the leave ledger with receipts and reversals",
+        "The official DTR package: the DTR as a PDF, the supporting documents, and a SHA-256 manifest",
+        "A management dashboard, deadline reminders, and scheduled jobs that create each period's DTR and settle pending deductions",
+      ],
+      architecture: {
+        summary:
+          "Part of PRAMS (Slim 4, PHP, MySQL). The devices push punches to a separate iclock endpoint outside the session-based API. Console commands on cron create each period's DTRs, send reminders, move reviews to a new office head and settle pending deductions.",
+        layers: [
+          {
+            label: "Biometric devices",
+            detail: "ZKTeco devices push punches over ADMS",
+          },
+          {
+            label: "iclock endpoint",
+            detail: "Checks the device serial and HR approval, stores punches",
+          },
+          {
+            label: "DTR services",
+            detail: "Compute, sync, assessment, leave posting, official package",
+          },
+          {
+            label: "Scheduled jobs",
+            detail: "Period creation, reminders, reviewer changes, deductions",
+          },
+          {
+            label: "MySQL",
+            detail: "Punches, DTR snapshots, validations, leave ledger",
+          },
+        ],
+        integrations: [
+          "PRAMS leave ledger",
+          "PRAMS approval routes for correction requests",
+          "PRAMS notifications",
+        ],
+      },
+      decisions: [
+        {
+          title: "Devices push their punches",
+          detail:
+            "The ZKTeco devices speak a push protocol: they send new punches to the server and keep retrying until the reply starts with OK. A new device is held until HR approves it, and until then the reply is not OK, so the device keeps its punches and sends them again after approval. Offices without a connected device can still import the device's Excel report.",
+        },
+        {
+          title: "A frozen snapshot after submission",
+          detail:
+            "When the employee submits, the DTR is saved as a snapshot. The supervisor reviews, HR validates and the official package is built from that snapshot, with the SHA-256 of every file in its manifest, so the printed form matches what the employee certified. A later change goes through an HR amendment record instead of editing the submitted dates.",
+        },
+        {
+          title: "Leave rules HR signed off first",
+          detail:
+            "I built the leave posting, then kept it switched off and gave HR five decisions to make: how minutes convert to leave days, daily or monthly totals, absences, short balances and Compressed Workweek days. HR chose the CSC table in three decimals, so leave balances across PRAMS moved from two to three decimals. A balance never goes below zero. A daily job takes the shortfall from the next Vacation Leave credits.",
+        },
+      ],
+      outcomes: [
+        "In user acceptance testing with HR.",
+        "HR and management approved the leave posting rules in October 2026.",
+        "Charges follow the CSC conversion table and are written on the leave card in its usual format.",
+      ],
+    },
+  },
 
   {
     slug: "tsios",

@@ -26,19 +26,19 @@ const styles = StyleSheet.create({
   // ("E D U C A T I O N"), and a parser then misses the section entirely.
   name: { fontSize: 17, fontFamily: "Helvetica-Bold" },
   role: { fontSize: 11, fontFamily: "Helvetica-Bold", marginTop: 3 },
-  contact: { fontSize: 9, color: "#333333", marginTop: 5 },
+  contact: { fontSize: 9, color: "#333333", marginTop: 5 }, // ds-allow-hardcode: react-pdf has no CSS tokens
   sectionTitle: {
     fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
     marginTop: 14,
     paddingBottom: 3,
     borderBottomWidth: 0.75,
-    borderBottomColor: "#999999",
+    borderBottomColor: "#999999", // ds-allow-hardcode
   },
   body: { fontSize: 9.5, lineHeight: 1.4, marginTop: 6 },
   entry: { marginTop: 9 },
   entryRole: { fontSize: 10, fontFamily: "Helvetica-Bold" },
-  entryMeta: { fontSize: 9, color: "#333333", marginTop: 1.5 },
+  entryMeta: { fontSize: 9, color: "#333333", marginTop: 1.5 }, // ds-allow-hardcode
   position: { fontSize: 9.5, marginTop: 2 },
   positions: { marginTop: 2, marginBottom: 2 },
   bulletRow: { flexDirection: "row", marginTop: 3 },
@@ -116,6 +116,10 @@ export function ResumeDocument() {
                   <Text style={styles.bulletText}>{line}</Text>
                 </View>
               ))}
+              <Text style={styles.skillRow}>
+                <Text style={styles.label}>Technologies: </Text>
+                {item.technologies}
+              </Text>
             </View>
           ))}
         </Section>

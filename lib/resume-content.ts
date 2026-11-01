@@ -19,7 +19,8 @@ export function asciiDashes(value: string) {
     .replace(/[̀-ͯ]/g, "");
 }
 
-export const resumeSummary = `Full stack developer with 6+ years building internal web systems in PHP, MySQL and JavaScript. Main developer of the DOLE Region IV-A HRIS (about 500 users), and builder of the regional office's permit, certificate, biometric and reporting systems. Recent work in Laravel, React and TypeScript.`;
+// Spells out each acronym once: an ATS may search for either form.
+export const resumeSummary = `Full Stack Developer with 6+ years building web applications in PHP, JavaScript and MySQL, from database design and REST APIs to production support. Main developer of the Human Resource Information System (HRIS) used by about 500 employees at the Department of Labor and Employment (DOLE) Region IV-A, and builder of the regional office's permit, certificate, biometric and reporting systems. Experienced in role-based access control (RBAC), single sign-on (SSO), approval workflows and audit logging. Currently building applications in Laravel and React.`;
 
 /** Hyphen rather than an em dash: dash variants trip some date parsers. */
 export const resumeDateRange = formatDateRange;
@@ -82,6 +83,8 @@ export function resumeExperience() {
         dates: resumeDateRange(position.start, position.end),
       })),
       highlights: item.highlights.map(asciiDashes),
+      // Ties each skill to a job, which ATS tools use to judge recency.
+      technologies: item.technologies.join(", "),
     };
   });
 }
