@@ -229,6 +229,8 @@ export const projects: Project[] = [
       "REST API",
       "SSE",
       "Gemini API",
+      "PHPStan",
+      "GitHub Actions",
     ],
     metrics: [
       "~500 employees",
@@ -254,18 +256,32 @@ export const projects: Project[] = [
         caption: "Filed requests by date, filtered by office, type and status.",
       },
       {
-        src: "/projects/prams-login.png",
-        width: 1877,
-        height: 843,
-        alt: "PRAMS employee portal login screen",
-        caption: "Employee portal login.",
+        src: "/projects/prams-login.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "PRAMS employee portal sign-in page with a frosted glass card on a dark blue background",
+        caption: "Redesigned sign-in page. Accounts with two-factor turned on get a code step next.",
+      },
+      {
+        src: "/projects/prams-login-mobile.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "The PRAMS sign-in page on a phone-sized screen, in front of the desktop layout",
+        caption: "The same page on a phone. The office header moves into the card.",
+      },
+      {
+        src: "/projects/prams-forgot-password.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "PRAMS forgot password page asking for an employee ID to send a reset link",
+        caption: "Password reset by employee ID. Public pages like this one are rate-limited.",
       },
     ],
     caseStudy: {
       overview:
         "PRAMS is where employees file leave, CTO, overtime and office orders, and where HR manages credits, schedules and approval routes. Approved requests print as the official government forms. The region's other internal systems use it as their login.",
       teamNote:
-        "Built by a small team. My parts: the approval workflows and route engine, delegation, single sign-on, the printed forms, leave and CTO credits, access control, the org chart and the chatbot. The employee profile, PDS export and employee import are mostly a teammate's work.",
+        "Built by a small team. My parts: the approval workflows and route engine, delegation, single sign-on, two-factor sign-in, the sign-in page, the printed forms and document templates, leave and CTO credits, access control, database backup, the org chart and the chatbot. The employee profile, PDS export and employee import are mostly a teammate's work.",
       problem: [
         "Leave and overtime requests went around on paper, and nobody knew where a form was.",
         "Leave and CTO balances were kept in spreadsheets and often didn't match what employees expected.",
@@ -273,15 +289,15 @@ export const projects: Project[] = [
       ],
       built: [
         "An approval route engine, and the settings screen HR uses to build routes",
-        "Leave, overtime, CTO and office order workflows, with approval delegation",
+        "Leave, overtime, CTO and office order workflows, with approval delegation, a team calendar for unit heads and an Excel leave report",
         "Single sign-on for the other internal systems, with an admin page to register them",
-        "Page-level access control and a Roles & Permissions screen",
-        "Official form output (PhpSpreadsheet, TCPDF) and credit ledgers with bulk import",
+        "Two-factor sign-in with an authenticator app and backup codes, a login lockout kept in the database, and page-level access control with a Roles & Permissions screen",
+        "Official form output (PhpSpreadsheet, TCPDF), Word and Excel templates HR can edit, and credit ledgers with bulk import",
         "Notifications, chat, and a RAG chatbot on the Gemini API that answers from HR's knowledge base",
       ],
       architecture: {
         summary:
-          "Slim 4 with a PSR-15 middleware stack, serving a JSON API to a JavaScript front end. Middleware handles session, CSRF, page access and rate limits. Business logic is in services, and models use PDO with prepared statements.",
+          "Slim 4 with a PSR-15 middleware stack, serving a JSON API to a JavaScript front end. Middleware handles session, CSRF, page access and rate limits. Business logic is in services, and models use PDO with prepared statements. Schema changes ship as tracked migrations, and CI runs PHPStan and unit tests on every pull request.",
         layers: [
           {
             label: "Browser",
@@ -297,7 +313,7 @@ export const projects: Project[] = [
           },
           {
             label: "Services",
-            detail: "Route engine, delegation, credits, forms, single sign-on",
+            detail: "Route engine, delegation, credits, forms, single sign-on, two-factor",
           },
           {
             label: "MySQL",
