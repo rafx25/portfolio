@@ -5,6 +5,7 @@ import {
   resumeContactLines,
   resumeEducation,
   resumeExperience,
+  resumeProjects,
   resumeSkillLines,
   resumeSummary,
 } from "@/lib/resume-content";
@@ -87,6 +88,30 @@ export default function ResumePage() {
                   <li
                     key={highlight}
                     className="break-inside-avoid pl-4 -indent-4 text-sm leading-relaxed"
+                  >
+                    {"• "}
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1.5 text-sm leading-relaxed">
+                <span className="font-semibold">Technologies: </span>
+                {item.technologies}
+              </p>
+            </div>
+          ))}
+        </Section>
+
+        <Section title="Projects">
+          {resumeProjects().map((item) => (
+            <div key={item.name} className="break-inside-avoid">
+              <h3 className="text-sm font-bold">{item.name}</h3>
+              <p className="text-muted-foreground text-sm">{item.meta}</p>
+              <ul className="mt-1.5 space-y-1">
+                {item.highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="pl-4 -indent-4 text-sm leading-relaxed"
                   >
                     {"• "}
                     {highlight}

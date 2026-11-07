@@ -89,6 +89,28 @@ export function resumeExperience() {
   });
 }
 
+/** Work outside a job. Kept apart from Experience so an ATS doesn't read it as employment. */
+const resumeProjectItems = [
+  {
+    name: "GACC Worship",
+    meta: "Volunteer side project, God's Anointing Christian Church | 2026",
+    highlights: [
+      "Built an offline worship presentation app for a local church: song lyrics, Bible verses and announcement slides run from one operator screen, with a projector window kept in sync over BroadcastChannel.",
+      "Packaged it with Electron as a Windows installer and a portable USB version that places the projector fullscreen on the second display automatically.",
+    ],
+    technologies: ["JavaScript", "HTML", "CSS", "Electron", "IndexedDB"],
+  },
+];
+
+export function resumeProjects() {
+  return resumeProjectItems.map((item) => ({
+    name: item.name,
+    meta: asciiDashes(item.meta),
+    highlights: item.highlights.map(asciiDashes),
+    technologies: item.technologies.join(", "),
+  }));
+}
+
 export function resumeEducation() {
   return education.map((item) => ({
     qualification: item.qualification,
