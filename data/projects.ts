@@ -256,6 +256,20 @@ export const projects: Project[] = [
         caption: "Filed requests by date, filtered by office, type and status.",
       },
       {
+        src: "/projects/prams-roles-permissions.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "Roles & Permissions grid with menu pages as rows and roles as columns, each cell a checkbox",
+        caption: "Roles & Permissions: which menu pages each role can open, saved per role.",
+      },
+      {
+        src: "/projects/prams-maintenance.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "Maintenance settings with a database backup download and a two-factor policy table for Admin and HR accounts",
+        caption: "Database backup and the two-factor policy for Admin and HR. Usernames are blurred.",
+      },
+      {
         src: "/projects/prams-login.jpg",
         width: 1800,
         height: 1125,
