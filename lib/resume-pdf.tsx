@@ -5,6 +5,7 @@ import {
   resumeContactLines,
   resumeEducation,
   resumeExperience,
+  resumeProjects,
   resumeSkillLines,
   resumeSummary,
 } from "@/lib/resume-content";
@@ -112,6 +113,25 @@ export function ResumeDocument() {
               </View>
               {item.highlights.map((line) => (
                 <View key={line} style={styles.bulletRow} wrap={false}>
+                  <Text style={styles.bulletMark}>{BULLET}</Text>
+                  <Text style={styles.bulletText}>{line}</Text>
+                </View>
+              ))}
+              <Text style={styles.skillRow}>
+                <Text style={styles.label}>Technologies: </Text>
+                {item.technologies}
+              </Text>
+            </View>
+          ))}
+        </Section>
+
+        <Section title="Projects">
+          {resumeProjects().map((item) => (
+            <View key={item.name} style={styles.entry} wrap={false}>
+              <Text style={styles.entryRole}>{item.name}</Text>
+              <Text style={styles.entryMeta}>{item.meta}</Text>
+              {item.highlights.map((line) => (
+                <View key={line} style={styles.bulletRow}>
                   <Text style={styles.bulletMark}>{BULLET}</Text>
                   <Text style={styles.bulletText}>{line}</Text>
                 </View>
