@@ -234,12 +234,7 @@ export const projects: Project[] = [
       "PHPStan",
       "GitHub Actions",
     ],
-    metrics: [
-      "~500 employees",
-      "6 field offices",
-      "single sign-on",
-      "biometric DTR",
-    ],
+    metrics: ["~500 employees", "6 field offices", "single sign-on", "biometric DTR"],
     featured: true,
     confidential: true,
     screenshots: [
@@ -262,42 +257,48 @@ export const projects: Project[] = [
         width: 1800,
         height: 1250,
         alt: "DTR Dashboard with counts of DTRs by stage for one coverage month and progress by office",
-        caption: "DTR Dashboard: each month's DTRs by stage, with deadline and IPCR ratings.",
+        caption:
+          "DTR Dashboard: each month's DTRs by stage, with deadline and IPCR ratings.",
       },
       {
         src: "/projects/prams-dtr-devices.jpg",
         width: 1800,
         height: 1250,
         alt: "Biometric Devices page listing a ZKTeco device with its status, last contact, last punch and punch count",
-        caption: "ZKTeco devices push punches to PRAMS. Device serial and address are blurred.",
+        caption:
+          "ZKTeco devices push punches to PRAMS. Device serial and address are blurred.",
       },
       {
         src: "/projects/prams-dtr-settings.jpg",
         width: 1800,
         height: 1250,
         alt: "DTR Settings with deadline reminders, deadline adjustments and the status of each scheduled job",
-        caption: "DTR Settings: reminder days, deadline adjustments and each scheduled job's last run.",
+        caption:
+          "DTR Settings: reminder days, deadline adjustments and each scheduled job's last run.",
       },
       {
         src: "/projects/prams-roles-permissions.jpg",
         width: 1800,
         height: 1250,
         alt: "Roles & Permissions grid with menu pages as rows and roles as columns, each cell a checkbox",
-        caption: "Roles & Permissions: which menu pages each role can open, saved per role.",
+        caption:
+          "Roles & Permissions: which menu pages each role can open, saved per role.",
       },
       {
         src: "/projects/prams-maintenance.jpg",
         width: 1800,
         height: 1250,
         alt: "Maintenance settings with a database backup download and a two-factor policy table for Admin and HR accounts",
-        caption: "Database backup and the two-factor policy for Admin and HR. Usernames are blurred.",
+        caption:
+          "Database backup and the two-factor policy for Admin and HR. Usernames are blurred.",
       },
       {
         src: "/projects/prams-login.jpg",
         width: 1800,
         height: 1125,
         alt: "PRAMS employee portal sign-in page with a frosted glass card on a dark blue background",
-        caption: "Redesigned sign-in page. Accounts with two-factor turned on get a code step next.",
+        caption:
+          "Redesigned sign-in page. Accounts with two-factor turned on get a code step next.",
       },
       {
         src: "/projects/prams-login-mobile.jpg",
@@ -311,7 +312,8 @@ export const projects: Project[] = [
         width: 1800,
         height: 1125,
         alt: "PRAMS forgot password page asking for an employee ID to send a reset link",
-        caption: "Password reset by employee ID. Public pages like this one are rate-limited.",
+        caption:
+          "Password reset by employee ID. Public pages like this one are rate-limited.",
       },
     ],
     caseStudy: {
@@ -701,6 +703,129 @@ export const projects: Project[] = [
         "Duplicate enrollments are caught on site.",
         "Sites without internet register beneficiaries and release IDs the same day.",
         "Field offices install the service themselves.",
+      ],
+    },
+  },
+  {
+    slug: "gacc-worship",
+    name: "GACC Worship",
+    tagline:
+      "Offline worship presentation app for a local church. Song lyrics, Bible verses and announcement slides go on the projector from one operator screen, with a Windows installer and a portable USB version.",
+    type: "Desktop app, side project",
+    role: "Sole developer (volunteer)",
+    period: "2026",
+    organization: "God's Anointing Christian Church",
+    status: "Delivered",
+    technologies: [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Electron",
+      "electron-builder",
+      "IndexedDB",
+      "BroadcastChannel",
+    ],
+    metrics: [
+      "works fully offline",
+      "dual-screen projector",
+      "installer + portable .exe",
+      "no backend",
+    ],
+    featured: true,
+    confidential: false,
+    // Built-in sample songs only, no real member data.
+    screenshots: [
+      {
+        src: "/projects/gacc-operator.png",
+        width: 1600,
+        height: 1000,
+        alt: "Operator screen with the song library, a live preview of the current lyric slide, the service playlist and media controls",
+        caption:
+          "Operator screen. Library on the left, live preview and service playlist in the middle, video, sound and background controls on the right. Sample songs.",
+      },
+      {
+        src: "/projects/gacc-projector.png",
+        width: 1280,
+        height: 720,
+        alt: "Projector window showing two lines of lyrics over an animated aurora background",
+        caption:
+          "What the congregation sees. The projector window follows the operator screen.",
+      },
+      {
+        src: "/projects/gacc-animations.png",
+        width: 1600,
+        height: 1000,
+        alt: "Song editor with Home, Insert, Design, Transitions and Animations tabs, the lyrics on the left and a slide list on the right",
+        caption:
+          "Song editor. Lyrics split into slides as you type, with PowerPoint-style transitions and text animations.",
+      },
+    ],
+    caseStudy: {
+      overview:
+        "GACC Worship is a presentation app for a local church's Sunday service. The media team picks songs, Bible verses and announcements into a playlist, then runs the service from one screen while the projector shows only the slides.",
+      teamNote:
+        "A volunteer side project. I built and maintain the whole app, from the first browser version to the Windows installer.",
+      problem: [
+        "The church computer is often offline during the service, so nothing can depend on a server or a CDN.",
+        "Volunteers run the slides, so the tool has to feel like PowerPoint, not like new software to learn.",
+        "The operator needs a control screen while the projector shows only the slide, and the projector must not freeze or end up on the wrong display.",
+      ],
+      built: [
+        "An operator screen with a searchable library, a service playlist and a live preview, plus Previous / Next and jump-to-section cards (Verse, Chorus, Bridge)",
+        "A lyrics editor that splits text into slides as you type, with formatting, text boxes, shapes, backgrounds, transitions and per-line or per-word animations",
+        "A separate projector window kept in sync with the operator screen, with animated backgrounds, video, an audio overlay and a logo bumper between songs",
+        "Local storage for the library and IndexedDB for imported media, with JSON backup and import",
+        "An Electron wrapper that puts the projector on the second screen automatically and follows it when cables are plugged in or out",
+        "A Windows installer that needs no admin rights, and a portable .exe that keeps its library next to it on a USB drive",
+      ],
+      architecture: {
+        summary:
+          "The whole app is one HTML file with no build step and no dependencies, so the same file runs in a browser or inside Electron. The operator and projector windows are two copies of that page that talk over BroadcastChannel. Electron only adds what a browser can't do: window placement, autoplay with sound and an installed app.",
+        layers: [
+          {
+            label: "Operator window",
+            detail: "Library, playlist, editor, live preview",
+          },
+          {
+            label: "BroadcastChannel",
+            detail: "Sends the current slide, style and media state",
+          },
+          {
+            label: "Projector window",
+            detail: "Same page in present mode, renders the slide only",
+          },
+          {
+            label: "Browser storage",
+            detail: "localStorage for the library, IndexedDB for media",
+          },
+          {
+            label: "Electron main process",
+            detail: "Display detection, fullscreen placement, single instance",
+          },
+        ],
+        integrations: ["electron-builder for the NSIS installer and the portable .exe"],
+      },
+      decisions: [
+        {
+          title: "One HTML file",
+          detail:
+            "Keeping the app as a single file means it can be copied to any church computer and opened in a browser with nothing to install. The desktop build copies that same file into Electron, so there is one codebase. The cost is a large file to maintain; splitting it into modules with a bundler is the next step if it keeps growing.",
+        },
+        {
+          title: "A fixed origin for storage",
+          detail:
+            "Browser storage is tied to the page's origin, and a file:// path changes with the install folder. The desktop app serves the page from a custom gacc://app protocol, so the library, media and the projector channel stay the same wherever it is installed or updated.",
+        },
+        {
+          title: "A projector that never pauses",
+          detail:
+            "On Windows, Chromium paused the projector video whenever the operator window covered it, because it treated the window as hidden. I turned off window occlusion detection and background media suspension in Electron, so the projector keeps playing behind the operator screen.",
+        },
+      ],
+      outcomes: [
+        "Services run without internet, from an installed app or a USB drive.",
+        "The projector opens fullscreen on the second display with no manual setup.",
+        "Volunteers prepare songs with PowerPoint-style tools they already know.",
       ],
     },
   },
