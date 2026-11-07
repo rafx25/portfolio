@@ -31,6 +31,7 @@ export const experience: ExperienceItem[] = [
       "Designed approval routing that HR configures from a settings screen, so a new Regional Director's preferred flow no longer needs a code change. Reused the same design in TSIOS and the No Pending Case system.",
       "Built single sign-on (SSO) for PRAMS using one-time codes and server-to-server token exchange, so the region's other systems log staff in with one account.",
       "Added a retrieval-augmented generation (RAG) chatbot to PRAMS using the Gemini API, answering employee questions from HR's knowledge base.",
+      "Hardened PRAMS sign-in with two-factor authentication (TOTP authenticator apps and backup codes) and a database-backed login lockout, and set up GitHub Actions CI with PHPStan and unit tests.",
       "Built TSIOS (Permit to Operate and electrical inspection certificates) and the No Pending Case system with a small team, from online application to e-signed certificate.",
       "Integrated DigitalPersona fingerprint readers with the TUPAD emergency employment program's web app through a local C# service for 1:N duplicate checks, and built an offline registration page for sites without internet.",
       "Built the Public Employment Service Office (PESO) reporting portal and the Client Satisfaction Measurement system, replacing emailed spreadsheets and paper surveys.",

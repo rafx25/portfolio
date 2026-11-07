@@ -213,7 +213,7 @@ export const projects: Project[] = [
     slug: "prams",
     name: "PRAMS",
     tagline:
-      "HRIS used by about 500 DOLE CALABARZON employees for leave, overtime, CTO and office orders. Also the single sign-on for the region's other internal systems.",
+      "HRIS used by about 500 DOLE CALABARZON employees for leave, overtime, CTO, office orders and Daily Time Records from biometric devices. Also the single sign-on for the region's other internal systems.",
     type: "HRIS / workflow platform",
     role: "Full Stack Developer",
     period: "2025 - Present",
@@ -229,13 +229,12 @@ export const projects: Project[] = [
       "REST API",
       "SSE",
       "Gemini API",
+      "ZKTeco ADMS",
+      "Cron jobs",
+      "PHPStan",
+      "GitHub Actions",
     ],
-    metrics: [
-      "~500 employees",
-      "6 field offices",
-      "HR-set approval routes",
-      "single sign-on",
-    ],
+    metrics: ["~500 employees", "6 field offices", "single sign-on", "biometric DTR"],
     featured: true,
     confidential: true,
     screenshots: [
@@ -254,34 +253,90 @@ export const projects: Project[] = [
         caption: "Filed requests by date, filtered by office, type and status.",
       },
       {
-        src: "/projects/prams-login.png",
-        width: 1877,
-        height: 843,
-        alt: "PRAMS employee portal login screen",
-        caption: "Employee portal login.",
+        src: "/projects/prams-dtr-dashboard.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "DTR Dashboard with counts of DTRs by stage for one coverage month and progress by office",
+        caption:
+          "DTR Dashboard: each month's DTRs by stage, with deadline and IPCR ratings.",
+      },
+      {
+        src: "/projects/prams-dtr-devices.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "Biometric Devices page listing a ZKTeco device with its status, last contact, last punch and punch count",
+        caption:
+          "ZKTeco devices push punches to PRAMS. Device serial and address are blurred.",
+      },
+      {
+        src: "/projects/prams-dtr-settings.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "DTR Settings with deadline reminders, deadline adjustments and the status of each scheduled job",
+        caption:
+          "DTR Settings: reminder days, deadline adjustments and each scheduled job's last run.",
+      },
+      {
+        src: "/projects/prams-roles-permissions.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "Roles & Permissions grid with menu pages as rows and roles as columns, each cell a checkbox",
+        caption:
+          "Roles & Permissions: which menu pages each role can open, saved per role.",
+      },
+      {
+        src: "/projects/prams-maintenance.jpg",
+        width: 1800,
+        height: 1250,
+        alt: "Maintenance settings with a database backup download and a two-factor policy table for Admin and HR accounts",
+        caption:
+          "Database backup and the two-factor policy for Admin and HR. Usernames are blurred.",
+      },
+      {
+        src: "/projects/prams-login.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "PRAMS employee portal sign-in page with a frosted glass card on a dark blue background",
+        caption:
+          "Redesigned sign-in page. Accounts with two-factor turned on get a code step next.",
+      },
+      {
+        src: "/projects/prams-login-mobile.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "The PRAMS sign-in page on a phone-sized screen, in front of the desktop layout",
+        caption: "The same page on a phone. The office header moves into the card.",
+      },
+      {
+        src: "/projects/prams-forgot-password.jpg",
+        width: 1800,
+        height: 1125,
+        alt: "PRAMS forgot password page asking for an employee ID to send a reset link",
+        caption:
+          "Password reset by employee ID. Public pages like this one are rate-limited.",
       },
     ],
     caseStudy: {
       overview:
-        "PRAMS is where employees file leave, CTO, overtime and office orders, and where HR manages credits, schedules and approval routes. Approved requests print as the official government forms. The region's other internal systems use it as their login.",
+        "PRAMS is where employees file leave, CTO, overtime and office orders, and where HR manages credits, schedules and approval routes. Approved requests print as the official government forms. The region's other internal systems use it as their login. The Daily Time Record module, in user acceptance testing with HR, turns biometric punches into each employee's DTR and posts tardiness and undertime to the leave ledger.",
       teamNote:
-        "Built by a small team. My parts: the approval workflows and route engine, delegation, single sign-on, the printed forms, leave and CTO credits, access control, the org chart and the chatbot. The employee profile, PDS export and employee import are mostly a teammate's work.",
+        "Built by a small team. My parts: the approval workflows and route engine, delegation, single sign-on, two-factor sign-in, the sign-in page, the printed forms and document templates, leave and CTO credits, access control, database backup, the org chart, the chatbot and the whole DTR module. The employee profile, PDS export and employee import are mostly a teammate's work.",
       problem: [
-        "Leave and overtime requests went around on paper, and nobody knew where a form was.",
-        "Leave and CTO balances were kept in spreadsheets and often didn't match what employees expected.",
+        "Leave, overtime and DTRs went around on paper. HR checked every DTR date by hand against the biometric logs, leaves, CTO and holidays.",
+        "Leave and CTO balances were kept in spreadsheets, and tardiness was converted to leave days by hand with the CSC table.",
         "The approval flow changes whenever a new Regional Director or ARD comes in. It was hardcoded, so every change needed a developer.",
       ],
       built: [
         "An approval route engine, and the settings screen HR uses to build routes",
-        "Leave, overtime, CTO and office order workflows, with approval delegation",
-        "Single sign-on for the other internal systems, with an admin page to register them",
-        "Page-level access control and a Roles & Permissions screen",
-        "Official form output (PhpSpreadsheet, TCPDF) and credit ledgers with bulk import",
+        "Leave, overtime, CTO and office order workflows, with approval delegation, a team calendar for unit heads and an Excel leave report",
+        "Single sign-on for the other internal systems, two-factor sign-in with an authenticator app, a login lockout kept in the database, and a Roles & Permissions screen",
+        "The DTR module: ZKTeco devices push punches, the employee submits, the supervisor verifies, and HR validates each date and posts charges to the leave ledger with receipts and reversals",
+        "Official form output (PhpSpreadsheet, TCPDF), Word and Excel templates HR can edit, and credit ledgers with bulk import",
         "Notifications, chat, and a RAG chatbot on the Gemini API that answers from HR's knowledge base",
       ],
       architecture: {
         summary:
-          "Slim 4 with a PSR-15 middleware stack, serving a JSON API to a JavaScript front end. Middleware handles session, CSRF, page access and rate limits. Business logic is in services, and models use PDO with prepared statements.",
+          "Slim 4 with a PSR-15 middleware stack, serving a JSON API to a JavaScript front end. Middleware handles session, CSRF, page access and rate limits. Business logic is in services, and models use PDO with prepared statements. Biometric devices push punches to a separate endpoint outside the session-based API, and cron jobs create each period's DTRs, send deadline reminders and settle pending deductions. Schema changes ship as tracked migrations, and CI runs PHPStan and unit tests on every pull request.",
         layers: [
           {
             label: "Browser",
@@ -297,12 +352,16 @@ export const projects: Project[] = [
           },
           {
             label: "Services",
-            detail: "Route engine, delegation, credits, forms, single sign-on",
+            detail: "Route engine, delegation, credits, forms, single sign-on, DTR",
           },
           {
             label: "MySQL",
-            detail: "Requests, route versions, credits, audit logs",
+            detail: "Requests, route versions, credits, punches, audit logs",
           },
+        ],
+        integrations: [
+          "ZKTeco biometric devices (ADMS push)",
+          "Cron jobs for DTR periods, reminders and deductions",
         ],
       },
       decisions: [
@@ -317,117 +376,15 @@ export const projects: Project[] = [
             "Other systems redirect users to PRAMS, which checks the registered return URL, signs them in and sends back a one-time code. The system exchanges that code server-to-server for the user's details. PRAMS only says who the person is, and each system decides its own permissions. Staff keep one password, and a transfer or resignation applies everywhere at the next login.",
         },
         {
-          title: "SSE vs polling",
+          title: "Biometric devices push their punches",
           detail:
-            "I first used Server-Sent Events for live updates. On shared hosting each open connection holds a PHP worker, and staff leave tabs open all day, so the workers ran out. I moved the notification badge to polling every 20 seconds and kept SSE only on the approval screens, closing the stream when the tab is hidden.",
+            "The ZKTeco devices send new punches to the server and keep retrying until the reply starts with OK. A new device is held until HR approves it, and until then the reply is not OK, so the device keeps its punches and sends them again after approval. Offices without a connected device can still import the device's Excel report.",
         },
       ],
       outcomes: [
-        "Used by about 500 employees across six field offices.",
+        "Used by about 500 employees across six field offices, and other internal systems log users in through PRAMS.",
         "HR updates approval flows without a developer.",
-        "Other internal systems log users in through PRAMS.",
-      ],
-    },
-  },
-  {
-    slug: "prams-dtr",
-    name: "PRAMS DTR",
-    tagline:
-      "The Daily Time Record module of PRAMS. Biometric punches become each employee's DTR, which the supervisor verifies and HR validates, and late, undertime and absence charges post to the leave ledger.",
-    type: "Attendance and timekeeping module",
-    role: "Full Stack Developer",
-    period: "2026",
-    organization: "DOLE Regional Office No. IV-A (CALABARZON)",
-    status: "UAT",
-    technologies: [
-      "Slim 4",
-      "PHP",
-      "MySQL",
-      "JavaScript",
-      "ZKTeco ADMS",
-      "PhpSpreadsheet",
-      "TCPDF",
-      "Cron jobs",
-    ],
-    metrics: [
-      "biometric push",
-      "HR validation per date",
-      "CSC leave conversion",
-      "4 scheduled jobs",
-    ],
-    featured: true,
-    confidential: true,
-    screenshots: [],
-    caseStudy: {
-      overview:
-        "The DTR module turns biometric punches into each employee's Daily Time Record. The employee checks and submits it, the supervisor verifies it, and HR validates each date, assesses tardiness, undertime and absences, and posts the charges to the leave ledger. It is in user acceptance testing with HR.",
-      teamNote:
-        "The DTR module is my work. It builds on PRAMS's leave ledger, approval routes and notifications.",
-      problem: [
-        "Every employee submits a DTR each month, and JO/COS staff twice a month. HR checks every date against the biometric logs, leaves, CTO and holidays.",
-        "Tardiness and undertime have to be converted to leave days with the CSC table and recorded on each employee's leave card.",
-        "Punches sit on the biometric devices in each office.",
-      ],
-      built: [
-        "A ZKTeco push endpoint that receives punches straight from the devices, with HR approval for new devices, plus an import for the devices' Excel reports",
-        "Daily time in, time out, tardiness and undertime per work schedule, including flexi-time and the Compressed Workweek",
-        "The employee's DTR workspace with auto-saved drafts, correction requests with supporting documents, and supervisor review",
-        "HR validation per date, leave assessment, and posting to the leave ledger with receipts and reversals",
-        "The official DTR package: the DTR as a PDF, the supporting documents, and a SHA-256 manifest",
-        "A management dashboard, deadline reminders, and scheduled jobs that create each period's DTR and settle pending deductions",
-      ],
-      architecture: {
-        summary:
-          "Part of PRAMS (Slim 4, PHP, MySQL). The devices push punches to a separate iclock endpoint outside the session-based API. Console commands on cron create each period's DTRs, send reminders, move reviews to a new office head and settle pending deductions.",
-        layers: [
-          {
-            label: "Biometric devices",
-            detail: "ZKTeco devices push punches over ADMS",
-          },
-          {
-            label: "iclock endpoint",
-            detail: "Checks the device serial and HR approval, stores punches",
-          },
-          {
-            label: "DTR services",
-            detail: "Compute, sync, assessment, leave posting, official package",
-          },
-          {
-            label: "Scheduled jobs",
-            detail: "Period creation, reminders, reviewer changes, deductions",
-          },
-          {
-            label: "MySQL",
-            detail: "Punches, DTR snapshots, validations, leave ledger",
-          },
-        ],
-        integrations: [
-          "PRAMS leave ledger",
-          "PRAMS approval routes for correction requests",
-          "PRAMS notifications",
-        ],
-      },
-      decisions: [
-        {
-          title: "Devices push their punches",
-          detail:
-            "The ZKTeco devices speak a push protocol: they send new punches to the server and keep retrying until the reply starts with OK. A new device is held until HR approves it, and until then the reply is not OK, so the device keeps its punches and sends them again after approval. Offices without a connected device can still import the device's Excel report.",
-        },
-        {
-          title: "A frozen snapshot after submission",
-          detail:
-            "When the employee submits, the DTR is saved as a snapshot. The supervisor reviews, HR validates and the official package is built from that snapshot, with the SHA-256 of every file in its manifest, so the printed form matches what the employee certified. A later change goes through an HR amendment record instead of editing the submitted dates.",
-        },
-        {
-          title: "Leave rules HR signed off first",
-          detail:
-            "I built the leave posting, then kept it switched off and gave HR five decisions to make: how minutes convert to leave days, daily or monthly totals, absences, short balances and Compressed Workweek days. HR chose the CSC table in three decimals, so leave balances across PRAMS moved from two to three decimals. A balance never goes below zero. A daily job takes the shortfall from the next Vacation Leave credits.",
-        },
-      ],
-      outcomes: [
-        "In user acceptance testing with HR.",
-        "HR and management approved the leave posting rules in October 2026.",
-        "Charges follow the CSC conversion table and are written on the leave card in its usual format.",
+        "The DTR module is in user acceptance testing, with leave posting rules HR and management approved in October 2026.",
       ],
     },
   },
@@ -746,6 +703,129 @@ export const projects: Project[] = [
         "Duplicate enrollments are caught on site.",
         "Sites without internet register beneficiaries and release IDs the same day.",
         "Field offices install the service themselves.",
+      ],
+    },
+  },
+  {
+    slug: "gacc-worship",
+    name: "GACC Worship",
+    tagline:
+      "Offline worship presentation app for a local church. Song lyrics, Bible verses and announcement slides go on the projector from one operator screen, with a Windows installer and a portable USB version.",
+    type: "Desktop app, side project",
+    role: "Sole developer (volunteer)",
+    period: "2026",
+    organization: "God's Anointing Christian Church",
+    status: "Delivered",
+    technologies: [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Electron",
+      "electron-builder",
+      "IndexedDB",
+      "BroadcastChannel",
+    ],
+    metrics: [
+      "works fully offline",
+      "dual-screen projector",
+      "installer + portable .exe",
+      "no backend",
+    ],
+    featured: true,
+    confidential: false,
+    // Built-in sample songs only, no real member data.
+    screenshots: [
+      {
+        src: "/projects/gacc-operator.png",
+        width: 1600,
+        height: 1000,
+        alt: "Operator screen with the song library, a live preview of the current lyric slide, the service playlist and media controls",
+        caption:
+          "Operator screen. Library on the left, live preview and service playlist in the middle, video, sound and background controls on the right. Sample songs.",
+      },
+      {
+        src: "/projects/gacc-projector.png",
+        width: 1280,
+        height: 720,
+        alt: "Projector window showing two lines of lyrics over an animated aurora background",
+        caption:
+          "What the congregation sees. The projector window follows the operator screen.",
+      },
+      {
+        src: "/projects/gacc-animations.png",
+        width: 1600,
+        height: 1000,
+        alt: "Song editor with Home, Insert, Design, Transitions and Animations tabs, the lyrics on the left and a slide list on the right",
+        caption:
+          "Song editor. Lyrics split into slides as you type, with PowerPoint-style transitions and text animations.",
+      },
+    ],
+    caseStudy: {
+      overview:
+        "GACC Worship is a presentation app for a local church's Sunday service. The media team picks songs, Bible verses and announcements into a playlist, then runs the service from one screen while the projector shows only the slides.",
+      teamNote:
+        "A volunteer side project. I built and maintain the whole app, from the first browser version to the Windows installer.",
+      problem: [
+        "The church computer is often offline during the service, so nothing can depend on a server or a CDN.",
+        "Volunteers run the slides, so the tool has to feel like PowerPoint, not like new software to learn.",
+        "The operator needs a control screen while the projector shows only the slide, and the projector must not freeze or end up on the wrong display.",
+      ],
+      built: [
+        "An operator screen with a searchable library, a service playlist and a live preview, plus Previous / Next and jump-to-section cards (Verse, Chorus, Bridge)",
+        "A lyrics editor that splits text into slides as you type, with formatting, text boxes, shapes, backgrounds, transitions and per-line or per-word animations",
+        "A separate projector window kept in sync with the operator screen, with animated backgrounds, video, an audio overlay and a logo bumper between songs",
+        "Local storage for the library and IndexedDB for imported media, with JSON backup and import",
+        "An Electron wrapper that puts the projector on the second screen automatically and follows it when cables are plugged in or out",
+        "A Windows installer that needs no admin rights, and a portable .exe that keeps its library next to it on a USB drive",
+      ],
+      architecture: {
+        summary:
+          "The whole app is one HTML file with no build step and no dependencies, so the same file runs in a browser or inside Electron. The operator and projector windows are two copies of that page that talk over BroadcastChannel. Electron only adds what a browser can't do: window placement, autoplay with sound and an installed app.",
+        layers: [
+          {
+            label: "Operator window",
+            detail: "Library, playlist, editor, live preview",
+          },
+          {
+            label: "BroadcastChannel",
+            detail: "Sends the current slide, style and media state",
+          },
+          {
+            label: "Projector window",
+            detail: "Same page in present mode, renders the slide only",
+          },
+          {
+            label: "Browser storage",
+            detail: "localStorage for the library, IndexedDB for media",
+          },
+          {
+            label: "Electron main process",
+            detail: "Display detection, fullscreen placement, single instance",
+          },
+        ],
+        integrations: ["electron-builder for the NSIS installer and the portable .exe"],
+      },
+      decisions: [
+        {
+          title: "One HTML file",
+          detail:
+            "Keeping the app as a single file means it can be copied to any church computer and opened in a browser with nothing to install. The desktop build copies that same file into Electron, so there is one codebase. The cost is a large file to maintain; splitting it into modules with a bundler is the next step if it keeps growing.",
+        },
+        {
+          title: "A fixed origin for storage",
+          detail:
+            "Browser storage is tied to the page's origin, and a file:// path changes with the install folder. The desktop app serves the page from a custom gacc://app protocol, so the library, media and the projector channel stay the same wherever it is installed or updated.",
+        },
+        {
+          title: "A projector that never pauses",
+          detail:
+            "On Windows, Chromium paused the projector video whenever the operator window covered it, because it treated the window as hidden. I turned off window occlusion detection and background media suspension in Electron, so the projector keeps playing behind the operator screen.",
+        },
+      ],
+      outcomes: [
+        "Services run without internet, from an installed app or a USB drive.",
+        "The projector opens fullscreen on the second display with no manual setup.",
+        "Volunteers prepare songs with PowerPoint-style tools they already know.",
       ],
     },
   },

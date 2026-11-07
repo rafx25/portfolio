@@ -32,6 +32,16 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // The DTR module used to have its own case study; it is now part of PRAMS.
+  async redirects() {
+    return [
+      {
+        source: "/projects/prams-dtr",
+        destination: "/projects/prams",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
